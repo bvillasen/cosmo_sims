@@ -8,7 +8,7 @@ import numpy as np
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
 dataDir = '/raid/bruno/data/'
-inDir = dataDir + 'cosmo_sims/cholla_pm/512_cool/'
+inDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/'
 outDir = inDir + 'data/'
 
 # inDir = dataDir + '/cosmo_sims/cholla_pm/sphere_collapse/'
