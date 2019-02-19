@@ -60,6 +60,8 @@ He_0_dens =  data_grid[ ('gas', 'He_p0_density')].in_units('msun/kpc**3')*curren
 He_1_dens =  data_grid[ ('gas', 'He_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
 He_2_dens =  data_grid[ ('gas', 'He_p2_density')].in_units('msun/kpc**3')*current_a**3/h**2
 electron_dens =  data_grid[ ('gas', 'El_density')].in_units('msun/kpc**3')*current_a**3/h**2
+proten_electron_mass_ratio = 1836.15267389
+electron_dens *= proten_electron_mass_ratio
 
 if metals:
   metal_dens = data_grid[ ('gas', 'metal_density')].in_units('msun/kpc**3')*current_a**3/h**2
@@ -69,7 +71,7 @@ if metals:
 # He_frac = He_0_dens / gas_dens
 #
 # mu_0 = 1. / ( H_frac + He_frac/4 )
-
+#
 
 
 p_mass = data[('all', 'particle_mass')].in_units('msun')*h

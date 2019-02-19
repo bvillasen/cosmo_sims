@@ -20,13 +20,13 @@ chollaDir_cool = chollaDir +  'data/'
 chollaDir_0 = chollaDir +  'data_hydro/'
 
 enzoDir = dataDir + 'cosmo_sims/enzo/'
-enzoDir_cool = enzoDir + '256_hydro_grackle_noMetal_noUV/h5_files/'
+enzoDir_cool = enzoDir + '256_hydro_grackle/h5_files/'
 enzoDir_0 = enzoDir + '256_hydro/h5_files/'
 
 
 outDir = cosmo_dir + 'figures/cooling/chemistry/'
 
-metals = False
+metals = True
 
 gamma = 5./3
 nPoints = 256
@@ -65,6 +65,7 @@ for nSnap in snapshots:
   current_a_ch = data_cholla['current_a']
   print current_z_ch
   dens_ch = data_cholla['gas']['density'][...]
+  temp_ch = data_cholla['gas']['temperature'][...]
   gasEnergy_ch = data_cholla['gas']['GasEnergy'][...] /dens_ch
   dens_avrg = dens_ch.mean()
   # dens_ch /= dens_avrg
@@ -88,8 +89,8 @@ for nSnap in snapshots:
   HeII_dens_proj_ch = np.log10(HeII_dens_ch[:n_slice, :, :].sum(axis=0))
   HeIII_dens_proj_ch = np.log10(HeIII_dens_ch[:n_slice, :, :].sum(axis=0))
   e_dens_proj_ch = np.log10(e_dens_ch[:n_slice, :, :].sum(axis=0))
-
   gasEnergy_proj_ch = np.log10(gasEnergy_ch[:n_slice, :, :].sum(axis=0))
+
 
   dens_max_ch = dens_proj_ch.max()
   HI_max_ch = HI_dens_proj_ch.max()
@@ -131,6 +132,7 @@ for nSnap in snapshots:
   current_a_enzo = data_enzo['current_a']
   current_z_enzo = data_enzo['current_z']
   dens_en = data_enzo['gas']['density'][...]
+  temp_en = data_enzo['gas']['temperature'][...]
   gasEnergy_en = data_enzo['gas']['GasEnergy'][...] /dens_en
   dens_avrg = dens_en.mean()
   # dens_en /= dens_avrg
@@ -146,6 +148,8 @@ for nSnap in snapshots:
   HeII_dens_en = data_enzo['gas']['HeII_density'][...]
   HeIII_dens_en = data_enzo['gas']['HeIII_density'][...]
   e_dens_en = data_enzo['gas']['e_density'][...]
+  proten_electron_mass_ratio = 1836.15267389
+  e_dens_en *= proten_electron_mass_ratio
   dens_proj_en = np.log10(dens_en[:n_slice, :, :].sum(axis=0))
   HI_dens_proj_en = np.log10(HI_dens_en[:n_slice, :, :].sum(axis=0))
   HII_dens_proj_en = np.log10(HII_dens_en[:n_slice, :, :].sum(axis=0))

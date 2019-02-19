@@ -41,6 +41,7 @@ def load_snapshot_enzo( nSnap, inDir, dm=False, cool=False, metals=False ):
     data['gas']['HeII_density'] = data_gas['HeI_dens']
     data['gas']['HeIII_density'] = data_gas['HeII_dens']
     data['gas']['e_density'] = data_gas['electron_dens']
+    data['gas']['temperature'] = data_gas['temperature']
   if metals:
     data['gas']['metal_density'] = data_gas['metal_dens']
 
