@@ -53,11 +53,10 @@ def load_snapshot_data_particles( nSnap, inputDir ):
 def load_snapshot_data( nSnap, inDir, cool=False ):
   gridFileName = inDir + 'grid_{0}.h5'.format(nSnap)
   partFileName = inDir + 'particles_{0}.h5'.format(nSnap)
-  print ("Loading Cholla Snapshot: {0}".format(nSnap) )
   outDir = {'dm':{}, 'gas':{} }
   data_grid = h5.File( gridFileName, 'r' )
   fields_data = data_grid.keys()
-  print fields_data
+  # print fields_data
   fields_grid = [ 'density',  'momentum_x', 'momentum_y', 'momentum_z', 'Energy', 'GasEnergy', 'potential', 'extra_field', 'cooling_rate']
   if cool: fields_grid.extend(['HI_density', 'HII_density', 'HeI_density', 'HeII_density', 'HeIII_density', 'e_density', 'metal_density', 'temperature'])
   for field in fields_grid:
@@ -69,6 +68,7 @@ def load_snapshot_data( nSnap, inDir, cool=False ):
   fields_part = [ 'density',  'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z' ]
   current_a = data_part.attrs['current_a']
   current_z = data_part.attrs['current_z']
+  print ("Loading Cholla Snapshot: {0}       current_z: {1}".format( nSnap, current_z) )
   outDir['current_a'] = current_a
   outDir['current_z'] = current_z
   for field in fields_part:

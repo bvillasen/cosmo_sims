@@ -20,9 +20,9 @@ from domain_decomposition import get_domain_block, get_domain_parent
 
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
-enzoDir = dataDir + 'cosmo_sims/enzo/256_hydro_grackle_noUV_0/'
+enzoDir = dataDir + 'cosmo_sims/enzo/512_hydro/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/ics_metals/'
+outputDir = dataDir + 'cosmo_sims/cholla_pm/512_cool/ics_cool/'
 nSnap_enzo = 0
 
 metals = True
@@ -52,26 +52,39 @@ gas_E = data_grid[('gas', 'total_energy' )].v * 1e-10   *gas_dens  #km^2/s^2
 # mu = data_grid[('gas', 'mean_molecular_weight' )].v
 
 
-# H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
-H_0_dens =  data_grid[ ('gas', 'H_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
-H_1_dens =  data_grid[ ('gas', 'H_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# He_dens =  data_grid[ ('gas', 'He_density')].in_units('msun/kpc**3')*current_a**3/h**2
-He_0_dens =  data_grid[ ('gas', 'He_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
-He_1_dens =  data_grid[ ('gas', 'He_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
-He_2_dens =  data_grid[ ('gas', 'He_p2_density')].in_units('msun/kpc**3')*current_a**3/h**2
-electron_dens =  data_grid[ ('gas', 'El_density')].in_units('msun/kpc**3')*current_a**3/h**2
-proten_electron_mass_ratio = 1836.15267389
-electron_dens *= proten_electron_mass_ratio
-
-if metals:
-  metal_dens = data_grid[ ('gas', 'metal_density')].in_units('msun/kpc**3')*current_a**3/h**2
+HI_frac = 0.75984603
+HII_frac = 0.00015397
+HeI_frac = 0.24
+HeII_frac = 9.6e-15
+HeIII_frac = 9.6e-18
+electron_frac = 0.00015397
+metal_frac = 1e-10
 
 
-# H_frac = H_0_dens / gas_dens
-# He_frac = He_0_dens / gas_dens
+HI_dens = HI_frac * gas_dens
+HII_dens = HII_frac * gas_dens
+HeI_dens = HeI_frac * gas_dens
+HeII_dens = HeII_frac * gas_dens
+HeIII_dens = HeIII_frac * gas_dens
+electron_dens = electron_frac * gas_dens
+metal_dens = metal_frac * gas_dens
+# # H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
+# HI_dens =  data_grid[ ('gas', 'H_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
+# HII_dens =  data_grid[ ('gas', 'H_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
+# # He_dens =  data_grid[ ('gas', 'He_density')].in_units('msun/kpc**3')*current_a**3/h**2
+# HeI_dens =  data_grid[ ('gas', 'He_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
+# HeII_dens =  data_grid[ ('gas', 'He_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
+# HeIII_dens =  data_grid[ ('gas', 'He_p2_density')].in_units('msun/kpc**3')*current_a**3/h**2
+# electron_dens =  data_grid[ ('gas', 'El_density')].in_units('msun/kpc**3')*current_a**3/h**2
+# proten_electron_mass_ratio = 1836.15267389 * 1.00066569
+# electron_dens *= proten_electron_mass_ratio
 #
-# mu_0 = 1. / ( H_frac + He_frac/4 )
-#
+# if metals:
+#   metal_dens = data_grid[ ('gas', 'metal_density')].in_units('msun/kpc**3')*current_a**3/h**2
+
+
+
+
 
 
 p_mass = data[('all', 'particle_mass')].in_units('msun')*h
@@ -100,19 +113,19 @@ data_enzo['gas']['momentum_y'] = gas_dens * gas_vel_y
 data_enzo['gas']['momentum_z'] = gas_dens * gas_vel_z
 data_enzo['gas']['GasEnergy'] = gas_u
 data_enzo['gas']['Energy'] = gas_E
-data_enzo['gas']['HI_density'] = H_0_dens
-data_enzo['gas']['HII_density'] = H_1_dens
-data_enzo['gas']['HeI_density'] = He_0_dens
-data_enzo['gas']['HeII_density'] = He_1_dens
-data_enzo['gas']['HeIII_density'] = He_2_dens
+data_enzo['gas']['HI_density'] = HI_dens
+data_enzo['gas']['HII_density'] = HII_dens
+data_enzo['gas']['HeI_density'] = HeI_dens
+data_enzo['gas']['HeII_density'] = HeII_dens
+data_enzo['gas']['HeIII_density'] = HeIII_dens
 data_enzo['gas']['e_density'] = electron_dens
 if metals:
   data_enzo['gas']['metal_density'] = metal_dens
 
 
 proc_grid = [ 2, 2, 2]
-box_size = [ 115000, 115000, 115000 ]
-grid_size = [ 256, 256, 256 ]
+box_size = [ 50000, 50000, 50000 ]
+grid_size = [ 512, 512, 512 ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
 generate_ics_particles(data_enzo, outputDir, outputBaseName, proc_grid, box_size, grid_size)
 

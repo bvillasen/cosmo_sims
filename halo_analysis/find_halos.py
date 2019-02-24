@@ -26,14 +26,23 @@ inFile.close()
 
 dens = dens[:n_slice,:,:]
 
-halo_limit = dens.mean() * 200
+halo_limit = dens.mean() * 172
 dens_limit = dens.mean() * 1
 halo_catalog = find_halos( Lbox, dens, dens_limit, halo_limit )
 
-# h_mass = halo_catalog[:,2]
+h_mass = halo_catalog[:,2]
+pos_x = halo_catalog[:,4]
+pos_y = halo_catalog[:,5]
+pos_z = halo_catalog[:,6]
+
+m_max = h_mass.max()
+id = np.where( h_mass == m_max)[0][0]
+x_max = pos_x[id]
+y_max = pos_y[id]
+z_max = pos_z[id]
 #
 # m_min = 1e13
 # indxs = h_mass > m_min
 # h_mass = h_mass[indxs]
 
-plot_halos_positions( Lbox, halo_catalog, dens,  outDir, snap )
+# plot_halos_positions( Lbox, halo_catalog, dens,  outDir, snap )
