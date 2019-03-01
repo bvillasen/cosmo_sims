@@ -1,8 +1,9 @@
 import numpy as np
 import h5py as h5
 
-dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
-inDir = dataDir + 'cosmo_sims/enzo/256_hydro_grackle/h5_files/'
+# dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
+dataDir = '/raid/bruno/data/'
+inDir = dataDir + 'cosmo_sims/enzo/256_cool_uv/h5_files/'
 outDir = inDir
 
 
@@ -19,7 +20,7 @@ for nSnap in range(31):
 n_vals = len( a_list )
 a_vals = np.array(a_list)
 
-fileName = 'scale_outputs_enzo_cool.txt'.format( n_vals)
+fileName = 'outputs_enzo_cool_UV_30.txt'.format( n_vals)
 np.savetxt( outDir+fileName, a_vals )
 
 

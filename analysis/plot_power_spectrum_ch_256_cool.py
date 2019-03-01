@@ -12,11 +12,11 @@ from load_data_enzo import load_snapshot_enzo
 
 
 dataDir = '/raid/bruno/data/'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_uv/'
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data/'
 enzoDir = dataDir + 'cosmo_sims/enzo/256_cool_uv/h5_files/'
 outDir = cosmo_dir + 'figures/power_hydro/'
 
-fileName = outDir + 'ps_256_cool_uv.png'
+fileName = outDir + 'ps_256_cool_uv_de02_da0015_deltaEk.png'
 
 # set simulation volume dimentions
 nPoints = 256
@@ -96,15 +96,15 @@ for i,nSnap in enumerate(snapshots):
 
   # label = 'z = {0:.1f}'.format(current_z_enzo)
   if i == 9:
-    ax1.plot( k_vals, ps_dm_enzo, '--', c='k', linewidth=1, label='Enzo' )
-    ax3.plot( k_vals, ps_gas_enzo, '--', c='k', linewidth=1, label='Enzo' )
-    ax5.plot( k_vals, ps_gas_H_enzo, '--', c='k', linewidth=1, label='Enzo' )
-    ax7.plot( k_vals, ps_gas_HII_enzo, '--', c='k', linewidth=1, label='Enzo' )
+    ax1.plot( k_vals, ps_dm_enzo, '--', c=c, linewidth=1, label='Enzo' )
+    ax3.plot( k_vals, ps_gas_enzo, '--', c=c, linewidth=1, label='Enzo' )
+    ax5.plot( k_vals, ps_gas_H_enzo, '--', c=c, linewidth=1, label='Enzo' )
+    ax7.plot( k_vals, ps_gas_HII_enzo, '--', c=c, linewidth=1, label='Enzo' )
   else:
-    ax1.plot( k_vals, ps_dm_enzo, '--', c='k', linewidth=1 )
-    ax3.plot( k_vals, ps_gas_enzo, '--', c='k', linewidth=1 )
-    ax5.plot( k_vals, ps_gas_H_enzo, '--', c='k', linewidth=1  )
-    ax7.plot( k_vals, ps_gas_HII_enzo, '--', c='k', linewidth=1 )
+    ax1.plot( k_vals, ps_dm_enzo, '--', c=c, linewidth=1 )
+    ax3.plot( k_vals, ps_gas_enzo, '--', c=c, linewidth=1 )
+    ax5.plot( k_vals, ps_gas_H_enzo, '--', c=c, linewidth=1  )
+    ax7.plot( k_vals, ps_gas_HII_enzo, '--', c=c, linewidth=1 )
   #
 
   error_dm = (ps_dm_cholla - ps_dm_enzo) / ps_dm_cholla
