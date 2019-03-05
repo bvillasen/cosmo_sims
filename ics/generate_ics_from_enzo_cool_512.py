@@ -20,17 +20,19 @@ from domain_decomposition import get_domain_block, get_domain_parent
 
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
-enzoDir = dataDir + 'cosmo_sims/enzo/512_hydro/'
+enzoDir = dataDir + 'cosmo_sims/enzo/512_cool_115Mpc/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/512_cool/ics_cool/'
-nSnap_enzo = 0
+outputDir = dataDir + 'cosmo_sims/cholla_pm/512_cool/ics_115Mpc/'
+nSnap = 0
 
-metals = True
-
-nSnap = nSnap_enzo
 
 snapKey = '{0:03}'.format(nSnap)
 inFileName = 'DD0{0}/data0{0}'.format( snapKey)
+
+Lbox = 115000
+
+metals = True
+
 
 ds = yt.load( inDir + inFileName )
 data = ds.all_data()
@@ -124,7 +126,7 @@ if metals:
 
 
 proc_grid = [ 2, 2, 2]
-box_size = [ 50000, 50000, 50000 ]
+box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 512, 512, 512 ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
 generate_ics_particles(data_enzo, outputDir, outputBaseName, proc_grid, box_size, grid_size)
