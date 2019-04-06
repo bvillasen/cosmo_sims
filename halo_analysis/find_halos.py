@@ -32,19 +32,19 @@ fig = plt.figure(0)
 plt.clf()
 ax = plt.gca()
 
-# for nSnap in range(19, 20):
-print "n_nSnap: ", nSnap
-inFileName = 'data/particles_{0}.h5'.format(nSnap)
-inFile = h5.File( inDir + inFileName )
-dens = inFile['density'][...]
-inFile.close()
-
-dens = dens[:n_slice,:,:]
-
-halo_limit = dens.mean() * 172
-dens_limit = dens.mean() * 1
-halo_catalog = find_halos( Lbox, dens, dens_limit, halo_limit )
-h_mass = halo_catalog[:,2]
+# # for nSnap in range(19, 20):
+# print "n_nSnap: ", nSnap
+# inFileName = 'data/particles_{0}_1.h5'.format(nSnap)
+# inFile = h5.File( inDir + inFileName )
+# dens = inFile['density'][...]
+# inFile.close()
+# 
+# dens = dens[:n_slice,:,:]
+# 
+# halo_limit = dens.mean() * 172
+# dens_limit = dens.mean() * 1
+# halo_catalog = find_halos( Lbox, dens, dens_limit, halo_limit )
+# h_mass = halo_catalog[:,2]
 # pos_x = halo_catalog[:,4]
 # pos_y = halo_catalog[:,5]
 # pos_z = halo_catalog[:,6]

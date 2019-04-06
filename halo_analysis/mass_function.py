@@ -16,7 +16,7 @@ def get_mass_function(h_mass, boxSize, comulative=True, nBins=50, binEdges='None
     hist = np.histogram(masses, bins=binEdges)[0]
     binCenters = np.sqrt(binEdges[:-1]*binEdges[1:])
   if comulative:
-    massFunction = (np.sum(hist) - np.cumsum(hist)) / boxSize**3
+    massFunction = (np.sum(hist) - np.cumsum(hist))  / boxSize**3
   else:
     massFunction = hist/ boxSize**3
   return [binCenters, massFunction]

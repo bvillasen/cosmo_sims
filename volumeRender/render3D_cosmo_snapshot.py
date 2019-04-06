@@ -16,10 +16,6 @@ currentDirectory = os.getcwd()
 developerDirectory = '/home/bruno/Desktop/Dropbox/Developer/'
 toolsDirectory_1 = developerDirectory + 'pyCUDA/tools/'
 volumeRenderDirectory = developerDirectory + "pyCUDA/volumeRender/"
-# dataDir = '/media/bruno/hard_drive_1/data/'
-# dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
-dataDir = '/home/bruno/Desktop/data/'
-# dataDir = '/raid/bruno/data/'
 cosmo_dir = '/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/'
 toolsDirectory = cosmo_dir + "tools/"
 sys.path.extend([toolsDirectory, toolsDirectory_1, volumeRenderDirectory] )
@@ -38,10 +34,8 @@ for option in sys.argv:
   if option.find("iso") != -1: transp_type = 'gaussian'
 
 
-# inDir = dataDir + 'cholla_hydro/collapse_3D/'
-inDir = dataDir + 'cosmo_sims/cholla_pm/cosmo_512_hydro/data/'
-dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
-inDir = dataDir + 'cosmo_sims/cholla_pm/cosmo_512_hydro/data/interpolation/'
+dataDir = '/home/bruno/Desktop/data/'
+inDir = dataDir 
 outDir = '/home/bruno/Desktop/anim_cosmo/'
 
 # #Cholla fie names
@@ -84,16 +78,16 @@ def load_data_snap( nSnap):
   # data_cholla, nSnapshots = load_snapshot_data( snapKey, gridFileName, partFileName )
   # density_dm = data_cholla['dm']['density'][...]
   # density_gas = data_cholla['grid']['density'][...]
-  gridFileName = 'grid_{0}.h5'.format( nSnap )
   partFileName = 'particles_{0}.h5'.format( nSnap )
+  partFile = h5.File( inDir + partFileName, 'r')
+  density_dm = partFile['density'][...]
+  partFile.close()
+  gridFileName = 'grid_{0}.h5'.format( nSnap )
   gridFile = h5.File( inDir + gridFileName, 'r')
-  # partFile = h5.File( inDir + partFileName, 'r')
+  density_gas = gridFile['density'][...]
+  gridFile.close()
   # print partFile.keys()
   # print gridFile.keys()
-  density_gas = gridFile['GasEnergy'][...]
-  density_dm = gridFile['GasEnergy'][...]
-  gridFile.close()
-  # partFile.close()
   plotData_h_256 = prepare_data( nSnap, density_dm, log=True)
   plotData_h_256_1 = prepare_data( nSnap, density_gas, log=True)
   return plotData_h_256, plotData_h_256_1
@@ -106,7 +100,7 @@ def change_snapshot( nSnap):
   volumeRender.plotData_dArray, copyToScreenArray = np3DtoCudaArray( plotData_h_256 )
 
 
-nSnap = 399
+nSnap = 99
 plotData_h_256, plotData_h_256_1 = load_data_snap( nSnap )
 nz, ny, nx = plotData_h_256.shape
 nWidth, nHeight, nDepth = nx, ny, nz

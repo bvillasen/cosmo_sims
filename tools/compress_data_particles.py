@@ -59,7 +59,7 @@ def compress_particles( inDir, outDir, cosmology=True):
         if cosmology:
           current_a = head['current_a']
           current_z = head['current_z']
-        particle_mass= head['particle_mass']
+        # particle_mass= head['particle_mass']
         procStart_z, procStart_y, procStart_x = head['offset']
         procEnd_z, procEnd_y, procEnd_x = head['offset'] + head['dims_local']
         if key in keys:
@@ -82,7 +82,7 @@ def compress_particles( inDir, outDir, cosmology=True):
         if cosmology:
           fileSnap.attrs['current_z'] = current_z[0]
           fileSnap.attrs['current_a'] = current_a[0]
-        fileSnap.attrs['particle_mass'] = particle_mass[0]
+        # fileSnap.attrs['particle_mass'] = particle_mass[0]
         added_time = True
     fileSnap.close()
     print ' Saved File: ', outDir+fileName

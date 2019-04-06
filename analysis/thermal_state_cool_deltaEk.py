@@ -13,12 +13,12 @@ from load_data_enzo import load_snapshot_enzo
 from phase_diagram import get_phase_diagram
 
 dataDir = '/raid/bruno/data/'
-outDir = cosmo_dir + 'figures/phase_diagram/deltaEk/'
+outDir = cosmo_dir + 'figures/phase_diagram/doubleSync/'
 
 chollaDir_metals = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_metals/'
 chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_limitEkin/'
 chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_gravWork/'
-chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_deltaEk/'
+chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_doubleSync/'
 
 
 
@@ -37,7 +37,7 @@ dv = (115000./nPoints)**3
 nbins = 1000
 
 nSnap = 0
-snapshots = range(16,31)
+snapshots = range(0,31)
 # snapshots = [0]
 for nSnap in snapshots:
   fileName = 'phase_diagram_{0}.png'.format(nSnap)
@@ -136,7 +136,7 @@ for nSnap in snapshots:
   plt.colorbar(c)
   ax.set_ylabel(r'Log Temperature $[K]$', fontsize=15 )
   ax.set_xlabel(r'Log Gas Overdensity', fontsize=15 )
-  ax.set_title( " ENZO Gas UVB HM2012  T={0:.2e}   d={1:.2e}".format( temp_avrg_en_uv, dens_avrg_en_uv))
+  ax.set_title( " Z={2:.2f}   ENZO Gas UVB HM2012  T={0:.2e}   d={1:.2e}".format( temp_avrg_en_uv, dens_avrg_en_uv, current_z_ch))
   ax.set_xlim(x_min, x_max)
   ax.set_ylim(-1, y_max)
 
@@ -204,7 +204,7 @@ for nSnap in snapshots:
   plt.colorbar(c)
   ax.set_ylabel(r'Log Temperature $[K]$', fontsize=15 )
   ax.set_xlabel(r'Log Gas Overdensity', fontsize=15 )
-  ax.set_title( " CHOLLA Gas GRAVITY DELTA EKIN  T={0:.2e}   d={1:.2e}".format( temp_avrg_ch_uv_2, dens_avrg_ch_uv_2))
+  ax.set_title( " CHOLLA Gas DOUBLE SYNC  T={0:.2e}   d={1:.2e}".format( temp_avrg_ch_uv_2, dens_avrg_ch_uv_2))
   ax.set_xlim(x_min, x_max)
   ax.set_ylim(-1, y_max)
 
@@ -215,7 +215,7 @@ for nSnap in snapshots:
   plt.colorbar(c)
   ax.set_ylabel(r'Log Temperature $[K]$', fontsize=15 )
   ax.set_xlabel(r'Log Neutral Hydrogen Overdensity', fontsize=15 )
-  ax.set_title( " CHOLLA Neutral Hydrogen GRAVITY  DELTA EKIN  T={0:.2e}   d={1:.2e}".format( temp_avrg_ch_uv_2, dens_H_avrg_ch_uv_2))
+  ax.set_title( " CHOLLA Neutral Hydrogen  DOUBLE SYNC  T={0:.2e}   d={1:.2e}".format( temp_avrg_ch_uv_2, dens_H_avrg_ch_uv_2))
   ax.set_xlim(x_min_h, x_max_h)
   ax.set_ylim(-1, y_max)
 

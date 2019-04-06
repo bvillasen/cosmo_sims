@@ -54,9 +54,11 @@ def compress_grid( inDir, outDir ):
     added_time = False
     print ' snap: {0}  '.format( nSnap )
     for key in keys:
-      if key in [ 'momentum_x', 'momentum_y', 'momentum_z', 'Energy', 'e_density', 'metal_density', 'HeI_density', 'HeII_density', 'HeIII_density', 'GasEnergy']: continue
+      # if key in [ 'momentum_x', 'momentum_y', 'momentum_z', 'Energy', 'grav_potential', 'e_density', 'metal_density', 'HeI_density', 'HeII_density', 'HeIII_density']: continue
+      if key in [  'grav_potential', ]: continue
       print '  {0}'.format(key)
       # data_all = np.zeros( dims_all, dtype=np.float32 )
+      # if key in [ 'flags_DE' ]: data_all = np.zeros( dims_all, dtype=np.bool )
       data_all = np.zeros( dims_all, dtype=np.float64 )
       for nBox in range(nBoxes):
         inFileName = '{0}.{1}.{2}'.format(nSnap, name_base, nBox)
@@ -69,6 +71,7 @@ def compress_grid( inDir, outDir ):
         data_all[ procStart_z:procEnd_z, procStart_y:procEnd_y, procStart_x:procEnd_x] = data_local
         inFile.close()
       if key=='grav_density': print '  {0}   {1}   {2}'.format(data_all.mean(), data_all.min(), data_all.max())
+      if key=='flags_DE': print ' Flags_DE:  {0} '.format(data_all.sum())
       fileSnap.create_dataset( key, data=data_all )
       fileSnap.attrs['max_'+ key ] = data_all.max()
       fileSnap.attrs['min_'+ key ] = data_all.min()

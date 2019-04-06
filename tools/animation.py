@@ -8,11 +8,11 @@ from shutil import copyfile
 cosmo_dir = '/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/'
 # inDir = cosmo_dir + 'figures/cosmo_256_cholla_highRes/'
 # inDir = cosmo_dir + 'figures/collapse/anim/'
-inDir = cosmo_dir + 'figures/cooling/phase_diagram/'
+inDir = cosmo_dir + 'figures/phase_diagram/uvb_new_noSyncDE/'
 outDir = '/home/bruno/Desktop/'
 
 image_name = 'phase_diagram'
-out_anim_name = 'phase_diagram_cool'
+out_anim_name = 'phase_diagram_separateDE_new_noSyncDE'
 
 cmd = 'ffmpeg -framerate 1 -i '
 cmd += '{0}{1}_%d.png '.format( inDir, image_name )
