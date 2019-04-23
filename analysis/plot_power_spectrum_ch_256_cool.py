@@ -13,12 +13,12 @@ from load_data_enzo import load_snapshot_enzo
 
 dataDir = '/raid/bruno/data/'
 
-dataSet = 'de1'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_{0}/'.format(dataSet)
+# dataSet = 'de1'
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PCM/'
 enzoDir = dataDir + 'cosmo_sims/enzo/256_cool_uv/h5_files/'
 outDir = cosmo_dir + 'figures/power_hydro/'
 
-fileName = outDir + 'ps_256_cooling_uv_{0}.png'.format( dataSet )
+fileName = outDir + 'ps_256_cooling_uv_PCM.png'
 
 # set simulation volume dimentions
 nPoints = 256
@@ -151,7 +151,7 @@ ax2.set_xscale('log')
 ax4.set_xscale('log')
 ax6.set_xscale('log')
 ax8.set_xscale('log')
-ax1.set_title('{0}    DM Power Spectrum'.format(dataSet),  fontsize=18)
+ax1.set_title('    DM Power Spectrum',  fontsize=18)
 ax3.set_title('Gas Power Spectrum',  fontsize=18)
 ax5.set_title('Neutral Hydrogen Power Spectrum',  fontsize=18)
 ax7.set_title('Ionized Hydrogen Power Spectrum',  fontsize=18)

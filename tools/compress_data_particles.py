@@ -23,13 +23,14 @@ def compress_particles( inDir, outDir, cosmology=True):
   snaps, boxes = files_names.T
   snaps = np.unique( snaps )
   boxes = np.unique( boxes )
+  snaps.sort()
   nSnapshots = len( snaps )
   nBoxes = len( boxes )
 
   print "Number of boxes: {0}".format(nBoxes)
   print "Number of snapshots: {0}".format(nSnapshots)
 
-  snap_id = 0
+  snap_id = snaps[0]
   box_id = 0
   inFileName = '{0}_particles.{1}.{2}'.format(snap_id, name_base, box_id)
   inFile = h5py.File( inDir + inFileName, 'r')
@@ -40,7 +41,7 @@ def compress_particles( inDir, outDir, cosmology=True):
   nz, ny, nx = dims_all
   inFile.close()
 
-  for nSnap in range(nSnapshots):
+  for nSnap in snaps:
     fileName = out_base_name + '{0}.h5'.format( nSnap )
     fileSnap = h5py.File( outDir + fileName, 'w')
     keys = [  'density' ]

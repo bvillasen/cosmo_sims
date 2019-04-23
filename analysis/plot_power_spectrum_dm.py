@@ -22,14 +22,18 @@ outDir = cosmo_dir + 'figures/power_dm/'
 # snapshots_ch = [  2, 4, 6, 8, 10, 12, 16, 20, 24, 30 ]
 snapshots = range(20)
 
-fileName = 'power_dm_nyx_256.png'
+fileName = 'power_dm_nyx_50Mpc.png'
 
+
+# Lbox = 115.0   #Mpc/h
+# h = 0.6774
+
+Lbox = 50.
+h = 0.6766
 
 nPoints = 256
 nz, ny, nx = nPoints, nPoints, nPoints
 nCells  = nx*ny*nz
-Lbox = 115.0   #Mpc/h
-h = 0.6774
 Lx = Lbox
 Ly = Lbox
 Lz = Lbox

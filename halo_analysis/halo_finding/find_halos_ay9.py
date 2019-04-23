@@ -7,13 +7,13 @@ pId = MPIcomm.Get_rank()
 nProc = MPIcomm.Get_size()
 
 currentDirectory = os.getcwd()
-#Add Modules from other directories
+#Add Modules from other directoriess
 devDirectory = '/home/bruno/Desktop/Dropbox/Developer/'
 toolsDirectory = devDirectory + "tools/"
-sys.path.append( toolsDirectory )
-from tools import *
+# sys.path.append( toolsDirectory )
+# from tools import *
 
-dataDir = '/home/bruno/Desktop/data/ay9/128_dm/'
+dataDir = '/raid/bruno/data/cosmo_sims/gadget/ay9_256/'
 
 
 rockstarDir = devDirectory + 'cosmo_sims/halo_analysis/halo_finding/rockstar/'
@@ -24,16 +24,17 @@ rockstarConf = {
 'FILE_FORMAT': '"GADGET2"',
 'GADGET_LENGTH_CONVERSION' :1e-3,  #convert from kpc to Mpc
 'GADGET_MASS_CONVERSION': 1e+10,
-'FORCE_RES': 0.0078125,                 #Mpc/h
-'OUTBASE': dataDir + 'halos/',
+'FORCE_RES': 0.002,                 #Mpc/h
+'OUTBASE': dataDir + 'halos/snap_100/',
+'FULL_PARTICLE_CHUNKS': 8,
 }
 parallelConf = {
 'PARALLEL_IO': 1,
 'PERIODIC': 1,                                #non-periodic boundary conditions
 'INBASE':  dataDir ,               #"/directory/where/files/are/located"
 'NUM_BLOCKS': 1,                              # <number of files per snapshot>
-'NUM_SNAPS': 201,                               # <total number of snapshots>
-'STARTING_SNAP': 0,
+'NUM_SNAPS': 101,                               # <total number of snapshots>
+'STARTING_SNAP': 100,
 'FILENAME': '"snapshot_<snap>"',              #"my_sim.<snap>.<block>"
 # 'SNAPSHOT_NAMES': dataDir + 'halos/snaps_names.txt',
 # 'BGC2_SNAPNAMES': dataDir + 'halos/snaps_names.txt',

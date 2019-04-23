@@ -21,6 +21,16 @@ def get_internal_energy( temp, gamma=5./3 ):
   return u
 
 
+def get_mu( data_cholla ):
+  dens = data_cholla['gas']['density'][...]
+  HI_dens = data_cholla['gas']['HI_density'][...]
+  HII_dens = data_cholla['gas']['HII_density'][...]
+  HeI_dens = data_cholla['gas']['HeI_density'][...]
+  HeII_dens = data_cholla['gas']['HeII_density'][...]
+  HeIII_dens = data_cholla['gas']['HeIII_density'][...]
+  mu =  dens / ( HI_dens + 2*HII_dens + ( HeI_dens + 2*HeII_dens + 3*HeIII_dens) / 4 )
+  return mu
+
 def get_Temperaure_From_Flags_DE( data_cholla, gamma=5./3, normalize_dens=True ):
   dens = data_cholla['gas']['density'][...]
   dens_mean = dens.mean()

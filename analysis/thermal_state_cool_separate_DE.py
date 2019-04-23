@@ -13,9 +13,9 @@ from phase_diagram import get_phase_diagram
 from internal_energy import get_internal_energy, get_temp, get_Temperaure_From_Flags_DE
 
 dataDir = '/raid/bruno/data/'
-outDir = cosmo_dir + 'figures/phase_diagram/uvb_de001_syncDE_tempFloor/'
+outDir = cosmo_dir + 'figures/phase_diagram/uvb_PCM/'
 
-chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de001_syncDE_tempFloor/'
+chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PCM/'
 # chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de001_extra_scalar_pressureTerm/'
 # chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_newDE/'
 
@@ -34,7 +34,7 @@ dv = (115000./nPoints)**3
 nbins = 1000
 
 nSnap = 8
-snapshots = range(0,31)
+snapshots = range(20,31)
 # snapshots = [0]
 for nSnap in snapshots:
   fileName = 'phase_diagram_{0}.png'.format(nSnap)

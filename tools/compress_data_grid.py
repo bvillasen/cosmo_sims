@@ -22,6 +22,7 @@ def compress_grid( inDir, outDir ):
   snaps, boxes = files_names.T
   snaps = np.unique( snaps )
   boxes = np.unique( boxes )
+  snaps.sort()
   nSnapshots = len( snaps )
   nBoxes = len( boxes )
 
@@ -29,7 +30,7 @@ def compress_grid( inDir, outDir ):
   print "Number of boxes: {0}".format(nBoxes)
   print "Number of snapshots: {0}".format(nSnapshots)
 
-  snap_id = 0
+  snap_id = snaps[0]
   box_id = 0
   inFileName = '{0}.{1}.{2}'.format(snap_id, name_base, box_id)
   inFile = h5py.File( inDir + inFileName, 'r')
@@ -48,7 +49,7 @@ def compress_grid( inDir, outDir ):
   nz, ny, nx = dims_all
   inFile.close()
 
-  for nSnap in range(nSnapshots):
+  for nSnap in snaps:
     fileName = out_base_name + '{0}.h5'.format( nSnap )
     fileSnap = h5py.File( outDir + fileName, 'w' )
     added_time = False
@@ -65,6 +66,7 @@ def compress_grid( inDir, outDir ):
         inFile = h5py.File( inDir + inFileName, 'r')
         head = inFile.attrs
         time = head['t']
+        dt = head['dt']
         procStart_z, procStart_y, procStart_x = head['offset']
         procEnd_z, procEnd_y, procEnd_x = head['offset'] + head['dims_local']
         data_local = inFile[key][...]
@@ -78,6 +80,7 @@ def compress_grid( inDir, outDir ):
       fileSnap.attrs['mean_'+ key ] = data_all.mean()
       if added_time == False:
         fileSnap['t'] = time
+        fileSnap['dt'] = dt
         added_time = True
     fileSnap.close()
     print ' Saved File: ', outDir+fileName, '\n'

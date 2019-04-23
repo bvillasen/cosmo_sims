@@ -15,7 +15,8 @@ K_b = 1.38064852e-23 #m2 kg s-2 K-1
 
 #Mass of proton
 M_p = 1.6726219e-27 #kg
-
+M_e = 9.10938356e-31 #kg
+e_charge = 1.60217662e-19 # Coulombs 
 
 c = 299792000.458 # velocity of light in m/sec
 # pc = 3.086e13  #km
