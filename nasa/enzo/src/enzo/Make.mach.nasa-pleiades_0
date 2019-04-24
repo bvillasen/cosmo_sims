@@ -44,7 +44,7 @@ LOCAL_MPI_INSTALL    =/nasa/sgi/mpt/2.15r20
 LOCAL_HDF5_INSTALL   = /nasa/hdf5/1.8.18_serial
 LOCAL_PYTHON_INSTALL = $(YT_DEST)
 LOCAL_COMPILER_DIR    = /nasa/intel/Compiler/2016.2.181/
-LOCAL_GRACKLE_INSTALL = $(HOME)/code/grackle
+LOCAL_GRACKLE_INSTALL = $(HOME)/local
 
 #-----------------------------------------------------------------------
 # Compiler settings
