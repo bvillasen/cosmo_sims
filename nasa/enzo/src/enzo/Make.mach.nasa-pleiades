@@ -50,23 +50,24 @@ LOCAL_GRACKLE_INSTALL = $(HOME)/code/grackle
 # Compiler settings
 #-----------------------------------------------------------------------
 
-MACH_CPP       = icpc
+MACH_CPP       = mpicxx
 
 # With MPI
 
-MACH_CC_MPI    = icc
-MACH_CXX_MPI   = icpc
-MACH_FC_MPI    = ifort
-MACH_F90_MPI   = ifort
-MACH_LD_MPI    = icpc
+MACH_CC_MPI    = mpicc
+MACH_CXX_MPI   = mpicxx
+MACH_FC_MPI    = mpif77
+MACH_F90_MPI   = mpif90
+MACH_LD_MPI    = mpgcc
 
 # Without MPI
 
-MACH_CC_NOMPI  = icc
-MACH_CXX_NOMPI = icpc
-MACH_FC_NOMPI  = ifort
-MACH_F90_NOMPI = ifort
-MACH_LD_NOMPI  = icpc
+MACH_CC_NOMPI  = gcc # C compiler
+MACH_CXX_NOMPI = g++ # C++ compiler
+MACH_FC_NOMPI  = gfortran # Fortran 77
+MACH_F90_NOMPI = gfortran # Fortran 90
+MACH_LD_NOMPI  = gcc # Linker
+MACH_LIBTOOL   = libtool
 
 #-----------------------------------------------------------------------
 # Machine-dependent defines
