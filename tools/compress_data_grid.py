@@ -67,6 +67,13 @@ def compress_grid( inDir, outDir ):
         head = inFile.attrs
         time = head['t']
         dt = head['dt']
+        if added_time == False:
+          fileSnap['t'] = time
+          fileSnap['dt'] = dt
+          for key_cosmo in [ 'H0', 'Omega_M', 'Omega_L', 'Current_a', 'Current_z']:
+            if inFile.attrs.get(key_cosmo): 
+              fileSnap[key_cosmo] = inFile.attrs[key_cosmo]
+          added_time = True
         procStart_z, procStart_y, procStart_x = head['offset']
         procEnd_z, procEnd_y, procEnd_x = head['offset'] + head['dims_local']
         data_local = inFile[key][...]
@@ -78,9 +85,5 @@ def compress_grid( inDir, outDir ):
       fileSnap.attrs['max_'+ key ] = data_all.max()
       fileSnap.attrs['min_'+ key ] = data_all.min()
       fileSnap.attrs['mean_'+ key ] = data_all.mean()
-      if added_time == False:
-        fileSnap['t'] = time
-        fileSnap['dt'] = dt
-        added_time = True
     fileSnap.close()
     print ' Saved File: ', outDir+fileName, '\n'

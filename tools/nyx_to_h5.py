@@ -106,7 +106,7 @@ for nSnap, inFileName in enumerate( dataFiles):
   outFile.close()
   print 'Saved h5 file: ', outputFileName
 
-# chollaDir = '/home/bruno/cholla/'
-# scale_fle_name = chollaDir + 'scale_output_files/outputs_{0}_nyx.txt'.format(type)
-# print "Saving scale_output_files: ", scale_fle_name
-# np.savetxt( scale_fle_name, current_a_list )
+chollaDir = '/home/bruno/cholla/'
+scale_fle_name = chollaDir + 'scale_output_files/outputs_{0}_nyx.txt'.format(type)
+print "Saving scale_output_files: ", scale_fle_name
+np.savetxt( scale_fle_name, current_a_list )

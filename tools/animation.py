@@ -8,11 +8,11 @@ from shutil import copyfile
 cosmo_dir = '/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/'
 # inDir = cosmo_dir + 'figures/cosmo_256_cholla_highRes/'
 # inDir = cosmo_dir + 'figures/collapse/anim/'
-inDir = cosmo_dir + 'figures/phase_diagram/uvb_reconst/'
+inDir = cosmo_dir + 'figures/phase_diagram/uvb_de02_noFirst/'
 outDir = '/home/bruno/Desktop/'
 
 image_name = 'phase_diagram'
-out_anim_name = 'phase_diagram_reconst'
+out_anim_name = 'phase_diagram_noFirst_all'
 
 cmd = 'ffmpeg -framerate 1  '
 # cmd += ' -start_number 45'

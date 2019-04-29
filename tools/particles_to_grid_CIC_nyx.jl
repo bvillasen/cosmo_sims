@@ -40,7 +40,7 @@ const dz = Lz / nz
 
 
 # nSnap = 0
-for nSnap in 0:30
+for nSnap in 0:80
   println( "\nSnapshot: $(nSnap)")
   snapKey = lpad(nSnap,3,0)
   inFileName = inDir * in_base_name * snapKey * ".h5"

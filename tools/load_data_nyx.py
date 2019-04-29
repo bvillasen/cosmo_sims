@@ -66,8 +66,8 @@ def load_data_nyx_yt( inFileName, inDir, hydro=True ):
   h = ds.hubble_constant
   current_z = ds.current_redshift
   current_a = 1/(current_z + 1)
+  print h
 
-  L = 115
   p_mass = data[('all', 'particle_mass')] * h
   p_pos_x = data[('all', 'particle_position_x')].in_units('kpc')/current_a * h
   p_pos_y = data[('all', 'particle_position_y')].in_units('kpc')/current_a * h

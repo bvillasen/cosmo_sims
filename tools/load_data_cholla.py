@@ -61,8 +61,9 @@ def load_snapshot_data( nSnap, inDir, cool=False, dm=True ):
   dt = data_grid['dt'][0]
   outDir['t'] = t
   outDir['dt'] = dt
-  fields_grid = [ 'density',  'momentum_x', 'momentum_y', 'momentum_z', 'Energy', 'GasEnergy', 'potential', 'extra_scalar', 'extra_scalar_1', 'cooling_rate']
-  if cool: fields_grid.extend(['HI_density', 'HII_density', 'HeI_density', 'HeII_density', 'HeIII_density', 'e_density', 'metal_density', 'temperature', 'flags_DE'])
+  # fields_grid = [ 'density',  'momentum_x', 'momentum_y', 'momentum_z', 'Energy', 'GasEnergy', 'potential', 'extra_scalar', 'extra_scalar_1', 'cooling_rate']
+  # if cool: fields_grid.extend(['HI_density', 'HII_density', 'HeI_density', 'HeII_density', 'HeIII_density', 'e_density', 'metal_density', 'temperature', 'flags_DE'])
+  fields_grid = fields_data
   for field in fields_grid:
     if field not in fields_data: continue
     outDir['gas'][field] = data_grid[field]

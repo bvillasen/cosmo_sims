@@ -68,11 +68,11 @@ def get_Temperaure_From_Flags_DE( data_cholla, gamma=5./3, normalize_dens=True )
   HI_dens_GE = HI_dens[indxs_ge].flatten() / dens_mean
   temp_U_ALL = get_temp( U/dens*1e6, gamma, mu ).flatten()
   temp_GE_ALL = get_temp( GasEnergy/dens*1e6, gamma, mu ).flatten()
-  temp_1[temp_1 <= 0] = 1
-  temp_U[temp_U <= 0] = 1
-  temp_GE[temp_GE <= 0] = 1
-  temp_U_ALL[temp_U_ALL <= 0] = 1
-  temp_GE_ALL[temp_GE_ALL <= 0] = 1
+  temp_1[temp_1 <= 1] = 1
+  temp_U[temp_U <= 1] = 1
+  temp_GE[temp_GE <= 1] = 1
+  temp_U_ALL[temp_U_ALL <= 1] = 1
+  temp_GE_ALL[temp_GE_ALL <= 1] = 1
   return temp.flatten(), temp_1, temp_U, temp_GE, dens_U, dens_GE, HI_dens_U, HI_dens_GE, temp_U_ALL, temp_GE_ALL
 
 
