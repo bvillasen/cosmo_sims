@@ -20,7 +20,7 @@ from domain_decomposition import get_domain_block, get_domain_parent
 
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/nobackup/bvillase/hydro/'
-enzoDir = dataDir + 'enzo/512_hydro_50Mpc/'
+enzoDir = dataDir + 'enzo/512_hydro_50Mpc/ics/'
 inDir = enzoDir
 outputDir = dataDir + 'enzo/512_hydro_50Mpc/ics_cholla_8/'
 nSnap = 0
