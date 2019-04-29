@@ -22,7 +22,7 @@ from domain_decomposition import get_domain_block, get_domain_parent
 dataDir = '/nobackup/bvillase/hydro/'
 enzoDir = dataDir + 'enzo/512_hydro_50Mpc/'
 inDir = enzoDir
-outputDir = dataDir + 'enzo/512_hydro_50Mpc/'
+outputDir = dataDir + 'enzo/512_hydro_50Mpc/ics_cholla_8/'
 nSnap = 0
 
 
@@ -53,83 +53,62 @@ gas_E = data_grid[('gas', 'total_energy' )].v * 1e-10   *gas_dens  #km^2/s^2
 
 # mu = data_grid[('gas', 'mean_molecular_weight' )].v
 
-# 
-# HI_frac = 0.75984603
-# HII_frac = 0.00015397
-# HeI_frac = 0.24
-# HeII_frac = 9.6e-15
-# HeIII_frac = 9.6e-18
-# electron_frac = 0.00015397
-# metal_frac = 1e-10
-# 
-# 
-# HI_dens = HI_frac * gas_dens
-# HII_dens = HII_frac * gas_dens
-# HeI_dens = HeI_frac * gas_dens
-# HeII_dens = HeII_frac * gas_dens
-# HeIII_dens = HeIII_frac * gas_dens
-# electron_dens = electron_frac * gas_dens
-# metal_dens = metal_frac * gas_dens
-# # # H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# # HI_dens =  data_grid[ ('gas', 'H_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# # HII_dens =  data_grid[ ('gas', 'H_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# # # He_dens =  data_grid[ ('gas', 'He_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# # HeI_dens =  data_grid[ ('gas', 'He_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# # HeII_dens =  data_grid[ ('gas', 'He_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# # HeIII_dens =  data_grid[ ('gas', 'He_p2_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# # electron_dens =  data_grid[ ('gas', 'El_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# # proten_electron_mass_ratio = 1836.15267389 * 1.00066569
-# # electron_dens *= proten_electron_mass_ratio
-# #
-# # if metals:
-# #   metal_dens = data_grid[ ('gas', 'metal_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# 
-# 
-# 
-# 
-# 
-# 
-# p_mass = data[('all', 'particle_mass')].in_units('msun')*h
-# p_pos_x = data[('all', 'particle_position_x')].in_units('kpc')/current_a*h
-# p_pos_y = data[('all', 'particle_position_y')].in_units('kpc')/current_a*h
-# p_pos_z = data[('all', 'particle_position_z')].in_units('kpc')/current_a*h
-# p_vel_x = data[('all', 'particle_velocity_x')].in_units('km/s')
-# p_vel_y = data[('all', 'particle_velocity_y')].in_units('km/s')
-# p_vel_z = data[('all', 'particle_velocity_z')].in_units('km/s')
-# 
-# data_enzo = { 'dm':{}, 'gas':{} }
-# data_enzo['current_a'] = current_a
-# data_enzo['current_z'] = current_z
-# 
-# data_enzo['dm']['mass'] = p_mass
-# data_enzo['dm']['pos_x'] = p_pos_x
-# data_enzo['dm']['pos_y'] = p_pos_y
-# data_enzo['dm']['pos_z'] = p_pos_z
-# data_enzo['dm']['vel_x'] = p_vel_x
-# data_enzo['dm']['vel_y'] = p_vel_y
-# data_enzo['dm']['vel_z'] = p_vel_z
-# #
-# data_enzo['gas']['density'] = gas_dens
-# data_enzo['gas']['momentum_x'] = gas_dens * gas_vel_x
-# data_enzo['gas']['momentum_y'] = gas_dens * gas_vel_y
-# data_enzo['gas']['momentum_z'] = gas_dens * gas_vel_z
-# data_enzo['gas']['GasEnergy'] = gas_u
-# data_enzo['gas']['Energy'] = gas_E
-# data_enzo['gas']['HI_density'] = HI_dens
-# data_enzo['gas']['HII_density'] = HII_dens
-# data_enzo['gas']['HeI_density'] = HeI_dens
-# data_enzo['gas']['HeII_density'] = HeII_dens
-# data_enzo['gas']['HeIII_density'] = HeIII_dens
-# data_enzo['gas']['e_density'] = electron_dens
-# if metals:
-#   data_enzo['gas']['metal_density'] = metal_dens
-# 
-# 
-# proc_grid = [ 2, 2, 2]
-# box_size = [ Lbox, Lbox, Lbox ]
-# grid_size = [ 512, 512, 512 ]
-# outputBaseName = '{0}_particles.h5'.format(nSnap)
-# generate_ics_particles(data_enzo, outputDir, outputBaseName, proc_grid, box_size, grid_size)
-# 
-# outputBaseName = '{0}.h5'.format(nSnap)
-# expand_data_grid_to_cholla( proc_grid, data_enzo['gas'], outputDir, outputBaseName )
+# H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
+HI_dens =  data_grid[ ('gas', 'H_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
+HII_dens =  data_grid[ ('gas', 'H_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
+# He_dens =  data_grid[ ('gas', 'He_density')].in_units('msun/kpc**3')*current_a**3/h**2
+HeI_dens =  data_grid[ ('gas', 'He_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
+HeII_dens =  data_grid[ ('gas', 'He_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
+HeIII_dens =  data_grid[ ('gas', 'He_p2_density')].in_units('msun/kpc**3')*current_a**3/h**2
+electron_dens =  data_grid[ ('gas', 'El_density')].in_units('msun/kpc**3')*current_a**3/h**2
+proten_electron_mass_ratio = 1836.15267389 * 1.00066569
+electron_dens *= proten_electron_mass_ratio
+
+if metals:
+  metal_dens = data_grid[ ('gas', 'metal_density')].in_units('msun/kpc**3')*current_a**3/h**2
+
+
+p_mass = data[('all', 'particle_mass')].in_units('msun')*h
+p_pos_x = data[('all', 'particle_position_x')].in_units('kpc')/current_a*h
+p_pos_y = data[('all', 'particle_position_y')].in_units('kpc')/current_a*h
+p_pos_z = data[('all', 'particle_position_z')].in_units('kpc')/current_a*h
+p_vel_x = data[('all', 'particle_velocity_x')].in_units('km/s')
+p_vel_y = data[('all', 'particle_velocity_y')].in_units('km/s')
+p_vel_z = data[('all', 'particle_velocity_z')].in_units('km/s')
+
+data_enzo = { 'dm':{}, 'gas':{} }
+data_enzo['current_a'] = current_a
+data_enzo['current_z'] = current_z
+
+data_enzo['dm']['mass'] = p_mass
+data_enzo['dm']['pos_x'] = p_pos_x
+data_enzo['dm']['pos_y'] = p_pos_y
+data_enzo['dm']['pos_z'] = p_pos_z
+data_enzo['dm']['vel_x'] = p_vel_x
+data_enzo['dm']['vel_y'] = p_vel_y
+data_enzo['dm']['vel_z'] = p_vel_z
+#
+data_enzo['gas']['density'] = gas_dens
+data_enzo['gas']['momentum_x'] = gas_dens * gas_vel_x
+data_enzo['gas']['momentum_y'] = gas_dens * gas_vel_y
+data_enzo['gas']['momentum_z'] = gas_dens * gas_vel_z
+data_enzo['gas']['GasEnergy'] = gas_u
+data_enzo['gas']['Energy'] = gas_E
+data_enzo['gas']['HI_density'] = HI_dens
+data_enzo['gas']['HII_density'] = HII_dens
+data_enzo['gas']['HeI_density'] = HeI_dens
+data_enzo['gas']['HeII_density'] = HeII_dens
+data_enzo['gas']['HeIII_density'] = HeIII_dens
+data_enzo['gas']['e_density'] = electron_dens
+if metals:
+  data_enzo['gas']['metal_density'] = metal_dens
+
+
+proc_grid = [ 2, 2, 2]
+box_size = [ Lbox, Lbox, Lbox ]
+grid_size = [ 512, 512, 512 ]
+outputBaseName = '{0}_particles.h5'.format(nSnap)
+generate_ics_particles(data_enzo, outputDir, outputBaseName, proc_grid, box_size, grid_size)
+
+outputBaseName = '{0}.h5'.format(nSnap)
+expand_data_grid_to_cholla( proc_grid, data_enzo['gas'], outputDir, outputBaseName )
