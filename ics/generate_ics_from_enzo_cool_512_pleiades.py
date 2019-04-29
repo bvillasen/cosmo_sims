@@ -19,10 +19,10 @@ from expand_data_grid import expand_data_grid_to_cholla
 from domain_decomposition import get_domain_block, get_domain_parent
 
 # dataDir = '/home/bruno/Desktop/data/'
-dataDir = '/raid/bruno/data/'
-enzoDir = dataDir + 'cosmo_sims/enzo/512_cool_115Mpc/'
+dataDir = '/nobackup/bvillase/hydro/'
+enzoDir = dataDir + 'enzo/512_hydro_50Mpc/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/512_cool/ics_115Mpc/'
+outputDir = dataDir + 'enzo/512_hydro_50Mpc/'
 nSnap = 0
 
 
