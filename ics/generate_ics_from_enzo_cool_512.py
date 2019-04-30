@@ -20,16 +20,16 @@ from domain_decomposition import get_domain_block, get_domain_parent
 
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
-enzoDir = dataDir + 'cosmo_sims/enzo/512_cool_115Mpc/'
+enzoDir = dataDir + 'cosmo_sims/enzo/512_50Mpc/ics/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/512_cool/ics_115Mpc/'
+outputDir = dataDir + 'cosmo_sims/cholla_pm/512_cool/ics_50Mpc_8/'
 nSnap = 0
 
+Lbox = 50000
 
 snapKey = '{0:03}'.format(nSnap)
 inFileName = 'DD0{0}/data0{0}'.format( snapKey)
 
-Lbox = 115000
 
 metals = True
 
@@ -40,53 +40,49 @@ h = ds.hubble_constant
 current_z = np.float(ds.current_redshift)
 current_a = 1./(current_z + 1)
 
+print " Getting grid data "
+
 data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
+
+print "density"
 gas_dens = data_grid[ ('gas', 'density')].in_units('msun/kpc**3').v*current_a**3/h**2
+print "vel x"
 gas_vel_x = data_grid[('gas','velocity_x')].in_units('km/s').v
+print "vel y"
 gas_vel_y = data_grid[('gas','velocity_y')].in_units('km/s').v
+print "vel z"
 gas_vel_z = data_grid[('gas','velocity_z')].in_units('km/s').v
-gas_temp = data_grid[ ('gas', 'temperature')].v
-# temp_factor = 1.2385545089162293
-# gas_temp *= temp_factor
+# gas_temp = data_grid[ ('gas', 'temperature')].v
+print "U"
 gas_u = data_grid[('gas', 'thermal_energy' )].v * 1e-10 * gas_dens #km^2/s^2
+print "E"
 gas_E = data_grid[('gas', 'total_energy' )].v * 1e-10   *gas_dens  #km^2/s^2
 
 # mu = data_grid[('gas', 'mean_molecular_weight' )].v
+# H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "HI"
+HI_dens =  data_grid[ ('gas', 'H_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "HII"
+HII_dens =  data_grid[ ('gas', 'H_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
+# He_dens =  data_grid[ ('gas', 'He_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "HeI"
+HeI_dens =  data_grid[ ('gas', 'He_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "HeII"
+HeII_dens =  data_grid[ ('gas', 'He_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "HeIII"
+HeIII_dens =  data_grid[ ('gas', 'He_p2_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "e"
+electron_dens =  data_grid[ ('gas', 'El_density')].in_units('msun/kpc**3')*current_a**3/h**2
+proten_electron_mass_ratio = 1836.15267389 * 1.00066569
+electron_dens *= proten_electron_mass_ratio
 
-
-HI_frac = 0.75984603
-HII_frac = 0.00015397
-HeI_frac = 0.24
-HeII_frac = 9.6e-15
-HeIII_frac = 9.6e-18
-electron_frac = 0.00015397
-metal_frac = 1e-10
-
-
-HI_dens = HI_frac * gas_dens
-HII_dens = HII_frac * gas_dens
-HeI_dens = HeI_frac * gas_dens
-HeII_dens = HeII_frac * gas_dens
-HeIII_dens = HeIII_frac * gas_dens
-electron_dens = electron_frac * gas_dens
-metal_dens = metal_frac * gas_dens
-# # H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# HI_dens =  data_grid[ ('gas', 'H_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# HII_dens =  data_grid[ ('gas', 'H_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# # He_dens =  data_grid[ ('gas', 'He_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# HeI_dens =  data_grid[ ('gas', 'He_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# HeII_dens =  data_grid[ ('gas', 'He_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# HeIII_dens =  data_grid[ ('gas', 'He_p2_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# electron_dens =  data_grid[ ('gas', 'El_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# proten_electron_mass_ratio = 1836.15267389 * 1.00066569
-# electron_dens *= proten_electron_mass_ratio
-#
-# if metals:
-#   metal_dens = data_grid[ ('gas', 'metal_density')].in_units('msun/kpc**3')*current_a**3/h**2
+if metals:
+  print "metals"
+  metal_dens = data_grid[ ('gas', 'metal_density')].in_units('msun/kpc**3')*current_a**3/h**2
 
 
 
-
+print "particles"
 
 
 p_mass = data[('all', 'particle_mass')].in_units('msun')*h

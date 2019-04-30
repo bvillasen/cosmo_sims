@@ -39,34 +39,49 @@ data = ds.all_data()
 h = ds.hubble_constant
 current_z = np.float(ds.current_redshift)
 current_a = 1./(current_z + 1)
+print " Getting grid data "
 
 data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
+
+print "density"
 gas_dens = data_grid[ ('gas', 'density')].in_units('msun/kpc**3').v*current_a**3/h**2
+print "vel x"
 gas_vel_x = data_grid[('gas','velocity_x')].in_units('km/s').v
+print "vel y"
 gas_vel_y = data_grid[('gas','velocity_y')].in_units('km/s').v
+print "vel z"
 gas_vel_z = data_grid[('gas','velocity_z')].in_units('km/s').v
-gas_temp = data_grid[ ('gas', 'temperature')].v
-# temp_factor = 1.2385545089162293
-# gas_temp *= temp_factor
+# gas_temp = data_grid[ ('gas', 'temperature')].v
+print "U"
 gas_u = data_grid[('gas', 'thermal_energy' )].v * 1e-10 * gas_dens #km^2/s^2
+print "E"
 gas_E = data_grid[('gas', 'total_energy' )].v * 1e-10   *gas_dens  #km^2/s^2
 
 # mu = data_grid[('gas', 'mean_molecular_weight' )].v
-
 # H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "HI"
 HI_dens =  data_grid[ ('gas', 'H_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "HII"
 HII_dens =  data_grid[ ('gas', 'H_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
 # He_dens =  data_grid[ ('gas', 'He_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "HeI"
 HeI_dens =  data_grid[ ('gas', 'He_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "HeII"
 HeII_dens =  data_grid[ ('gas', 'He_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "HeIII"
 HeIII_dens =  data_grid[ ('gas', 'He_p2_density')].in_units('msun/kpc**3')*current_a**3/h**2
+print "e"
 electron_dens =  data_grid[ ('gas', 'El_density')].in_units('msun/kpc**3')*current_a**3/h**2
 proten_electron_mass_ratio = 1836.15267389 * 1.00066569
 electron_dens *= proten_electron_mass_ratio
 
 if metals:
+  print "metals"
   metal_dens = data_grid[ ('gas', 'metal_density')].in_units('msun/kpc**3')*current_a**3/h**2
 
+
+
+print "particles"
 
 p_mass = data[('all', 'particle_mass')].in_units('msun')*h
 p_pos_x = data[('all', 'particle_position_x')].in_units('kpc')/current_a*h

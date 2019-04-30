@@ -19,12 +19,12 @@ rank = comm.Get_rank()
 nSnap = rank
 
 dataDir = '/raid/bruno/data/'
-outDir = cosmo_dir + 'figures/phase_diagram/uvb_de02_noFirst/'
+outDir = cosmo_dir + 'figures/phase_diagram/uvb_de02_da00001/'
 
 
-nrows = 4
-chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PCM_noFirst/'
-chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PLMP_noFirst/'
+nrows = 2
+chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC_noFirst/'
+chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC_da00001/'
 chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PLMC_noFirst/'
 chollaDir_3 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC_noFirst/'
 # chollaDir_4 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC/'
