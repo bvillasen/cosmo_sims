@@ -57,8 +57,8 @@ def load_snapshot_data( nSnap, inDir, cool=False, dm=True ):
   data_grid = h5.File( gridFileName, 'r' )
   fields_data = data_grid.keys()
   # print fields_data
-  t = data_grid['t'][0]
-  dt = data_grid['dt'][0]
+  t = data_grid.attrs['t']
+  dt = data_grid.attrs['dt']
   outDir['t'] = t
   outDir['dt'] = dt
   # fields_grid = [ 'density',  'momentum_x', 'momentum_y', 'momentum_z', 'Energy', 'GasEnergy', 'potential', 'extra_scalar', 'extra_scalar_1', 'cooling_rate']

@@ -17,12 +17,14 @@ from expand_data_particles import expand_data_particles_to_cholla
 from generate_ics_particles_functions import generate_ics_particles, generate_ics_particles_single_domain
 from expand_data_grid import expand_data_grid_to_cholla
 from domain_decomposition import get_domain_block, get_domain_parent
+from tools import create_directory
 
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
 enzoDir = dataDir + 'cosmo_sims/enzo/256_hydro_grackle_0/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/ics_cool/'
+outputDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/ics_noVel/'
+create_directory( outputDir )
 nSnap_enzo = 0
 
 metals = True
@@ -95,11 +97,15 @@ data_enzo['dm']['vel_y'] = p_vel_y
 data_enzo['dm']['vel_z'] = p_vel_z
 #
 data_enzo['gas']['density'] = gas_dens
-data_enzo['gas']['momentum_x'] = gas_dens * gas_vel_x
-data_enzo['gas']['momentum_y'] = gas_dens * gas_vel_y
-data_enzo['gas']['momentum_z'] = gas_dens * gas_vel_z
+# data_enzo['gas']['momentum_x'] = gas_dens * gas_vel_x
+# data_enzo['gas']['momentum_y'] = gas_dens * gas_vel_y
+# data_enzo['gas']['momentum_z'] = gas_dens * gas_vel_z
+data_enzo['gas']['momentum_x'] = gas_dens * 0
+data_enzo['gas']['momentum_y'] = gas_dens * 0
+data_enzo['gas']['momentum_z'] = gas_dens * 0
 data_enzo['gas']['GasEnergy'] = gas_u
-data_enzo['gas']['Energy'] = gas_E
+# data_enzo['gas']['Energy'] = gas_E
+data_enzo['gas']['Energy'] = gas_u
 data_enzo['gas']['HI_density'] = H_0_dens
 data_enzo['gas']['HII_density'] = H_1_dens
 data_enzo['gas']['HeI_density'] = He_0_dens

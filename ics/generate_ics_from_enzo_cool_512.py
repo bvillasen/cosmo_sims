@@ -22,7 +22,7 @@ from domain_decomposition import get_domain_block, get_domain_parent
 dataDir = '/raid/bruno/data/'
 enzoDir = dataDir + 'cosmo_sims/enzo/512_50Mpc/ics/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/512_cool/ics_50Mpc_8/'
+outputDir = dataDir + 'cosmo_sims/cholla_pm/512_cool/ics_50Mpc_64/'
 nSnap = 0
 
 Lbox = 50000
@@ -121,7 +121,8 @@ if metals:
   data_enzo['gas']['metal_density'] = metal_dens
 
 
-proc_grid = [ 2, 2, 2]
+# proc_grid = [ 2, 2, 2]
+proc_grid = [ 4, 4, 4]
 box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 512, 512, 512 ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)

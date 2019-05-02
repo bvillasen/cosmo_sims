@@ -13,12 +13,12 @@ from load_data_enzo import load_snapshot_enzo
 
 dataDir = '/raid/bruno/data/'
 
-dataSet = 'PPMC'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_{0}_noFirst/'.format( dataSet )
+dataSet = 'PLMP'
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de05_{0}/'.format( dataSet )
 enzoDir = dataDir + 'cosmo_sims/enzo/256_cool_uv/h5_files/'
 outDir = cosmo_dir + 'figures/power_hydro/'
 
-fileName = outDir + 'ps_256_cooling_uv_de02_{0}.png'.format(dataSet)
+fileName = outDir + 'ps_256_cooling_uv_de05_{0}.png'.format(dataSet)
 
 # set simulation volume dimentions
 nPoints = 256
@@ -69,6 +69,7 @@ for i,nSnap in enumerate(snapshots):
   dens_gas_cholla = data_cholla['gas']['density'][...]
   dens_gas_H_cholla = data_cholla['gas']['HI_density'][...]
   dens_gas_HII_cholla = data_cholla['gas']['HII_density'][...]
+  # dens_gas_H_cholla *= dens_gas_cholla.mean() / dens_gas_H_cholla.mean()
 
   ps_dm_cholla, k_vals, count_dm_cholla = get_power_spectrum( dens_dm_cholla, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
   ps_gas_cholla, k_vals, count_gas_cholla = get_power_spectrum( dens_gas_cholla, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
@@ -90,6 +91,7 @@ for i,nSnap in enumerate(snapshots):
   dens_gas_enzo = data_enzo['gas']['density'][...]
   dens_gas_H_enzo = data_enzo['gas']['HI_density'][...]
   dens_gas_HII_enzo = data_enzo['gas']['HII_density'][...]
+  # dens_gas_H_enzo *= dens_gas_enzo.mean() / dens_gas_H_enzo.mean()
 
   ps_dm_enzo, k_vals, count_dm_enzo = get_power_spectrum( dens_dm_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
   ps_gas_enzo, k_vals, count_gas_enzo = get_power_spectrum( dens_gas_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)

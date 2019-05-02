@@ -11,6 +11,7 @@ from load_data_cholla import load_snapshot_data
 from load_data_enzo import load_snapshot_enzo
 from phase_diagram import get_phase_diagram
 from internal_energy import get_internal_energy, get_temp, get_Temperaure_From_Flags_DE
+from tools import create_directory
 
 from mpi4py import MPI
 
@@ -19,16 +20,20 @@ rank = comm.Get_rank()
 nSnap = rank
 
 dataDir = '/raid/bruno/data/'
-outDir = cosmo_dir + 'figures/phase_diagram/uvb_de02_da00001/'
+outDir = cosmo_dir + 'figures/phase_diagram/uvb_de02_noGrav/'
 
 
-nrows = 2
-chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC_noFirst/'
+nrows = 1
+chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_noGrav/'
 chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC_da00001/'
 chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PLMC_noFirst/'
 chollaDir_3 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC_noFirst/'
 # chollaDir_4 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC/'
 
+
+if rank == 0: 
+  create_directory( outDir )
+  print "Output: ", outDir
 
 enzoDir_uv = dataDir + 'cosmo_sims/enzo/256_cool_uv/h5_files/'
 
