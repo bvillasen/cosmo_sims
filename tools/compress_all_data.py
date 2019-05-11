@@ -35,6 +35,9 @@ if rank == 0:
   print 'Output Dir: ', outDir
   create_directory( outDir )
 
+comm.Barrier()
+
+
 def split_name( file_name):
   nSap, name, nBox = file_name.split('.')
   return [int(nSap), int(nBox)]

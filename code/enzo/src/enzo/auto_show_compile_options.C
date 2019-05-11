@@ -3,7 +3,7 @@ void auto_show_compile_options(void) {
    FILE *opf;
    opf = fopen("Enzo_Build", "w");
    fprintf(opf, "### Enzo build information:\n");
-   fprintf(opf, "### Compiled: Thu Feb 14 09:28:03 2019\n");
+   fprintf(opf, "### Compiled: Wed May  8 18:03:54 2019\n");
    fprintf(opf, "### Machine name: tornado\n");
    fprintf(opf, "### Branch: unknown\n");
    fprintf(opf, "### Changeset: unknown\n");

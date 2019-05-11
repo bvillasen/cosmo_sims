@@ -23,7 +23,7 @@ from tools import create_directory
 dataDir = '/raid/bruno/data/'
 enzoDir = dataDir + 'cosmo_sims/enzo/256_hydro_grackle_0/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/ics_noVel/'
+outputDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/ics_vel1/'
 create_directory( outputDir )
 nSnap_enzo = 0
 
@@ -45,12 +45,23 @@ gas_dens = data_grid[ ('gas', 'density')].in_units('msun/kpc**3').v*current_a**3
 gas_vel_x = data_grid[('gas','velocity_x')].in_units('km/s').v
 gas_vel_y = data_grid[('gas','velocity_y')].in_units('km/s').v
 gas_vel_z = data_grid[('gas','velocity_z')].in_units('km/s').v
-gas_temp = data_grid[ ('gas', 'temperature')].v
+# gas_E = data_grid[('gas', 'total_energy' )].v * 1e-10   *gas_dens  #km^2/s^2
+gas_u = data_grid[('gas', 'thermal_energy' )].v * 1e-10 * gas_dens #km^2/s^2
+
+
+vel_max = max( [ gas_vel_x.max(), gas_vel_y.max(), gas_vel_z.max() ])
+
+print ' Vel max: ', vel_max
+
+gas_vel_x = np.ones_like( gas_dens ) * 1
+gas_vel_y = np.ones_like( gas_dens ) * 1
+gas_vel_z = np.ones_like( gas_dens ) * 1
+
+gas_E = 0.5 * gas_dens * ( gas_vel_x*gas_vel_x + gas_vel_y*gas_vel_y + gas_vel_z*gas_vel_z ) + gas_u
+
+# gas_temp = data_grid[ ('gas', 'temperature')].v
 # temp_factor = 1.2385545089162293
 # gas_temp *= temp_factor
-gas_u = data_grid[('gas', 'thermal_energy' )].v * 1e-10 * gas_dens #km^2/s^2
-gas_E = data_grid[('gas', 'total_energy' )].v * 1e-10   *gas_dens  #km^2/s^2
-
 # mu = data_grid[('gas', 'mean_molecular_weight' )].v
 
 
@@ -95,17 +106,13 @@ data_enzo['dm']['pos_z'] = p_pos_z
 data_enzo['dm']['vel_x'] = p_vel_x
 data_enzo['dm']['vel_y'] = p_vel_y
 data_enzo['dm']['vel_z'] = p_vel_z
-#
+
 data_enzo['gas']['density'] = gas_dens
-# data_enzo['gas']['momentum_x'] = gas_dens * gas_vel_x
-# data_enzo['gas']['momentum_y'] = gas_dens * gas_vel_y
-# data_enzo['gas']['momentum_z'] = gas_dens * gas_vel_z
-data_enzo['gas']['momentum_x'] = gas_dens * 0
-data_enzo['gas']['momentum_y'] = gas_dens * 0
-data_enzo['gas']['momentum_z'] = gas_dens * 0
+data_enzo['gas']['momentum_x'] = gas_dens * gas_vel_x
+data_enzo['gas']['momentum_y'] = gas_dens * gas_vel_y
+data_enzo['gas']['momentum_z'] = gas_dens * gas_vel_z
 data_enzo['gas']['GasEnergy'] = gas_u
-# data_enzo['gas']['Energy'] = gas_E
-data_enzo['gas']['Energy'] = gas_u
+data_enzo['gas']['Energy'] = gas_E
 data_enzo['gas']['HI_density'] = H_0_dens
 data_enzo['gas']['HII_density'] = H_1_dens
 data_enzo['gas']['HeI_density'] = He_0_dens

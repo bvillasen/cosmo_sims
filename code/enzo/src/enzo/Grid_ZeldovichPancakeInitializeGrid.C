@@ -119,6 +119,8 @@ int grid::ZeldovichPancakeInitializeGrid(int  ZeldovichPancakeDirection,
  
   int NumberOfZones = GridEndIndex[ZeldovichPancakeDirection] -
                       GridStartIndex[ZeldovichPancakeDirection] + 1;
+                      
+  printf( "####### Numer of Zones : %d \n", NumberOfZones);                    
  
   /* Compute the amplitude of perturbations. */
  
@@ -150,6 +152,8 @@ int grid::ZeldovichPancakeInitializeGrid(int  ZeldovichPancakeDirection,
       xEulerian += (xLagrange - xEulerian + Amplitude*sin(kx*xEulerian)/kx)
 	          /(1                     - Amplitude*cos(kx*xEulerian)   );
     }
+    
+    printf( "####### x : %f \n", xEulerian);       
  
     /* Set density. */
     // correct Zeldovich test: 

@@ -8,13 +8,17 @@ from shutil import copyfile
 cosmo_dir = '/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/'
 # inDir = cosmo_dir + 'figures/cosmo_256_cholla_highRes/'
 # inDir = cosmo_dir + 'figures/collapse/anim/'
-inDir = cosmo_dir + 'figures/phase_diagram/uvb_de02_noFirst/'
+# inDir = cosmo_dir + 'figures/phase_diagram/uvb_de1_PPMC_HLLC/'
+# inDir = cosmo_dir + 'figures/projections/de1_PPMC_HLLC/'
+inDir = cosmo_dir + 'figures/zeldovich/de001_enzo/'
 outDir = '/home/bruno/Desktop/'
 
-image_name = 'phase_diagram'
-out_anim_name = 'phase_diagram_noFirst_all'
+# image_name = 'phase_diagram'
+# out_anim_name = 'phase_diagram_de01_PPMC_HLLC'
+image_name = 'zeldovich'
+out_anim_name = 'zeldovich_noDE'
 
-cmd = 'ffmpeg -framerate 1  '
+cmd = 'ffmpeg -framerate 2  '
 # cmd += ' -start_number 45'
 cmd += ' -i {0}{1}_%d.png '.format( inDir, image_name )
 cmd += '-pix_fmt yuv420p '

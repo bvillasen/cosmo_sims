@@ -19,14 +19,16 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 nSnap = rank
 
+name = 'de001_PLMP_CTU'
+
 dataDir = '/raid/bruno/data/'
-outDir = cosmo_dir + 'figures/phase_diagram/uvb_de02_noGrav/'
+outDir = cosmo_dir + 'figures/phase_diagram/uvb_{0}/'.format(name)
 
 
 nrows = 1
-chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_noGrav/'
-chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC_da00001/'
-chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PLMC_noFirst/'
+chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_{0}/'.format( name )
+chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de0_velMax_noPFlux/'
+chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de001_PCM_noCool/'
 chollaDir_3 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC_noFirst/'
 # chollaDir_4 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_PPMC/'
 
@@ -150,7 +152,7 @@ x_en_uv, y_en_uv, z_en_uv = get_phase_diagram( rho_en_uv, temp_en_uv , nbins, nc
 # x_H_en_uv, y_H_en_uv, z_H_en_uv = get_phase_diagram( rho_H_en_uv, temp_en_uv , nbins, ncells )
 
 ncols = 6
-fig, ax_l = plt.subplots(nrows=2, ncols=ncols, figsize=(10*ncols,8*nrows))
+fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(10*ncols,8*nrows))
 x_min = -2
 x_max = 5
 x_min_h = -11
