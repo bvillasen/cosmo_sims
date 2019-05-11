@@ -25,7 +25,6 @@ nSnap = rank
 
 
 dataDir = '/raid/bruno/data/'
-# dataDir = '/home/bruno/Desktop/data/'
 
 data_set = 'test'
 
@@ -34,6 +33,7 @@ chollaDir = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_{0}/'.format(data_set
 enzoDir = dataDir + 'cosmo_sims/enzo/ZeldovichPancake/'
 
 outDir = cosmo_dir + 'figures/zeldovich/{0}/'.format( data_set )
+
 if rank == 0:
   create_directory( outDir )
 
