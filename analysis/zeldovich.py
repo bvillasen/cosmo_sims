@@ -25,17 +25,25 @@ nSnap = rank
 
 
 dataDir = '/raid/bruno/data/'
+# enzoDir = dataDir + 'cosmo_sims/enzo/ZeldovichPancake/'
+
 
 data_set = 'test'
+inputDir = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_{0}/'.format(data_set)
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_{0}/'.format(data_set)
+outputDir = cosmo_dir + 'figures/zeldovich/{0}/'.format( data_set )
 
-enzoDir = dataDir + 'cosmo_sims/enzo/ZeldovichPancake/'
+n_param = len( sys.argv )
+if n_param > 1: 
+  inputDir = sys.argv[1]
+  outputDir = sys.argv[2]
+  if inputDir[-1] != "/": inputDir += '/'
+  if outputDir[-1] != "/": outputDir += '/'
 
-outDir = cosmo_dir + 'figures/zeldovich/{0}/'.format( data_set )
 
-if rank == 0:
-  create_directory( outDir )
+
+# if rank == 0:
+#   create_directory( outputDir )
 
 a_list = []
 
@@ -55,7 +63,7 @@ x = np.arange(0, 256, 1)* dx + 0.5*dx
 out_file_name = 'zeldovich_{0}.png'.format(nSnap)
 
 
-data_cholla = load_snapshot_data( nSnap, chollaDir )
+data_cholla = load_snapshot_data( nSnap, inputDir )
 current_z_ch = data_cholla['current_z']
 dens_dm_cholla = data_cholla['dm']['density'][...]
 dens_ch = data_cholla['gas']['density'][...][:, j_indx, i_indx]
@@ -117,8 +125,8 @@ ax.set_ylabel(r'Velocity  [ $km/s$ ]')
 ax.set_xlabel(r'X [ $\mathrm{cMpc}/h$ ]')
 
 fig.tight_layout()
-fig.savefig( outDir + out_file_name)
-print "Saved Fig: ", outDir + out_file_name
+fig.savefig( outputDir + out_file_name)
+print "Saved Fig: ", outputDir + out_file_name
 
 
 # np.savetxt('outputs_zeldovich.txt', a_list )
