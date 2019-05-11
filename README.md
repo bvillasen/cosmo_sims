@@ -1,6 +1,6 @@
 # Cosmological Simulations
 
-### Compres multiple Cholla Files to a single file
+### Compres multiple Cholla Files to a single snapshot file
 
 ```
 mpirun -n N python tools/compress_all_data.py SNAPSHOTS_DIR OUTPUT_DIR
