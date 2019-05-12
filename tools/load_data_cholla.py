@@ -50,17 +50,18 @@ def load_snapshot_data_particles( nSnap, inputDir ):
 
 
 
-def load_snapshot_data( nSnap, inDir, cool=False, dm=True ):
+def load_snapshot_data( nSnap, inDir, cool=False, dm=True, cosmo=True ):
   gridFileName = inDir + 'grid_{0}.h5'.format(nSnap)
   partFileName = inDir + 'particles_{0}.h5'.format(nSnap)
   outDir = {'dm':{}, 'gas':{} }
   data_grid = h5.File( gridFileName, 'r' )
   fields_data = data_grid.keys()
   # print fields_data
-  t = data_grid.attrs['t']
-  dt = data_grid.attrs['dt']
-  outDir['t'] = t
-  outDir['dt'] = dt
+  # t = data_grid.attrs['t']
+  # dt = data_grid.attrs['dt']
+  # outDir['t'] = t
+  # outDir['dt'] = dt
+  for key in data_grid.attrs.keys(): outDir[key] = data_grid.attrs[key]
   # fields_grid = [ 'density',  'momentum_x', 'momentum_y', 'momentum_z', 'Energy', 'GasEnergy', 'potential', 'extra_scalar', 'extra_scalar_1', 'cooling_rate']
   # if cool: fields_grid.extend(['HI_density', 'HII_density', 'HeI_density', 'HeII_density', 'HeIII_density', 'e_density', 'metal_density', 'temperature', 'flags_DE'])
   fields_grid = fields_data
@@ -71,13 +72,17 @@ def load_snapshot_data( nSnap, inDir, cool=False, dm=True ):
   data_part = h5.File( partFileName, 'r' )
   fields_data = data_part.keys()
   fields_part = [ 'density',  'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z' ]
-  current_a = data_part.attrs['current_a']
-  current_z = data_part.attrs['current_z']
-  print ("Loading Cholla Snapshot: {0}       current_z: {1}".format( nSnap, current_z) )
-  outDir['current_a'] = current_a
-  outDir['current_z'] = current_z
+  # current_z = data_part.attrs['current_z']
+  # current_a = data_part.attrs['current_a']
+  # outDir['current_a'] = current_a
+  # outDir['current_z'] = current_z
+  for key in data_part.attrs.keys(): outDir[key] = data_part.attrs[key]
+  if cosmo:
+    current_z = data_part.attrs['current_z']
+    print ("Loading Cholla Snapshot: {0}       current_z: {1}".format( nSnap, current_z) )
   for field in fields_part:
     if field not in fields_data: continue
+    # print field
     outDir['dm'][field] = data_part[field]
 
   return outDir

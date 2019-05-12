@@ -49,8 +49,8 @@ a_list = []
 
 gamma = 5./3
 
-j_indx = 128
-i_indx = 128
+j_indx = 0
+i_indx = 0
 
 L = 64.
 n = 256

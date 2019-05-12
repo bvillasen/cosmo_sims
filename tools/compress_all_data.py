@@ -27,7 +27,7 @@ if inDir[-1] != "/": inDir += '/'
 if outDir[-1] != "/": outDir += '/'
 for option in sys.argv:
   if option == 'no_cosmo': cosmo = False
-  if option == 'particles': particles, hydro = True, False
+  if option == 'particles': particles, hydro = True, True
   
 
 if rank == 0:
