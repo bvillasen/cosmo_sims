@@ -4,7 +4,7 @@ from os.path import isfile, join
 import h5py
 import numpy as np
 
-def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, cosmology=True):
+def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, cosmology=True, float_precision=False):
 
 
   inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, 0)
@@ -12,9 +12,8 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
   head = inFile.attrs
   dims_all = head['dims']
   dims_local = head['dims_local']
-
   nz, ny, nx = dims_all
-  inFile.close()
+
 
   
   fileName = out_base_name + '{0}.h5'.format( nSnap )
@@ -23,8 +22,13 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
   # keys_parts = [ 'pos_x', 'pos_y', 'pos_z',  'vel_x', 'vel_y', 'vel_z' ]
   keys_parts = [  ]
   keys_all = keys + keys_parts
-  added_time = False
-  print ' snap: {0}  {1}'.format( nSnap, keys_all )
+  
+  if inFile.attrs.get('current_z'): print ' snap: {0}   {1}   current_z: {2}'.format( nSnap, keys_all, inFile.attrs['current_z'][0] )  
+  else: print ' snap: {0}  {1}'.format( nSnap, keys_all )
+  inFile.close()
+  
+  added_header = False
+  
   for key in keys_all:
     data_all = np.zeros( dims_all )
     data_all_parts = []
@@ -32,10 +36,13 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
       inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, nBox)
       inFile = h5py.File( inDir + inFileName, 'r')
       head = inFile.attrs
-      if cosmology:
-        current_a = head['current_a']
-        current_z = head['current_z']
-      # particle_mass= head['particle_mass']
+      if added_header == False:
+        for h_key in head.keys():
+          if h_key in ['dims', 'dims_local', 'offset', 'bounds', 'domain', 'dx', ]: continue
+          # print h_key
+          fileSnap.attrs[h_key] = head[h_key][0]
+        added_header = True
+        
       procStart_z, procStart_y, procStart_x = head['offset']
       procEnd_z, procEnd_y, procEnd_x = head['offset'] + head['dims_local']
       if key in keys:
@@ -54,11 +61,6 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
       array_parts = np.concatenate(data_all_parts)
       print 'nParticles: ', len(array_parts)
       fileSnap.create_dataset( key, data=array_parts )
-    if added_time == False:
-      if cosmology:
-        fileSnap.attrs['current_z'] = current_z[0]
-        fileSnap.attrs['current_a'] = current_a[0]
-      # fileSnap.attrs['particle_mass'] = particle_mass[0]
-      added_time = True
+    
   fileSnap.close()
   print ' Saved File: ', outDir+fileName

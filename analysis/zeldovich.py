@@ -42,8 +42,13 @@ if n_param > 1:
 
 
 
-# if rank == 0:
-#   create_directory( outputDir )
+if rank == 0:
+  print 'Input Dir: ', inputDir
+  print 'Output Dir: ', outputDir
+  create_directory( outputDir )
+
+
+DUAL_ENERGY =   False
 
 a_list = []
 
@@ -71,7 +76,9 @@ vel_x_ch = data_cholla['gas']['momentum_x'][...][:, j_indx, i_indx] / dens_ch
 vel_y_ch = data_cholla['gas']['momentum_y'][...][:, j_indx, i_indx] / dens_ch
 vel_z_ch = data_cholla['gas']['momentum_z'][...][:, j_indx, i_indx] / dens_ch
 E_ch = data_cholla['gas']['Energy'][...][:, j_indx, i_indx]
-U_ch = data_cholla['gas']['GasEnergy'][...][:, j_indx, i_indx]
+Ekin = 0.5 * dens_ch * ( vel_x_ch*vel_x_ch + vel_y_ch*vel_y_ch + vel_z_ch*vel_z_ch )
+U_ch = E_ch - Ekin
+if DUAL_ENERGY: U_ch = data_cholla['gas']['GasEnergy'][...][:, j_indx, i_indx]
 temp_ch = get_temp(U_ch / dens_ch * 1e6, mu=1)
 
 # 
@@ -89,7 +96,7 @@ H_0 = 100 * h
 # v = - H_0 * ( 1 + z_c )/np.sqrt( 1 + current_z ) * np.sin( k*( x - 32 )) / k
 # T = T_init * ( rho / rho.mean() )**(2./3)
 
-n_rows = 3
+n_rows = 5
 n_cols = 1
 fig, ax_list = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(10*n_cols,3*n_rows))
 
@@ -107,22 +114,42 @@ ax.text(0.02, 0.9, text, transform=ax.transAxes, fontsize=14,
           verticalalignment='top', bbox=props)
 ax.legend(loc=0)
 
-ax = ax_list[1]
-# ax.plot( x, gas_temp, linewidth=3  )
-ax.plot( x, temp_ch  )
-# ax.plot( x, T  )
-ax.set_yscale('log')
-ax.set_xlim(0,64)
-# ax.set_ylim(40,200)
-ax.set_ylabel(r'Temperature  [ $K$ ]')
 
-ax = ax_list[2]
+ax = ax_list[1]
 # ax.plot( x, gas_vel, linewidth=3 )
 ax.plot( x, vel_x_ch )
 # ax.plot( x, v )
 ax.set_xlim(0,64)
 ax.set_ylabel(r'Velocity  [ $km/s$ ]')
 ax.set_xlabel(r'X [ $\mathrm{cMpc}/h$ ]')
+
+ax = ax_list[2]
+# ax.plot( x, gas_temp, linewidth=3  )
+ax.plot( x, U_ch )
+# ax.plot( x, T  )
+ax.set_yscale('log')
+ax.set_xlim(0,64)
+# ax.set_ylim(40,200)
+ax.set_ylabel(r'Thermal Energy')
+
+ax = ax_list[3]
+# ax.plot( x, gas_temp, linewidth=3  )
+ax.plot( x, E_ch  )
+# ax.plot( x, T  )
+ax.set_yscale('log')
+ax.set_xlim(0,64)
+# ax.set_ylim(40,200)
+ax.set_ylabel(r'Energy')
+
+ax = ax_list[4]
+# ax.plot( x, gas_temp, linewidth=3  )
+ax.plot( x, Ekin  )
+# ax.plot( x, T  )
+ax.set_yscale('log')
+ax.set_xlim(0,64)
+# ax.set_ylim(40,200)
+ax.set_ylabel(r'Kinetic Energy')
+
 
 fig.tight_layout()
 fig.savefig( outputDir + out_file_name)

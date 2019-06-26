@@ -15,53 +15,64 @@ from internal_energy import get_internal_energy, get_temp, get_Temperaure_From_F
 from cosmo_constants import *
 # from load_data_enzo import load_snapshot_enzo_yt
 
-dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
+# dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
 dataDir = '/raid/bruno/data/'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de001_newDE/'
-nSnap = 1
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data/'
+nSnap = 0
 
 gamma = 5./3
 
-temp_0 = 1
-eta = 0.001
-
-dens = 1.
-HI_dens = 0.76
-HII_dens = 0
-HeI_dens = .24
-HeII_dens = 0
-HeIII_dens = 0
-
-mu =  dens / ( HI_dens + 2*HII_dens + ( HeI_dens + 2*HeII_dens + 3*HeIII_dens) / 4 )
-
-u_0 = temp_0 / (gamma - 1) * K_b / M_p / mu
-v= np.sqrt( 2*u_0*(1/eta - 1))
-v_0 = 4.503  #km/sec
-
-p_avrg = np.sqrt(3) * 370
-d_avrg = 13.49
-v_avrg = p_avrg / d_avrg
-v_avrg = 47.50 #km/sec 
+# temp_0 = 1
+# eta = 0.001
+# 
+# dens = 1.
+# HI_dens = 0.76
+# HII_dens = 0
+# HeI_dens = .24
+# HeII_dens = 0
+# HeIII_dens = 0
+# 
+# mu =  dens / ( HI_dens + 2*HII_dens + ( HeI_dens + 2*HeII_dens + 3*HeIII_dens) / 4 )
+# 
+# u_0 = temp_0 / (gamma - 1) * K_b / M_p / mu
+# v= np.sqrt( 2*u_0*(1/eta - 1))
+# v_0 = 4.503  #km/sec
+# 
+# p_avrg = np.sqrt(3) * 370
+# d_avrg = 13.49
+# v_avrg = p_avrg / d_avrg
+# v_avrg = 47.50 #km/sec 
 # 
 # 
 # 
-# data_cholla = load_snapshot_data( nSnap, chollaDir, cool=True)
-# dens = data_cholla['gas']['density'][...]
-# dens_mean = dens.mean()
-# px = data_cholla['gas']['momentum_x'][...]
-# py = data_cholla['gas']['momentum_y'][...]
-# pz = data_cholla['gas']['momentum_z'][...]
-# temp = data_cholla['gas']['temperature'][...]
-# flags_DE = data_cholla['gas']['flags_DE'][...]
-# HI_dens = data_cholla['gas']['HI_density'][...]
-# HII_dens = data_cholla['gas']['HII_density'][...]
-# HeI_dens = data_cholla['gas']['HeI_density'][...]
-# HeII_dens = data_cholla['gas']['HeII_density'][...]
-# HeIII_dens = data_cholla['gas']['HeIII_density'][...]
-# e_dens = data_cholla['gas']['e_density'][...]
-# metal_dens = data_cholla['gas']['metal_density'][...]
-# GasEnergy = data_cholla['gas']['GasEnergy'][...]
-# Energy = data_cholla['gas']['Energy'][...]
+data_cholla = load_snapshot_data( nSnap, chollaDir, cool=True)
+dens = data_cholla['gas']['density'][...]
+dens_mean = dens.mean()
+px = data_cholla['gas']['momentum_x'][...]
+py = data_cholla['gas']['momentum_y'][...]
+pz = data_cholla['gas']['momentum_z'][...]
+temp = data_cholla['gas']['temperature'][...]
+flags_DE = data_cholla['gas']['flags_DE'][...]
+HI_dens = data_cholla['gas']['HI_density'][...]
+HII_dens = data_cholla['gas']['HII_density'][...]
+HeI_dens = data_cholla['gas']['HeI_density'][...]
+HeII_dens = data_cholla['gas']['HeII_density'][...]
+HeIII_dens = data_cholla['gas']['HeIII_density'][...]
+e_dens = data_cholla['gas']['e_density'][...]
+metal_dens = data_cholla['gas']['metal_density'][...]
+GasEnergy = data_cholla['gas']['GasEnergy'][...]
+Energy = data_cholla['gas']['Energy'][...]
+
+frac_HI = HI_dens / dens
+frac_HII = HII_dens / dens
+frac_HeI = HeI_dens / dens
+frac_HeII = HeII_dens / dens
+frac_HeIII = HeIII_dens / dens
+frac_e = e_dens / dens
+frac_metal = metal_dens / dens
+
+
+
 # vx = px / dens
 # vy = py / dens
 # vz = pz / dens

@@ -12,6 +12,8 @@ comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 nSnap = rank
 
+# rank = 0
+
 n_param = len( sys.argv )
 dataDir = '/raid/bruno/data/'
 inDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/'
@@ -35,7 +37,7 @@ if rank == 0:
   print 'Output Dir: ', outDir
   create_directory( outDir )
 
-comm.Barrier()
+# comm.Barrier()
 
 
 def split_name( file_name):
@@ -65,7 +67,7 @@ if rank == 0:
 
 if rank < nSnapshots:   
   nSnap = rank
-
+# for nSnap in range( nSnapshots):
   if hydro:
     out_base_name = 'grid_' 
     compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir )

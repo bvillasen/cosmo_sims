@@ -10,15 +10,25 @@ sys.path.extend([toolsDirectory ] )
 from load_data_cholla import load_snapshot_data
 from load_data_enzo import load_snapshot_enzo
 
+from mpi4py import MPI
+
+comm = MPI.COMM_WORLD
+rank = comm.Get_rank()
 
 dataDir = '/raid/bruno/data/'
 
-dataSet = 'PLMP'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de05_{0}/'.format( dataSet )
+# beta_vals = [ 3, 5, 7, 9]
+
+eta_0 = 0.001
+beta_0 = 0.2
+beta_1 = 0.02
+
+# dataSet = 'PLMP'
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
 enzoDir = dataDir + 'cosmo_sims/enzo/256_cool_uv/h5_files/'
 outDir = cosmo_dir + 'figures/power_hydro/'
 
-fileName = outDir + 'ps_256_cooling_uv_de05_{0}.png'.format(dataSet)
+fileName = outDir + 'ps_256_cooling_uv_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}.png'.format( eta_0, beta_0, beta_1 )
 
 # set simulation volume dimentions
 nPoints = 256
@@ -57,7 +67,8 @@ ax7 = plt.subplot(gs[0:4, 3])
 ax8 = plt.subplot(gs[4:5, 3])
 
 
-colors = ['b', 'y', 'g', 'c', 'm', 'b', 'y', 'g', 'c', 'm', ]
+# colors = ['b', 'y', 'g', 'c', 'm', 'b', 'y', 'g', 'c', 'm', ]
+colors = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9']
 
 for i,nSnap in enumerate(snapshots):
   print " Cholla: ", nSnap
@@ -154,9 +165,12 @@ ax4.set_xscale('log')
 ax6.set_xscale('log')
 ax8.set_xscale('log')
 ax1.set_title('DM Power Spectrum',  fontsize=18)
-ax3.set_title('Gas Power Spectrum  {0}'.format(dataSet),  fontsize=18)
+ax3.set_title('Gas Power Spectrum ',  fontsize=18)
 ax5.set_title('Neutral Hydrogen Power Spectrum',  fontsize=18)
 ax7.set_title('Ionized Hydrogen Power Spectrum',  fontsize=18)
+
+
+fig.suptitle(r'$\eta_0={0:0.3f}$   $\beta_0={1:0.3f}$   $\beta_1={2:0.3f}$'.format( eta_0, beta_0, beta_1 ), fontsize=20, y=0.95)
 
 # ax1.xlim()
 fig.savefig( fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=80)
