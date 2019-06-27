@@ -5,7 +5,7 @@ import h5py as h5
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import yt
+# import yt
 
 
 
@@ -65,6 +65,7 @@ def load_snapshot_enzo( nSnap, inDir, dm=False, cool=False, metals=False ):
 
 
 def load_snapshot_enzo_yt( nSnap, inDir, cooling=False, metals=False  ):
+  import yt
   snapKey = '{0:03}'.format(nSnap)
   inFileName = 'DD0{0}/data0{0}'.format( snapKey)
   # outFileName = 'cosmo_ICs_256_double.h5'

@@ -33,7 +33,7 @@ dens_dm = data_cholla['dm']['density'][...]
 dens = data_cholla['gas']['density'][...]
 dens_mean = dens.mean()
 temp = data_cholla['gas']['temperature'][...]
-flags_DE = data_cholla['gas']['flags_DE'][...]
+flags_DE = data_cholla['gas']['flags_DE'][...]        #1 if using Advected Internal Energy, 0 otherwise
 HI_dens = data_cholla['gas']['HI_density'][...]
 HII_dens = data_cholla['gas']['HII_density'][...]
 
