@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import h5py as h5
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-cosmo_dir = '/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/'
-outDir = cosmo_dir + 'figures/power_hydro/'
+dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
+cosmo_dir = dev_dir + 'cosmo_sims/'
 toolsDirectory = cosmo_dir + "tools/"
 sys.path.extend([toolsDirectory ] )
 from tools import create_directory
@@ -25,6 +25,20 @@ eta_0 = 0.001
 beta_0 = 0.1
 beta_1 = 0.02
 
+n_arg = len(sys.argv)
+if n_arg > 1:
+  args = []
+  for i in range(1 , n_arg):
+    arg = sys.argv[i]
+    args.append( float( arg ))
+  eta_0, beta_0, beta_1 = args
+  if rank == 0:
+    print "Using command arguments"
+    print args
+
+
+print 'eta: {0:.3f}   beta{1:.3f}  {2:.3f}/'.format( eta_0, beta_0, beta_1 )
+
 chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/'
 chollaDir_uv = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
 
@@ -32,7 +46,7 @@ enzoDir = dataDir + 'cosmo_sims/enzo/'
 enzoDir_uv = enzoDir + '256_cool_uv/h5_files/'
 
 
-outDir = cosmo_dir + 'figures/cooling/chemistry_HI_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
+outDir = dev_dir + 'figures/chemistry/chemistry_HI_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
 if rank == 0:
   create_directory( outDir )
 
@@ -129,12 +143,16 @@ for i in range( n_cols):
     proj = data[field]['proj']
 
     if n == n_rows-1:
-      min_val = max( -10, proj.min())
-      max_val = min( 10 , proj.max() )
-
-
-    if field=='temperature': im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='jet' )
-    else: im = ax.imshow( proj, interpolation='bilinear', vmin=min_val, vmax=max_val )
+      # min_val = max( -10, proj.min())
+      # max_val = min( 10 , proj.max() )
+      min_val = -10
+      max_val = 10
+      im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='jet' )
+      
+    else:
+      if field=='temperature': im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='jet' )
+      else : im = ax.imshow( proj, interpolation='bilinear', vmin=min_val, vmax=max_val )
+    
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     fig.colorbar( im, cax=cax )
