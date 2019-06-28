@@ -43,9 +43,13 @@ print 'eta: {0:.3f}   beta{1:.3f}  {2:.3f}/'.format( eta_0, beta_0, beta_1 )
 
 outDir = dev_dir + 'figures/phase_diagram/uvb_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
 
+Lbox = 50000.
+nPoints = 128 
+
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool/'.format(nPoints)
 
 nrows = 1
-chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
+chollaDir_0 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
 chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_PPMC_HLLC_SIMPLE_eta001_beta5/'
 chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_PPMC_HLLC_SIMPLE_eta001_beta7/'
 chollaDir_3 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_PPMC_HLLC_SIMPLE_eta001_beta9/'
@@ -57,17 +61,17 @@ if rank == 0:
   create_directory( outDir )
   print "Output: ", outDir
 
-enzoDir_uv = dataDir + 'cosmo_sims/enzo/256_cool_uv/h5_files/'
+enzoDir_uv = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
+
 
 
 gamma = 5./3
-nPoints = 256
 nx = nPoints
 ny = nPoints
 nz = nPoints
 ncells = nx * ny * nz
 
-dv = (115000./nPoints)**3
+dv = (Lbox/nPoints)**3
 nbins = 1000
 
 # snapshots = range(0,31)

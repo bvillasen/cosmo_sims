@@ -36,18 +36,19 @@ if n_arg > 1:
 
 if rank == 0: print 'eta: {0:.3f}   beta{1:.3f}  {2:.3f}/'.format( eta_0, beta_0, beta_1 )
 
+nPoints = 128
+Lbox = 50.0   #Mpc/h
+
 # dataSet = 'PLMP'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
-enzoDir = dataDir + 'cosmo_sims/enzo/256_cool_uv/h5_files/'
+enzoDir = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool/data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1, nPoints )
 outDir = dev_dir + 'figures/power_hydro/'
 
-fileName = outDir + 'ps_256_cooling_uv_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}.png'.format( eta_0, beta_0, beta_1 )
+fileName = outDir + 'ps_{0}_cooling_uv_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}.png'.format( eta_0, beta_0, beta_1, nPoints )
 
 # set simulation volume dimentions
-nPoints = 256
 nz, ny, nx = nPoints, nPoints, nPoints
 nCells  = nx*ny*nz
-Lbox = 115.0   #Mpc/h
 h = 0.6774
 Lx = Lbox
 Ly = Lbox
@@ -58,7 +59,9 @@ n_kSamples = 20
 
 
 
-snapshots = [ 0, 2, 4, 7, 10, 13, 16, 20, 25, 30]
+# snapshots = [ 0, 2, 4, 7, 10, 13, 16, 20, 25, 30]
+
+snapshots = [ 0, 2, 4, 7, 10, 13, 16, 20, 24, 27]
 # snapshots = [ 0, 2, 4]
 n_snapshots = len( snapshots  )
 

@@ -39,11 +39,16 @@ if n_arg > 1:
 
 print 'eta: {0:.3f}   beta{1:.3f}  {2:.3f}/'.format( eta_0, beta_0, beta_1 )
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/'
+
+nPoints = 128
+Lbox = 50000.
+
+
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool/'.format(nPoints)
 chollaDir_uv = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
 
 enzoDir = dataDir + 'cosmo_sims/enzo/'
-enzoDir_uv = enzoDir + '256_cool_uv/h5_files/'
+enzoDir_uv = enzoDir + '{0}_cool_uv/h5_files/'.format(nPoints)
 
 
 outDir = dev_dir + 'figures/chemistry/chemistry_HI_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
@@ -54,12 +59,11 @@ if rank == 0:
 metals = True
 
 gamma = 5./3
-nPoints = 256
 nx = nPoints
 ny = nPoints
 nz = nPoints
 
-dv = (115000./256)**3
+dv = (Lbox/256)**3
 
 slice_0 = 0
 n_slice = 64

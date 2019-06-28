@@ -1,6 +1,6 @@
 module CIC_functions
 
-importall Base
+# importall Base
 
 export get_particles_outside_CIC, get_interp_CIC
 

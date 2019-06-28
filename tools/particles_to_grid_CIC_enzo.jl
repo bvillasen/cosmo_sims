@@ -3,30 +3,35 @@ current_dir = pwd()
 tools_dir = current_dir
 push!(LOAD_PATH, tools_dir)
 using CIC_functions
+using Statistics
 
 # Input File
-dataDir = "/raid/bruno/data/"
+# dataDir = "/raid/bruno/data/"
 # dataDir = "/home/bruno/Desktop/data/"
 # dataDir = "/home/bruno/Desktop/data/"
+dataDir = "/home/bruno/Desktop/hdd_extrn_1/data/"
+inDir = dataDir * "cosmo_sims/enzo/128_cool_uv/h5_files/"
 # inDir = "/home/bruno/Desktop/data/cosmo_sims/ramses/128_hydro/h5_files/"
-inDir = dataDir * "cosmo_sims/enzo/256_hydro_grackle_noUV/h5_files/"
+# inDir = dataDir * "cosmo_sims/enzo/256_hydro_grackle_noUV/h5_files/"
 outDir = inDir
 in_base_name = "snapshot_"
 out_base_name = "grid_CIC_"
+
+Lbox = 50e3
+const nPoints = 128
 
 #Domain Parameters
 const x_min = 0.0
 const y_min = 0.0
 const z_min = 0.0
-const x_max = 115e3
-const y_max = 115e3
-const z_max = 115e3
+const x_max = Lbox
+const y_max = Lbox
+const z_max = Lbox
 const Lx = x_max - x_min
 const Ly = y_max - y_min
 const Lz = z_max - z_min
 
 #Grid Properties
-const nPoints = 256
 const nx = nPoints
 const ny = nPoints
 const nz = nPoints
@@ -43,10 +48,10 @@ const dz = Lz / nz
 
 
 nSnap = 0
-for nSnap in 0:88
+for nSnap in 0:1
 
   println( "\nSnapshot: $(nSnap)")
-  snapKey = lpad(nSnap,3,0)
+  snapKey = lpad(nSnap,3,'0')
   inFileName = inDir * in_base_name * snapKey * ".h5"
   outFileName = outDir * out_base_name * snapKey * ".h5"
 
