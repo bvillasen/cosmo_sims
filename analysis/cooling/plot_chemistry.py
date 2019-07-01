@@ -63,7 +63,7 @@ nx = nPoints
 ny = nPoints
 nz = nPoints
 
-dv = (Lbox/256)**3
+dv = (Lbox/nPoints)**3
 
 slice_0 = 0
 n_slice = 64

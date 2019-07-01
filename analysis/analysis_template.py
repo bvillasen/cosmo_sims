@@ -28,6 +28,10 @@ nSnap = 0  #Snapshot Number [0 - 30]
 
 
 data_cholla = load_snapshot_data( nSnap, chollaDir, cool=True)
+H0 = data_cholla['H0'] #[km/s / kpc]
+h = H0 * 10
+Omega_M = data_cholla['Omega_M']
+Omega_L = data_cholla['Omega_L']
 current_z =  data_cholla['current_z']
 dens_dm = data_cholla['dm']['density'][...] 
 dens = data_cholla['gas']['density'][...]
