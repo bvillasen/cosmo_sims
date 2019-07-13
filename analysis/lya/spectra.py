@@ -2,54 +2,123 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py as h5
+from scipy import interpolate
 
-cosmo_dir = '/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/'
+dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
+cosmo_dir = dev_dir + 'cosmo_sims/'
 toolsDirectory = cosmo_dir + "tools/"
 analysisDirectory = cosmo_dir + "analysis/"
 sys.path.extend([toolsDirectory, analysisDirectory ] )
+from tools import create_directory
 from load_data_cholla import load_snapshot_data
 from load_data_enzo import load_snapshot_enzo
 from internal_energy import  get_temp, get_mu
-from cosmo_constants import *
+# from cosmo_constants import *
 
 dataDir = '/raid/bruno/data/'
-outDir = cosmo_dir + 'figures/spectra/'
+outDir = dev_dir + 'figures/spectra/'
+create_directory( outDir )
 
 chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_PPMC_HLLC_SIMPLE_eta0.005_beta0.120_0.000/'
 enzoDir_uv = dataDir + 'cosmo_sims/enzo/256_cool_uv/h5_files/'
 
 
-fileName = 'spectra_0.png'
+outputFileName = 'spectra_0.png'
+# 
+# #Boltazman constant
+# K_b = 1.38064852e-23 #m2 kg s-2 K-1
+# #Mass of proton
+# M_p = 1.6726219e-27 #kg
+# #Speed of ligth 
+# c = 299792000.458 #  m/sec
+# #Electron charge
+# e_charge = 1.60217662e-19 # Coulombs 
+# #electron mass
+# M_e = 9.10938356e-31 #kg
 
 
+
+#Boltazman constant
+K_b = 1.38064852e-16 # erg K-1
+#Mass of proton
+M_p = 1.6726219e-24 #g
+#Speed of ligth 
+c = 2.99792458e10 #  cm/s
+#Electron charge
+e_charge = 4.8032e-10 # cm^3/2 g^1/2 s^-1 
+#electron mass
+M_e = 9.10938356e-28 #g
+
+
+
+#Doppler Shift for the freccuency
+def get_nu( nu_0, v, c ):
+ return nu_0 * ( 1 - v/c  )
+
+def get_Doppler_parameter( T ):
+  b = np.sqrt( 2* K_b / M_p * T )
+  return b
+  
+def get_Doppler_width( nu_0, T ):
+  b = get_Doppler_parameter( T ) 
+  delta_nu = b / c * nu_0
+  return delta_nu
+   
+# Lymann Alpha Parameters
+Lya_lambda = 1215.67e-10 #m     Rest wave length of the Lyman Alpha Transition
+Lya_nu = c / Lya_lambda
 f_12 = 0.416 #Oscillator strength
-lyman_constant = np.pi * e_charge**2 / M_e / c * f_12
-
-Lbox = 115e3 #kpc/h
-nPoints = 256
-
-Lx, Ly, Lz = Lbox, Lbox, Lbox
-nx, ny, nz = nPoints, nPoints, nPoints
-dx, dy, dz = Lx/nx, Ly/ny, Lz/nz
-x = dx * ( np.linspace(0, nx-1, nx ) + 0.5 )
-y = dy * ( np.linspace(0, ny-1, ny ) + 0.5 )
-z = dz * ( np.linspace(0, nz-1, nz ) + 0.5 )
+Lya_sigma = np.pi * e_charge**2 / M_e / c * f_12
 
 
+#Test: Uniform Absorber
+N_HI = 1e15    #cm^-2   Column density
+T = 1e4 #K Temperature
+nPoints = 1024
+v_max = 100 #m/s
+vel = np.linspace(-v_max, v_max, nPoints)
+nu = get_nu( Lya_nu, vel, c)
+b = get_Doppler_parameter( T ) 
+delta_nu = get_Doppler_width( Lya_nu, T) 
 
-nSnap = 1
+phi = 1 / ( np.sqrt(np.pi) * delta_nu ) * np.exp( -1 * (( nu - Lya_nu ) / delta_nu  )**2 )
+tau = Lya_sigma * N_HI * phi
+vel_0 = vel[nPoints/2]
+nu_0 = nu[nPoints/2]
+phi_0 = phi[nPoints/2]
+tau_0 = tau[nPoints/2]
 
-data_cholla = load_snapshot_data( str(nSnap), chollaDir, cool=True)
-H0 = data_cholla['H0'] #[km/s / kpc]
-cosmo_h = H0 * 10
-Omega_M = data_cholla['Omega_M']
-Omega_L = data_cholla['Omega_L']
+b /= 1e3
+tau_1 = 0.758 * ( N_HI / 1e13 ) * ( 10/ b )
 
-current_z_ch = data_cholla['current_z']
-dens_ch = data_cholla['gas']['density'][...]
-temp_ch = data_cholla['gas']['temperature'][...]
-dens_H_ch = data_cholla['gas']['HI_density'][...]
-
+# Lbox = 115.0 #Mpc/h
+# nPoints = 256
+# 
+# Lx, Ly, Lz = Lbox, Lbox, Lbox
+# nx, ny, nz = nPoints, nPoints, nPoints
+# dx, dy, dz = Lx/nx, Ly/ny, Lz/nz
+# x = dx * ( np.linspace(0, nx-1, nx ) + 0.5 )
+# y = dy * ( np.linspace(0, ny-1, ny ) + 0.5 )
+# z = dz * ( np.linspace(0, nz-1, nz ) + 0.5 )
+# 
+# 
+# 
+# nSnap = 13
+# 
+# data_cholla = load_snapshot_data( str(nSnap), chollaDir, cool=True)
+# H0 = data_cholla['H0'] * 1e3 #[km/s / Mpc]
+# cosmo_h = H0 / 100
+# Omega_M = data_cholla['Omega_M']
+# Omega_L = data_cholla['Omega_L']
+# 
+# current_z_ch = data_cholla['current_z']
+# dens_ch = data_cholla['gas']['density'][...]
+# temp_ch = data_cholla['gas']['temperature'][...]
+# dens_H_ch = data_cholla['gas']['HI_density'][...]
+# vz_ch = data_cholla['gas']['momentum_z'][...] / dens_ch
+# 
+# data_ch = [ dens_ch, dens_H_ch, temp_ch, vz_ch ]
+# 
 # 
 # data_enzo = load_snapshot_enzo( nSnap, enzoDir_uv, dm=False, cool=True)
 # current_z_en = data_enzo['current_z']
@@ -59,120 +128,100 @@ dens_H_ch = data_cholla['gas']['HI_density'][...]
 # vz_en = data_enzo['gas']['momentum_z'][...] / dens_en
 # 
 # 
-
-# Global Cosmological Parameters 
-current_z = current_z_ch 
-current_a = 1. / ( current_z + 1 )
-a_dot = np.sqrt( Omega_M/current_a + Omega_L*current_a**2  ) * H0 
-H = a_dot / current_a 
-
-Lz_proper = current_a * Lz / cosmo_h
-dz_proper = Lz / nz
-
-
-
-lambda_0 = 1215.67e-10 #m     Rest wave length of the Lyman Alpha Transition
-nu_0 = c / lambda_0
-
-
-def get_nu( nu_0, v ):
- return nu_0 * ( 1 + v/c  )
-
-
-
-
-
-
-
-
+# data_en = [ dens_en, dens_H_en, temp_en, vz_en ]
 # 
-# indx_j, indx_i = 128, 128
-# 
-# dens = dens_en[:, indx_j, indx_i]
-# dens_H = dens_H_en[:, indx_j, indx_i]
-# temp = temp_en[:, indx_j, indx_i]
-# vz = vz_en[:, indx_j, indx_i] * 1e3
-# 
-# x_comov = np.linspace( 0, L, n_points )
-# r_proper = current_a * x_comov / cosmo_h
-# vel = H * r_proper * 1e3  #m/sec
-# 
-# 
-# 
-# 
-# def get_integral( nu_center ):
-#   integral = 0
-#   print " "
-#   for i in range(n_points): 
-#     nH_cell = dens_H[i] / M_p * 1000
-#     v_cell = vel[i]
-#     nu_cell = get_nu( nu_0, v_cell )
-#     temp_cell = temp[i]
-#     b = np.sqrt( 2 * K_b * temp_cell / M_p )
-#     doppler_width = b / c * nu_cell
-#     integral_term = nH_cell / doppler_width / np.sqrt(np.pi) * np.exp( -( ( nu_cell - nu_center ) /doppler_width )**2  ) * dr
-#     print i, integral_term
-#     integral += integral_term  
-#   return integral
-# 
-# optical_depth = []
-# 
-# for n_cell in range(n_points):
-#   v_center = vel[n_cell]
-#   nu_center = get_nu( nu_0, v_center )
-#   integral = get_integral( nu_center )
-#   tau = lyman_constant * integral
-#   optical_depth.append(tau)
-# optical_depth = np.array( optical_depth )
-# 
+# data_all = [ data_ch, data_en ]
 # 
 # ncols = 1
 # nrows = 4
 # fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(20*ncols,5*nrows))
+# font_size = 25
 # 
-# plt.subplot(nrows, ncols, 1)
-# ax = plt.gca()
-# ax.clear()
-# ax.plot( x_comov, dens / dens.mean() , label='Gas' )
-# ax.plot( x_comov, dens_H / dens_H.mean()   , label='HI' )
+# for n in range( 2 ):
+#   data = data_all[n]
+#   dens, dens_H, temp, vz = data
+# 
+#   #Get Line of sight data
+#   indx_j, indx_i = 128, 128
+# 
+#   dens = dens[:, indx_j, indx_i]
+#   dens_H = dens_H[:, indx_j, indx_i]
+#   temp = temp[:, indx_j, indx_i]
+#   vz = vz[:, indx_j, indx_i] 
+# 
+# 
+#   #Interpolate data
+#   n_ref = 2
+#   nz_ref = nz * n_ref
+#   dz_ref = Lz / nz_ref
+#   z_ref = dz_ref * ( np.linspace(0, nz_ref-1, nz_ref ) + 0.5 )
+#   los_dens = np.interp( z_ref, z, dens )
+#   los_dens_H = np.interp( z_ref, z, dens_H)
+#   los_temp = np.interp( z_ref, z, temp )
+#   los_vel = np.interp( z_ref, z, vz )
+# 
+# 
+# 
+#   # Global Cosmological Parameters 
+#   current_z = current_z_ch 
+#   current_a = 1. / ( current_z + 1 )
+#   a_dot = np.sqrt( Omega_M/current_a + Omega_L*current_a**2  ) * H0 
+#   H = a_dot / current_a 
+# 
+#   # Get Proper coordinates
+#   Lz_proper = current_a * Lz / cosmo_h
+#   dz_proper = Lz / nz
+#   z_proper = current_a * z_ref / cosmo_h 
+# 
+# 
+# 
+#   ax = ax_l[0]
+#   ax.plot( z_ref, los_dens  , label='Gas' )
+#   ax.plot( z_ref, los_dens_H   , label='HI' )
+# 
+#   ax = ax_l[1]
+#   ax.plot( z_ref, los_temp  )
+# 
+# 
+#   ax = ax_l[2]
+#   ax.plot( z_ref, los_vel  )
+# 
+#   ax = ax_l[3]
+# 
+# 
+# 
+# 
+# 
+# 
+# ax = ax_l[0]
+# ax.set_yscale('log')
+# ax.set_xlim(0, Lz )
+# ax.set_ylabel( r"$\rho / \bar{\rho} $", fontsize=font_size)
+# ax.legend( fontsize=font_size)
+# 
+# ax = ax_l[1]
 # ax.set_yscale('log')
 # ax.set_xlim(0, 115 )
-# ax.set_ylabel( r"$\rho / \bar{\rho} $", fontsize=16)
-# ax.legend( fontsize=16)
+# ax.set_ylim(3e3, 2e5 )
+# ax.set_ylabel( "Temperature [K]", fontsize=font_size)
+# # ax.legend()
 # 
-# plt.subplot(nrows, ncols, 2)
-# ax = plt.gca()
-# ax.clear()
-# ax.plot( x_comov, temp  )
-# ax.set_yscale('log')
-# ax.set_xlim(0, 115 )
-# ax.set_ylim(3e3, 1e5 )
-# ax.set_ylabel( "Temperature [K]", fontsize=16)
-# ax.legend()
-# 
-# plt.subplot(nrows, ncols, 3)
-# ax = plt.gca()
-# ax.clear()
-# ax.plot( x_comov, vz  )
+# ax = ax_l[2]
 # # ax.set_yscale('log')
 # ax.set_xlim(0, 115 )
-# ax.set_ylabel( r"LOS Velocity  [$km/s$] ", fontsize=16)
-# ax.legend()
+# ax.set_ylabel( r"LOS Velocity  [$km/s$] ", fontsize=font_size)
+# # ax.legend()
 # 
-# 
-# plt.subplot(nrows, ncols, 4)
-# ax = plt.gca()
-# ax.clear()
-# ax.plot( x_comov, optical_depth )
+# ax = ax_l[3]
+# # ax.plot( x_comov, optical_depth )
 # ax.set_yscale('log')
 # ax.set_xlim(0, 115 )
-# ax.set_ylabel( r"$\tau$", fontsize=16)
-# ax.legend()
+# ax.set_ylabel( r"$\tau$", fontsize=font_size)
+# # ax.legend()
 # 
 # 
 # 
 # fig.tight_layout()
-# fig.savefig( outDir + fileName )
-# print 'Saved image: ', fileName
+# fig.savefig( outDir + outputFileName )
+# print 'Saved image: ', outputFileName
 # print ''
-# 

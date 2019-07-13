@@ -22,14 +22,9 @@ nSnap = rank
 # name = 'de001_PLMP_CTU'
 dataDir = '/raid/bruno/data/'
 
-eta_0 = 0.001
-beta_0 = 0.00
-beta_1 = 0.00
+eta_1 = 0.001
+eta_2 = 0.030
 
-
-eta_0_1 = 0.005
-beta_0_1 = 0.055
-beta_1_1 = 0.00
 
 
 n_arg = len(sys.argv)
@@ -38,15 +33,15 @@ if n_arg > 1:
   for i in range(1 , n_arg):
     arg = sys.argv[i]
     args.append( float( arg ))
-  eta_0, beta_0, beta_1 = args
+  eta_1, eta_2 = args
   if rank == 0:
     print "Using command arguments"
     print args
 
-print 'eta: {0:.3f}   beta{1:.3f}  {2:.3f}/'.format( eta_0, beta_0, beta_1 )
+print 'eta: {0:.3f}   {1:.3f}  /'.format( eta_1, eta_2 )
 
 
-outDir = dev_dir + 'figures/phase_diagram/uvb_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
+outDir = dev_dir + 'figures/phase_diagram/uvb_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
 
 Lbox = 50000.
 nPoints = 128 
@@ -54,12 +49,12 @@ nPoints = 128
 chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool/'.format(nPoints)
 
 nrows = 1
-chollaDir_0 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
-chollaDir_1 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0_1, beta_0_1, beta_1_1 )
-chollaDir_2 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}_PressureJump1.0/'.format( eta_0, beta_0, beta_1 )
-chollaDir_3 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}_PressureJump10.0/'.format( eta_0, beta_0, beta_1 )
+chollaDir_0 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
+# chollaDir_1 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0_1, beta_0_1, beta_1_1 )
+# chollaDir_2 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}_PressureJump1.0/'.format( eta_0, beta_0, beta_1 )
+# chollaDir_3 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}_PressureJump10.0/'.format( eta_0, beta_0, beta_1 )
 
-chollaDir_all = [ chollaDir_0, chollaDir_1, chollaDir_2, chollaDir_3 ]
+chollaDir_all = [ chollaDir_0, chollaDir_0, ]
 
 if rank == 0: 
   create_directory( outDir )
@@ -201,7 +196,7 @@ for n in range(nrows):
 
 # # #
 # 
-fig.suptitle(r'$\eta_0={0:0.3f}$   $\beta_0={1:0.3f}$   $\beta_1={2:0.3f}$'.format( eta_0, beta_0, beta_1 ), fontsize=20, y=0.999)
+fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.3f}$   '.format( eta_1, eta_2 ), fontsize=20, y=0.999)
 
 # fig.text( 0.44, 0.99, r'$\eta_0={0:0.3f}$   $\beta_0={1:0.3f}$   $\beta_1={2:0.3f}$'.format( eta_0, beta_0, beta_1 ), fontsize=20, )
 # fig.text( 0.44, 0.49, r'$\eta_0={0:0.3f}$   $\beta_0={1:0.3f}$   $\beta_1={2:0.3f}$'.format( eta_0_1, beta_0_1, beta_1_1 ), fontsize=20, )

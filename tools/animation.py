@@ -5,20 +5,23 @@ from subprocess import call
 from shutil import copyfile
 
 
-cosmo_dir = '/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/'
+dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
 # inDir = cosmo_dir + 'figures/cosmo_256_cholla_highRes/'
 # inDir = cosmo_dir + 'figures/collapse/anim/'
-inDir = cosmo_dir + 'figures/phase_diagram/uvb_DE_beta_simple/'
+# inDir = dev_dir + 'figures/chemistry/chemistry_HI_eta0.005_beta0.250_0.000_PressureJump10.0/'
+inDir = dev_dir + 'figures/phase_diagram/uvb_eta0.001_beta0.000_0.000_noDE/'
 # inDir = cosmo_dir + 'figures/projections/de1_PPMC_HLLC/'
+
 # inDir = cosmo_dir + 'figures/zeldovich/enzo_simple_beta_convDE/'
 outDir = '/home/bruno/Desktop/'
 
+# image_name = 'chemistry'
 image_name = 'phase_diagram'
-out_anim_name = 'phase_DE_beta_simple'
+out_anim_name = 'phase_diagram_DE_beta_simple_beta0.00_noDE'
 # image_name = 'zeldovich'
 # out_anim_name = 'zeldovich_enzo_simple_beta_convDE'
 
-cmd = 'ffmpeg -framerate 2  '
+cmd = 'ffmpeg -framerate 1  '
 # cmd += ' -start_number 45'
 cmd += ' -i {0}{1}_%d.png '.format( inDir, image_name )
 cmd += '-pix_fmt yuv420p '

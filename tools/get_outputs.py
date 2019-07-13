@@ -4,12 +4,12 @@ import yt
 
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
-inDir = dataDir + 'cosmo_sims/enzo/128_cool_uv/h5_files/'
+inDir = dataDir + 'cosmo_sims/enzo/128_hydro/h5_files/'
 enzoDir = inDir
 outDir = inDir
 
 
-outFileName = 'outputs_enzo_cool_UV_128.txt'
+outFileName = 'outputs_enzo_hydro_128.txt'
 # a_list = [ 1./21 ]
 a_list = []
 

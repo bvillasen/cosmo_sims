@@ -21,13 +21,14 @@ from tools import create_directory
 
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
-enzoDir = dataDir + 'cosmo_sims/enzo/128_cool_uv/ics/'
+enzoDir = dataDir + 'cosmo_sims/enzo/128_hydro/ics/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/128_cool/ics/'
+outputDir = dataDir + 'cosmo_sims/cholla_pm/128_hydro/ics/'
 create_directory( outputDir )
 nSnap_enzo = 0
 
-metals = True
+cool = False
+metals = False
 
 nSnap = nSnap_enzo
 
@@ -64,17 +65,17 @@ gas_E = 0.5 * gas_dens * ( gas_vel_x*gas_vel_x + gas_vel_y*gas_vel_y + gas_vel_z
 # gas_temp *= temp_factor
 # mu = data_grid[('gas', 'mean_molecular_weight' )].v
 
-
-# H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
-H_0_dens =  data_grid[ ('gas', 'H_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
-H_1_dens =  data_grid[ ('gas', 'H_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
-# He_dens =  data_grid[ ('gas', 'He_density')].in_units('msun/kpc**3')*current_a**3/h**2
-He_0_dens =  data_grid[ ('gas', 'He_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
-He_1_dens =  data_grid[ ('gas', 'He_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
-He_2_dens =  data_grid[ ('gas', 'He_p2_density')].in_units('msun/kpc**3')*current_a**3/h**2
-electron_dens =  data_grid[ ('gas', 'El_density')].in_units('msun/kpc**3')*current_a**3/h**2
-proten_electron_mass_ratio = 1836.15267389
-electron_dens *= proten_electron_mass_ratio
+if cool:
+  # H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
+  H_0_dens =  data_grid[ ('gas', 'H_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
+  H_1_dens =  data_grid[ ('gas', 'H_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
+  # He_dens =  data_grid[ ('gas', 'He_density')].in_units('msun/kpc**3')*current_a**3/h**2
+  He_0_dens =  data_grid[ ('gas', 'He_p0_density')].in_units('msun/kpc**3')*current_a**3/h**2
+  He_1_dens =  data_grid[ ('gas', 'He_p1_density')].in_units('msun/kpc**3')*current_a**3/h**2
+  He_2_dens =  data_grid[ ('gas', 'He_p2_density')].in_units('msun/kpc**3')*current_a**3/h**2
+  electron_dens =  data_grid[ ('gas', 'El_density')].in_units('msun/kpc**3')*current_a**3/h**2
+  proten_electron_mass_ratio = 1836.15267389
+  electron_dens *= proten_electron_mass_ratio
 
 if metals:
   metal_dens = data_grid[ ('gas', 'metal_density')].in_units('msun/kpc**3')*current_a**3/h**2
@@ -113,12 +114,13 @@ data_enzo['gas']['momentum_y'] = gas_dens * gas_vel_y
 data_enzo['gas']['momentum_z'] = gas_dens * gas_vel_z
 data_enzo['gas']['GasEnergy'] = gas_u
 data_enzo['gas']['Energy'] = gas_E
-data_enzo['gas']['HI_density'] = H_0_dens
-data_enzo['gas']['HII_density'] = H_1_dens
-data_enzo['gas']['HeI_density'] = He_0_dens
-data_enzo['gas']['HeII_density'] = He_1_dens
-data_enzo['gas']['HeIII_density'] = He_2_dens
-data_enzo['gas']['e_density'] = electron_dens
+if cool:
+  data_enzo['gas']['HI_density'] = H_0_dens
+  data_enzo['gas']['HII_density'] = H_1_dens
+  data_enzo['gas']['HeI_density'] = He_0_dens
+  data_enzo['gas']['HeII_density'] = He_1_dens
+  data_enzo['gas']['HeIII_density'] = He_2_dens
+  data_enzo['gas']['e_density'] = electron_dens
 if metals:
   data_enzo['gas']['metal_density'] = metal_dens
 

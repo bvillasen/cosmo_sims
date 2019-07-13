@@ -10,7 +10,7 @@ using Statistics
 # dataDir = "/home/bruno/Desktop/data/"
 # dataDir = "/home/bruno/Desktop/data/"
 dataDir = "/home/bruno/Desktop/hdd_extrn_1/data/"
-inDir = dataDir * "cosmo_sims/enzo/128_cool_uv/h5_files/"
+inDir = dataDir * "cosmo_sims/enzo/128_cool_uv_noDE/h5_files/"
 # inDir = "/home/bruno/Desktop/data/cosmo_sims/ramses/128_hydro/h5_files/"
 # inDir = dataDir * "cosmo_sims/enzo/256_hydro_grackle_noUV/h5_files/"
 outDir = inDir
@@ -48,7 +48,7 @@ const dz = Lz / nz
 
 
 nSnap = 0
-for nSnap in 0:1
+for nSnap in 0:27
 
   println( "\nSnapshot: $(nSnap)")
   snapKey = lpad(nSnap,3,'0')

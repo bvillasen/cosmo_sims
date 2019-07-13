@@ -31,7 +31,7 @@ def get_mu( data_cholla ):
   mu =  dens / ( HI_dens + 2*HII_dens + ( HeI_dens + 2*HeII_dens + 3*HeIII_dens) / 4 )
   return mu
 
-def get_Temperaure_From_Flags_DE( data_cholla, gamma=5./3, normalize_dens=True ):
+def get_Temperaure_From_Flags_DE( data_cholla, gamma=5./3, normalize_dens=True, jeans=False ):
   dens = data_cholla['gas']['density'][...]
   dens_mean = dens.mean()
   px = data_cholla['gas']['momentum_x'][...]
@@ -68,12 +68,19 @@ def get_Temperaure_From_Flags_DE( data_cholla, gamma=5./3, normalize_dens=True )
   HI_dens_GE = HI_dens[indxs_ge].flatten() / dens_mean
   temp_U_ALL = get_temp( U/dens*1e6, gamma, mu ).flatten()
   temp_GE_ALL = get_temp( GasEnergy/dens*1e6, gamma, mu ).flatten()
+    
   temp_1[temp_1 <= 1] = 1
   temp_U[temp_U <= 1] = 1
   temp_GE[temp_GE <= 1] = 1
   temp_U_ALL[temp_U_ALL <= 1] = 1
   temp_GE_ALL[temp_GE_ALL <= 1] = 1
-  return temp.flatten(), temp_1, temp_U, temp_GE, dens_U, dens_GE, HI_dens_U, HI_dens_GE, temp_U_ALL, temp_GE_ALL
+  if jeans:
+    indxs_jeans = np.where(flags_DE==2 )
+    dens_jeans = dens[indxs_jeans].flatten() / dens_mean
+    temp_jeans = get_temp( GasEnergy/dens*1e6, gamma, mu )[indxs_jeans].flatten()
+    
+  if jeans: return temp.flatten(), temp_1, temp_U, temp_GE, dens_U, dens_GE, HI_dens_U, HI_dens_GE, temp_U_ALL, temp_GE_ALL, dens_jeans, temp_jeans
+  else: return temp.flatten(), temp_1, temp_U, temp_GE, dens_U, dens_GE, HI_dens_U, HI_dens_GE, temp_U_ALL, temp_GE_ALL
 
 
 

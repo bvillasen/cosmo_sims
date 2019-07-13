@@ -19,9 +19,9 @@ rank = comm.Get_rank()
 dataDir = '/raid/bruno/data/'
 
 
-eta_1 = 0.001
-eta_2 = 0.030
-
+eta_0 = 0.001
+beta_0 = 0.00
+beta_1 = 0.00
 
 n_arg = len(sys.argv)
 if n_arg > 1:
@@ -29,24 +29,24 @@ if n_arg > 1:
   for i in range(1 , n_arg):
     arg = sys.argv[i]
     args.append( float( arg ))
-  eta_1, eta_2 = args
+  eta_0, beta_0, beta_1 = args
   if rank == 0:
     print "Using command arguments"
     print args
 
-if rank == 0: print 'eta: {0:.3f}  {1:.3f}  /'.format( eta_1, eta_2, )
+if rank == 0: print 'eta: {0:.3f}   beta{1:.3f}  {2:.3f}/'.format( eta_0, beta_0, beta_1 )
 
 nPoints = 128
 Lbox = 50.0   #Mpc/h
 
-extra_name = '_pressure'
+extra_name = ''
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool/data_PPMC_HLLC_SIMPLE_eta{0:.3f}_{1:.3f}{2}/'.format( eta_1, eta_2,  extra_name, nPoints )
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool/data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}{4}/'.format( eta_0, beta_0, beta_1, nPoints, extra_name )
 
 enzoDir = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
 outDir = dev_dir + 'figures/power_hydro/'
 
-fileName = outDir + 'ps_{2}_cooling_uv_PPMC_HLLC_SIMPLE_eta{0:.3f}_{1:.3f}_{3}.png'.format( eta_1, eta_2, nPoints, extra_name  )
+fileName = outDir + 'ps_{0}_cooling_uv_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}{4}.png'.format( eta_0, beta_0, beta_1, nPoints, extra_name )
 
 # set simulation volume dimentions
 nz, ny, nx = nPoints, nPoints, nPoints
@@ -143,7 +143,7 @@ fig = plt.figure(0)
 fig.set_size_inches(40,10)
 fig.clf()
 
-fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.3f}$  {2}'.format( eta_1, eta_2,  extra_name ), fontsize=20, y=0.95)
+fig.suptitle(r'$\eta_0={0:0.3f}$   $\beta_0={1:0.3f}$   $\beta_1={2:0.3f}$  {3}'.format( eta_0, beta_0, beta_1, extra_name ), fontsize=20, y=0.95)
 
 gs = plt.GridSpec(5, 4)
 gs.update(hspace=0.05, wspace=0.08, )
