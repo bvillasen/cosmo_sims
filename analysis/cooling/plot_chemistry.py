@@ -41,18 +41,19 @@ if n_arg > 1:
 print 'eta: {0:.3f}  {1:.3f} /'.format( eta_1, eta_2 )
 
 
-nPoints = 128
-Lbox = 50000.
+nPoints = 256
+Lbox = 100000.
 
+integrator = 'SIMPLE'
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool/'.format(nPoints)
-chollaDir_uv = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_100Mpc/'.format(nPoints)
+chollaDir_uv = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2, integrator )
 
 enzoDir = dataDir + 'cosmo_sims/enzo/'
-enzoDir_uv = enzoDir + '{0}_cool_uv/h5_files/'.format(nPoints)
+enzoDir_uv = enzoDir + '{0}_cool_uv_100Mpc/h5_files/'.format(nPoints)
 
 
-outDir = dev_dir + 'figures/chemistry/chemistry_HI_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
+outDir = dev_dir + 'figures/chemistry_100Mpc/chemistry_HI_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
 if rank == 0:
   create_directory( outDir )
 
@@ -81,9 +82,9 @@ def get_projection( data, offset, depth, log=True ):
 
 
 proj_offset = 0
-proj_depth = 10
+proj_depth = 64
 
-fields = ['density', 'HI_density', 'HII_density', 'temperature' ]
+fields = ['density_dm', 'density', 'HI_density', 'HII_density', 'temperature' ]
 
 # nSnap = 0
 # n_snapshots = 10
@@ -94,8 +95,11 @@ data_ch = {}
 data_cholla = load_snapshot_data( nSnap, chollaDir_uv, cool=True )
 current_z_ch = data_cholla['current_z']
 current_a_ch = data_cholla['current_a']
-for field in fields:
-  data = data_cholla['gas'][field][...]
+for i,field in enumerate(fields):
+  if i == 0:
+   data = data_cholla['dm']['density'][...]
+  else:
+    data = data_cholla['gas'][field][...]
   data_ch[field] = {}
   proj = get_projection( data, proj_offset, proj_depth )
   data_ch[field]['proj'] = proj
@@ -104,11 +108,14 @@ for field in fields:
 
 
 data_en = {}
-data_enzo = load_snapshot_enzo( nSnap, enzoDir_uv, cool=True, metals=metals )
+data_enzo = load_snapshot_enzo( nSnap, enzoDir_uv, dm=True, cool=True, metals=metals )
 current_a_enzo = data_enzo['current_a']
 current_z_enzo = data_enzo['current_z']
-for field in fields:
-  data = data_enzo['gas'][field][...]
+for i,field in enumerate(fields):
+  if i == 0:
+   data = data_enzo['dm']['density'][...]
+  else:
+    data = data_enzo['gas'][field][...]
   data_en[field] = {}
   proj = get_projection( data, proj_offset, proj_depth )
   data_en[field]['proj'] = proj
@@ -116,9 +123,14 @@ for field in fields:
   data_en[field]['min'] = proj.min() 
 
 data_diff = {}
-for field in fields:
-  vals_ch = data_cholla['gas'][field][...] 
-  vals_en = data_enzo['gas'][field][...]
+for i,field in enumerate(fields):
+  if i == 0: 
+    vals_ch = data_cholla['dm']['density'][...] 
+    vals_en = data_enzo['dm']['density'][...]
+  else: 
+    vals_ch = data_cholla['gas'][field][...] 
+    vals_en = data_enzo['gas'][field][...]
+  if i == 0: print vals_ch.mean()
   proj_ch = get_projection( vals_ch, proj_offset, proj_depth, log=False )
   proj_en = get_projection( vals_en, proj_offset, proj_depth, log=False )
   proj = ( proj_ch - proj_en )/ proj_en
@@ -134,7 +146,7 @@ data_all = [ data_en, data_ch, data_diff ]
 n_rows = 3
 n_cols = len(fields)
 fig, ax_list = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(10*n_cols,10*n_rows))
-titles = [ 'Z={0:.2f}   Gas'.format(current_z_ch),  'HI', 'HII', 'Temperature' ]
+titles = [ 'Z={0:.2f}   DM Density'.format(current_z_ch), 'Gas Density',  'HI', 'HII', 'Temperature' ]
 y_labels = [' ENZO', 'CHOLLA', 'DIFFERENCE' ]
 
 fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.3f}$   '.format( eta_1, eta_2 ), fontsize=30, y=0.997)
@@ -155,14 +167,14 @@ for i in range( n_cols):
     if n == n_rows-1:
       # min_val = max( -10, proj.min())
       # max_val = min( 10 , proj.max() )
-      min_val = -5
-      max_val = 5
+      min_val = -1
+      max_val = 1
       im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='jet' )
-      
+
     else:
       if field=='temperature': im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='jet' )
       else : im = ax.imshow( proj, interpolation='bilinear', vmin=min_val, vmax=max_val )
-    
+
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     fig.colorbar( im, cax=cax )

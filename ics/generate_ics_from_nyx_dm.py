@@ -27,8 +27,10 @@ nSnap = 0
 
 data_nyx = load_snapshot_nyx( nSnap, nyxDir, hydro=False )
 
+Lbox = 50000
+
 proc_grid = [ 2, 2, 2]
-box_size = [ 50000, 50000, 50000 ]
+box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 256, 256, 256 ]
 domain_parent = get_domain_block( proc_grid, box_size, grid_size )
 outputBaseName = '{0}_particles.h5'.format(nSnap)

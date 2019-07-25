@@ -29,7 +29,7 @@ if inDir[-1] != "/": inDir += '/'
 if outDir[-1] != "/": outDir += '/'
 for option in sys.argv:
   if option == 'no_cosmo': cosmo = False
-  if option == 'particles': particles, hydro = True, True
+  if option == 'particles': particles, hydro = True, False
   
 
 if rank == 0:
@@ -40,19 +40,24 @@ if rank == 0:
 # comm.Barrier()
 
 
-def split_name( file_name):
-  nSap, name, nBox = file_name.split('.')
-  return [int(nSap), int(nBox)]
+def split_name( file_name, part=False):
+  nSnapshot, name, nBox = file_name.split('.')
+  if part: 
+    indx = nSnapshot.find("_particles")
+    nSnapshot = nSnapshot[:indx]
+  return [int(nSnapshot), int(nBox)]
 
   
 name_base = 'h5'
 
-
-dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find('.h5.') > 0 ) and ( f.find('_particles') < 0) ) ]
+if hydro:
+  dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find('.h5.') > 0 ) and ( f.find('_particles') < 0) ) ]
+else:
+  dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and ( f.find('_particles') > 0) ) ]
 dataFiles = np.sort( dataFiles )
 nFiles = len( dataFiles )
 
-files_names = np.array([ split_name( file_name ) for file_name in dataFiles ])
+files_names = np.array([ split_name( file_name, part=particles ) for file_name in dataFiles ])
 snaps, boxes = files_names.T
 snaps = np.unique( snaps )
 boxes = np.unique( boxes )
@@ -67,7 +72,7 @@ if rank == 0:
 
 if rank < nSnapshots:   
   nSnap = rank
-# for nSnap in range( nSnapshots):
+for nSnap in range( nSnapshots):
   if hydro:
     out_base_name = 'grid_' 
     compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir )

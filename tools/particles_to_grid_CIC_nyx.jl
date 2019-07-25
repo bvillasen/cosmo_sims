@@ -4,10 +4,11 @@ cosmo_dir = "/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/"
 tools_dir = cosmo_dir * "tools/"
 push!(LOAD_PATH, tools_dir)
 using CIC_functions
+using Statistics
 
 # Input File
-dataDir = "/raid/bruno/data/"
-# dataDir = "/home/bruno/Desktop/data/"
+# dataDir = "/raid/bruno/data/"
+dataDir = "/home/bruno/Desktop/hard_drive_1/data/"
 # inDir = dataDir * "cosmo_sims/nyx/256_hydro/run_lya/h5_files/"
 inDir = dataDir * "cosmo_sims/nyx/256_dm_50Mpc/h5_files/"
 outDir = inDir * "gridFields/"
@@ -40,9 +41,9 @@ const dz = Lz / nz
 
 
 # nSnap = 0
-for nSnap in 0:80
+for nSnap in 0:400
   println( "\nSnapshot: $(nSnap)")
-  snapKey = lpad(nSnap,3,0)
+  snapKey = lpad(nSnap,3,'0')
   inFileName = inDir * in_base_name * snapKey * ".h5"
   outFileName = outDir * out_base_name * snapKey * ".h5"
 

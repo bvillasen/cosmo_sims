@@ -4,10 +4,8 @@ import matplotlib.pyplot as plt
 import h5py as h5
 import yt
 
-# dataDir = '/raid/bruno/data/cosmo_sims/'
-dataDir = '/home/bruno/Desktop/data/'
-cosmo_dir = '/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/'
-outDir = cosmo_dir + 'figures/phase_diagram/'
+dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
+cosmo_dir = dev_dir + 'cosmo_sims/'
 toolsDirectory = cosmo_dir + "tools/"
 sys.path.extend([toolsDirectory ] )
 from load_data_cholla import load_snapshot_data
@@ -31,20 +29,13 @@ dataDir = '/raid/bruno/data/'
 data_set = 'enzo_simple_beta_convDE'
 
 
-n_cholla_files = 3
-# chollaDir = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_{0}/'.format(data_set)
-# chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_enzo_PPMC_HLL_SIMPLE_da001_noDE/'
-# chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_enzo_PPMC_HLL_SIMPLE_da001_noDE_gravWork/'
-chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_enzo_PPMC_HLL_SIMPLE_da001_BETA01_convDE_gravWork/'
-chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_enzo_PPMC_HLL_SIMPLE_da001_BETA005_convDE_gravWork/'
-chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_enzo_PPMC_HLL_SIMPLE_da001_BETA001_convDE_gravWork_de0001/'
-# chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_enzo_PPMC_HLL_SIMPLE_da001_BETA06/'
-chollaDir_3 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_enzo_PPMC_HLL_SIMPLE_da001_BETA08/'
-chollaDir_4 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_enzo_PPMC_HLL_SIMPLE_da001_BETA02/'
-chollaDir_5 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_enzo_PPMC_HLL_SIMPLE_da001_BETA02/'
+n_cholla_files = 2
+chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMC_HLLC_VL_eta0.001_0.030_da0.001/'
+chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMC_HLLC_VL_eta0.001_0.030_da0.002'
+chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMC_HLLC_VL_eta0.001_0.050/'
 
-chollaDir_all = [ chollaDir_0, chollaDir_1, chollaDir_2, chollaDir_3, chollaDir_4, chollaDir_5 ]
-cholla_label_all = ['Cholla beta=0.1 eta=0.001', 'Cholla beta=0.05 eta=0.001',  'Cholla beta=0.005 eta=0.0001', 'Cholla_beta_0.8' ]
+chollaDir_all = [ chollaDir_0, chollaDir_1, chollaDir_2 ]
+cholla_label_all = [r'Cholla $\eta_2=0.030 \Delta a = 0.001$', r'Cholla $\eta_2=0.030 \Delta a = 0.002$',  r'Cholla $\eta_2=0.050$' ]
 
 
 
@@ -52,7 +43,7 @@ enzoDir = dataDir + 'cosmo_sims/enzo/ZeldovichPancake_HLLC/'
 enzoDir_1 = dataDir + 'cosmo_sims/enzo/ZeldovichPancake_HLLC_noDE/'
 
 
-outDir = cosmo_dir + 'figures/zeldovich/{0}/'.format( data_set )
+outDir = dev_dir + 'figures/zeldovich/'
 if rank == 0:
   create_directory( outDir )
 
@@ -88,7 +79,7 @@ for n in range(n_cholla_files):
   Ekin_ch = 0.5 * dens_ch * ( vel_x_ch*vel_x_ch + vel_y_ch*vel_y_ch + vel_z_ch*vel_z_ch)
   temp_ch = get_temp(U_ch / dens_ch * 1e6, mu=1)
   data_ch = [ dens_ch, vel_x_ch, temp_ch, U_ch, E_ch, Ekin_ch ]
-  data_cholla_all.append(data_ch) 
+  data_cholla_all.append(data_ch)
 
 
 
@@ -102,30 +93,30 @@ x = data[('gas', 'x')].in_units('Mpc/h').v / current_a
 gas_dens = data[ ('gas', 'density')].in_units('msun/kpc**3').v*current_a**3/h**2
 gas_temp = data[ ('gas', 'temperature')].v
 gas_vel = data[ ('gas', 'velocity_x')].in_units('km/s').v
-gas_u = data[('gas', 'thermal_energy' )].v * 1e-10 *gas_dens #km^2/s^2 
+gas_u = data[('gas', 'thermal_energy' )].v * 1e-10 *gas_dens #km^2/s^2
 mu = data[('gas', 'mean_molecular_weight' )]
 temp = get_temp(gas_u / gas_dens * 1e6, mu=mu)
 Ekin = 0.5 * gas_dens * gas_vel * gas_vel
 gas_E = Ekin + gas_u
-data_en = [ gas_dens, gas_vel, temp,  gas_u, gas_E, Ekin ] 
-
-file_name = enzoDir_1 + 'DD{0:04}/data{0:04}'.format(nSnap)
-ds = yt.load( file_name )
-data = ds.all_data()
-h = ds.hubble_constant
-current_z = ds.current_redshift
-current_a = 1./(current_z + 1)
-x = data[('gas', 'x')].in_units('Mpc/h').v / current_a
-gas_dens = data[ ('gas', 'density')].in_units('msun/kpc**3').v*current_a**3/h**2
-gas_temp = data[ ('gas', 'temperature')].v
-gas_vel = data[ ('gas', 'velocity_x')].in_units('km/s').v
-gas_u = data[('gas', 'thermal_energy' )].v * 1e-10 *gas_dens #km^2/s^2 
-mu = data[('gas', 'mean_molecular_weight' )]
-temp = get_temp(gas_u / gas_dens * 1e6, mu=mu)
-Ekin = 0.5 * gas_dens * gas_vel * gas_vel
-gas_E = Ekin + gas_u
-data_en_1 = [ gas_dens, gas_vel, temp,  gas_u, gas_E, Ekin ] 
-
+data_en = [ gas_dens, gas_vel, temp,  gas_u, gas_E, Ekin ]
+# 
+# file_name = enzoDir_1 + 'DD{0:04}/data{0:04}'.format(nSnap)
+# ds = yt.load( file_name )
+# data = ds.all_data()
+# h = ds.hubble_constant
+# current_z = ds.current_redshift
+# current_a = 1./(current_z + 1)
+# x = data[('gas', 'x')].in_units('Mpc/h').v / current_a
+# gas_dens = data[ ('gas', 'density')].in_units('msun/kpc**3').v*current_a**3/h**2
+# gas_temp = data[ ('gas', 'temperature')].v
+# gas_vel = data[ ('gas', 'velocity_x')].in_units('km/s').v
+# gas_u = data[('gas', 'thermal_energy' )].v * 1e-10 *gas_dens #km^2/s^2
+# mu = data[('gas', 'mean_molecular_weight' )]
+# temp = get_temp(gas_u / gas_dens * 1e6, mu=mu)
+# Ekin = 0.5 * gas_dens * gas_vel * gas_vel
+# gas_E = Ekin + gas_u
+# data_en_1 = [ gas_dens, gas_vel, temp,  gas_u, gas_E, Ekin ]
+# 
 
 n_rows = 3
 n_cols = 1
@@ -153,13 +144,13 @@ ax.plot( x, data_en[2], linewidth=3 )
 
 for n in range(n_cholla_files):
   data_ch = data_cholla_all[n]
-  
+
   ax = ax_list[0]
   ax.plot( x, data_ch[0],  label=cholla_label_all[n] )
 
   ax = ax_list[1]
   ax.plot( x, data_ch[1] )
-  
+
   ax = ax_list[2]
   ax.plot( x, data_ch[2] )
 

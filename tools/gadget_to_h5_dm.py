@@ -15,7 +15,7 @@ from load_data_gadget import load_gadget_file, load_gadget_file_boxes, load_snap
 
 
 dataDir = '/raid/bruno/data/'
-gadgetDir = dataDir + 'cosmo_sims/gadget/256_dm_50Mpc/'
+gadgetDir = dataDir + 'cosmo_sims/gadget/dm_256_100Mpc/'
 h5_dir = gadgetDir + 'h5_files/'
 outDir = h5_dir
 base_name = 'snapshot'

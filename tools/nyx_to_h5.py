@@ -12,7 +12,7 @@ from tools import *
 from load_data_nyx import load_data_nyx_yt
 
 
-dataDir = '/raid/bruno/data/'
+dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
 
 base_name = 'snapshot_'
 
@@ -31,10 +31,13 @@ if type == 'hydro': hydro = True
 
 dataFiles, nFiles = get_files_names( fileKey, inDir, type='nyx' )
 
-print 'Saving Files: ', nFiles
+print ('Saving Files: ', nFiles)
 current_a_list = []
 
 for nSnap, inFileName in enumerate( dataFiles):
+  
+  # if nSnap > 1: continue
+  
   # snapKey = '{0:05}'.format(nSnap*index_stride)
   # inFileName = 'plt' + snapKey
   print "\n Loading: ", inDir +inFileName
@@ -43,7 +46,7 @@ for nSnap, inFileName in enumerate( dataFiles):
   current_z = data_nyx['current_z']
   snapKey = '{0:03}'.format(nSnap)
   current_a_list.append( current_a )
-  print ' Current_a: ', current_a
+  print ' Current_z: ', current_z
 
   outputFileName = outDir + base_name + snapKey + '.h5'
 
@@ -107,6 +110,6 @@ for nSnap, inFileName in enumerate( dataFiles):
   print 'Saved h5 file: ', outputFileName
 
 chollaDir = '/home/bruno/cholla/'
-scale_fle_name = chollaDir + 'scale_output_files/outputs_{0}_nyx.txt'.format(type)
+scale_fle_name = outDir + 'outputs_{0}_nyx_100Mpc.txt'.format(type)
 print "Saving scale_output_files: ", scale_fle_name
 np.savetxt( scale_fle_name, current_a_list )

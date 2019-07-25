@@ -29,24 +29,29 @@ if n_arg > 1:
   for i in range(1 , n_arg):
     arg = sys.argv[i]
     args.append( float( arg ))
-  eta_1, eta_2 = args
+  eta_1, eta_2, n_out = args
+  n_out = int( n_out)
   if rank == 0:
     print "Using command arguments"
     print args
 
-if rank == 0: print 'eta: {0:.3f}  {1:.3f}  /'.format( eta_1, eta_2, )
+if rank == 0: print 'eta: {0:.3f}  {1:.3f}  '.format( eta_1, eta_2, )
 
 nPoints = 128
 Lbox = 50.0   #Mpc/h
 
-extra_name = '_pressure'
+integrator = 'SIMPLE'
+extra_name = '_gravWork'
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool/data_PPMC_HLLC_SIMPLE_eta{0:.3f}_{1:.3f}{2}/'.format( eta_1, eta_2,  extra_name, nPoints )
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool/data_PPMC_HLLC_{4}_eta{0:.3f}_{1:.3f}{2}/'.format( eta_1, eta_2,  extra_name, nPoints, integrator )
 
 enzoDir = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
 outDir = dev_dir + 'figures/power_hydro/'
 
-fileName = outDir + 'ps_{2}_cooling_uv_PPMC_HLLC_SIMPLE_eta{0:.3f}_{1:.3f}_{3}.png'.format( eta_1, eta_2, nPoints, extra_name  )
+fileName = outDir + 'ps_{2}_cooling_uv_PPMC_HLLC_{4}_eta{0:.3f}_{1:.3f}{3}.png'.format( eta_1, eta_2, nPoints, extra_name, integrator  )
+# fileName = outDir + 'ps_{2}_cooling_uv_PPMC_HLLC_{4}_{5}.png'.format( eta_1, eta_2, nPoints, extra_name, integrator, n_out  )
+
+
 
 # set simulation volume dimentions
 nz, ny, nx = nPoints, nPoints, nPoints
@@ -143,7 +148,7 @@ fig = plt.figure(0)
 fig.set_size_inches(40,10)
 fig.clf()
 
-fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.3f}$  {2}'.format( eta_1, eta_2,  extra_name ), fontsize=20, y=0.95)
+fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.3f}$  {3}  {2}'.format( eta_1, eta_2,  extra_name, integrator ), fontsize=20, y=0.95)
 
 gs = plt.GridSpec(5, 4)
 gs.update(hspace=0.05, wspace=0.08, )

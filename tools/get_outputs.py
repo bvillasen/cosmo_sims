@@ -2,14 +2,14 @@ import numpy as np
 import h5py as h5
 import yt
 
-# dataDir = '/home/bruno/Desktop/data/'
-dataDir = '/raid/bruno/data/'
-inDir = dataDir + 'cosmo_sims/enzo/128_hydro/h5_files/'
+dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
+# dataDir = '/raid/bruno/data/'
+inDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_100Mpc/h5_files/'
 enzoDir = inDir
 outDir = inDir
 
 
-outFileName = 'outputs_enzo_hydro_128.txt'
+outFileName = 'outputs_enzo_cool_uv_256_100Mpc.txt'
 # a_list = [ 1./21 ]
 a_list = []
 
@@ -35,18 +35,18 @@ nSnap = 0
 # np.savetxt(  outDir + outFileName, a_vals )
 
 
-for nSnap in range(28):
+for nSnap in range(32):
   fileName = 'snapshot_{0:03}.h5'.format( nSnap )
   file = h5.File( inDir+fileName, 'r' )
   current_a = file.attrs['current_a']
-  print nSnap, current_a
+  print( nSnap, current_a )
   a_list.append( current_a )
 
 n_vals = len( a_list )
 a_vals = np.array(a_list)
 
-fileName = 'outputs_enzo_cool_UV_28.txt'
-np.savetxt( outDir+fileName, a_vals )
+
+np.savetxt( outDir + outFileName, a_vals )
 # 
 # 
 # outDir = '/home/bruno/Desktop/'

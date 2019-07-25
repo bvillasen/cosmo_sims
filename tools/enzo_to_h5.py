@@ -18,10 +18,11 @@ sys.path.extend([toolsDirectory ] )
 # dataDir = '/raid/bruno/data/'
 # dataDir = '/home/bruno/Desktop/data/'
 # dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
-dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
-inDir = dataDir + 'cosmo_sims/enzo/128_cool_uv_noDE/'
+# dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
+dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
+inDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_100Mpc/'
 # inDir = dataDir + 'cosmo_sims/enzo/512_hydro/'
-outDir = dataDir + 'cosmo_sims/enzo/128_cool_uv_noDE/h5_files/'
+outDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_100Mpc/h5_files/'
 # 
 # dataFiles = [f for f in listdir(inDir) if  (f.find('DD') == 0 )   ]
 # dataFiles = np.sort( dataFiles )
@@ -31,7 +32,7 @@ cooling = True
 metals = True
 
 
-n_snaps = 104
+n_snaps = 120
 snapshots = list(range(0,n_snaps, 4))
 if n_snaps-1 not in snapshots: snapshots.append(n_snaps-1)
 # snapshots = [0]

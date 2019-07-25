@@ -21,11 +21,13 @@ from tools import create_directory
 
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
-enzoDir = dataDir + 'cosmo_sims/enzo/256_hydro_grackle_0/'
+# enzoDir = dataDir + 'cosmo_sims/enzo/256_hydro_grackle_0/'
+enzoDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_100Mpc/ics/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/ics_vel1/'
+outputDir = dataDir + 'cosmo_sims/cholla_pm/256_cool_uv_100Mpc/ics/'
 create_directory( outputDir )
 nSnap_enzo = 0
+
 
 metals = True
 
@@ -47,16 +49,6 @@ gas_vel_y = data_grid[('gas','velocity_y')].in_units('km/s').v
 gas_vel_z = data_grid[('gas','velocity_z')].in_units('km/s').v
 # gas_E = data_grid[('gas', 'total_energy' )].v * 1e-10   *gas_dens  #km^2/s^2
 gas_u = data_grid[('gas', 'thermal_energy' )].v * 1e-10 * gas_dens #km^2/s^2
-
-
-vel_max = max( [ gas_vel_x.max(), gas_vel_y.max(), gas_vel_z.max() ])
-
-print ' Vel max: ', vel_max
-
-gas_vel_x = np.ones_like( gas_dens ) * 1
-gas_vel_y = np.ones_like( gas_dens ) * 1
-gas_vel_z = np.ones_like( gas_dens ) * 1
-
 gas_E = 0.5 * gas_dens * ( gas_vel_x*gas_vel_x + gas_vel_y*gas_vel_y + gas_vel_z*gas_vel_z ) + gas_u
 
 # gas_temp = data_grid[ ('gas', 'temperature')].v
@@ -122,9 +114,10 @@ data_enzo['gas']['e_density'] = electron_dens
 if metals:
   data_enzo['gas']['metal_density'] = metal_dens
 
+Lbox = 100000
 
 proc_grid = [ 2, 2, 2]
-box_size = [ 115000, 115000, 115000 ]
+box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 256, 256, 256 ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
 generate_ics_particles(data_enzo, outputDir, outputBaseName, proc_grid, box_size, grid_size)

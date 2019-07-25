@@ -40,27 +40,36 @@ if n_arg > 1:
 
 print 'eta: {0:.3f}   {1:.3f}  /'.format( eta_1, eta_2 )
 
+integrator = 'SIMPLE'
+extra_name = ''
 
-outDir = dev_dir + 'figures/phase_diagram/uvb_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
+# outDir = dev_dir + 'figures/phase_diagram/uvb_SIMPLE_eta{0:.3f}_{1:.3f}{3}/'.format( eta_1, eta_2, integrator, extra_name )
+outDir = dev_dir + 'figures/phase_diagram/cool_uv_100Mpc_{0}_eta2_{1:.3f}/'.format(  integrator, eta_2 )
 
-Lbox = 50000.
-nPoints = 128 
-
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool/'.format(nPoints)
-
-nrows = 1
-chollaDir_0 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
-# chollaDir_1 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0_1, beta_0_1, beta_1_1 )
-# chollaDir_2 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}_PressureJump1.0/'.format( eta_0, beta_0, beta_1 )
-# chollaDir_3 = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}_PressureJump10.0/'.format( eta_0, beta_0, beta_1 )
-
-chollaDir_all = [ chollaDir_0, chollaDir_0, ]
 
 if rank == 0: 
   create_directory( outDir )
   print "Output: ", outDir
 
-enzoDir_uv = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
+
+Lbox = 100000.
+nPoints = 256
+
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_100Mpc/'.format(nPoints)
+
+eta_2_LIST = [ 0.030, 0.030, 0.032, 0.038, 0.046,]
+
+nrows = 2
+chollaDir_0 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_{1:.3f}{3}_reconstDE/'.format( eta_1, eta_2, integrator, extra_name )
+chollaDir_1 = chollaDir +  'data_PPMC_HLLC_VL_eta0.001_0.030_nieghbourDE/'.format( eta_1, eta_2, integrator, extra_name )
+chollaDir_2 = chollaDir +  'data_PPMC_HLLC_VL_eta{0:.3f}_0.030_gravWork/'.format( eta_1, eta_2, integrator, extra_name )
+chollaDir_3 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_0.038{3}/'.format( eta_1, eta_2, integrator, extra_name )
+chollaDir_4 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_0.046{3}/'.format( eta_1, eta_2, integrator, extra_name )
+
+chollaDir_all = [ chollaDir_0, chollaDir_1, chollaDir_2, chollaDir_3, chollaDir_4 ]
+
+
+enzoDir_uv = dataDir + 'cosmo_sims/enzo/{0}_cool_uv_100Mpc/h5_files/'.format(nPoints)
 
 
 
@@ -102,8 +111,8 @@ for n in range( nrows ):
   data_U.append( [ x_U, y_U, z_U ])
   data_GE.append( [ x_GE, y_GE, z_GE ])
   data_frac.append( [cell_frac, mass_frac ])
-  
-  
+
+
   dens_1D = np.linspace( 0.001, 1e5, 1000  )
   alpha = 500
   p_jeans = alpha * dens_1D**2
@@ -140,11 +149,11 @@ y_max = 8
 
 
 for n in range(nrows):
-  
+
   data = data_GK[n]
   min_val = min( np.min(np.log10(z_en_uv)), np.min(np.log10(data[2])) )
   max_val = min( np.max(np.log10(z_en_uv)), np.max(np.log10(data[2])) )
-  
+
   plt.subplot(nrows, ncols, n*ncols+1)
   ax = plt.gca()
   ax.clear()
@@ -164,7 +173,7 @@ for n in range(nrows):
   # plt.plot( np.log10(dens_1D), np.log10(t_jeans), c='C3', linestyle='--', linewidth=2 )
   ax.set_ylabel(r'Log Temperature $[K]$', fontsize=15 )
   ax.set_xlabel(r'Log Gas Overdensity', fontsize=15 )
-  ax.set_title( " CHOLLA Gas GE_GRACKLE   ",fontsize=17 )
+  ax.set_title( r" CHOLLA Gas   $\eta_2={0:.3f}$".format(eta_2_LIST[n]),fontsize=17 )
   ax.set_xlim(x_min, x_max)
   ax.set_ylim(-1, y_max)
 
@@ -196,7 +205,7 @@ for n in range(nrows):
 
 # # #
 # 
-fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.3f}$   '.format( eta_1, eta_2 ), fontsize=20, y=0.999)
+# fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.3f}$  {2}  {3} '.format( eta_1, eta_2, integrator, extra_name ), fontsize=20, y=0.999)
 
 # fig.text( 0.44, 0.99, r'$\eta_0={0:0.3f}$   $\beta_0={1:0.3f}$   $\beta_1={2:0.3f}$'.format( eta_0, beta_0, beta_1 ), fontsize=20, )
 # fig.text( 0.44, 0.49, r'$\eta_0={0:0.3f}$   $\beta_0={1:0.3f}$   $\beta_1={2:0.3f}$'.format( eta_0_1, beta_0_1, beta_1_1 ), fontsize=20, )

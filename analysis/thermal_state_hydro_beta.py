@@ -22,9 +22,8 @@ nSnap = rank
 # name = 'de001_PLMP_CTU'
 dataDir = '/raid/bruno/data/'
 
-eta_0 = 0.005
-beta_0 = 0.01
-beta_1 = 0.00
+eta_1 = 0.001
+eta_2 = 0.030
 
 
 n_arg = len(sys.argv)
@@ -33,15 +32,18 @@ if n_arg > 1:
   for i in range(1 , n_arg):
     arg = sys.argv[i]
     args.append( float( arg ))
-  eta_0, beta_0, beta_1 = args
+  eta_1, eta_2 = args
   if rank == 0:
     print "Using command arguments"
     print args
 
-print 'eta: {0:.3f}   beta{1:.3f}  {2:.3f}/'.format( eta_0, beta_0, beta_1 )
+print 'eta: {0:.3f}  {1:.3f}  '.format( eta_1, eta_2 )
 
 
 outDir = dev_dir + 'figures/phase_diagram/hydro_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
+if rank == 0: 
+  create_directory( outDir )
+  print "Output: ", outDir
 
 Lbox = 50000.
 nPoints = 128 
@@ -57,9 +59,6 @@ chollaDir_4 = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_PPMC_HLLC_SIMPLE_eta
 
 chollaDir_all = [ chollaDir_0, chollaDir_1, chollaDir_2, chollaDir_3, chollaDir_4 ]
 
-if rank == 0: 
-  create_directory( outDir )
-  print "Output: ", outDir
 
 enzoDir_uv = dataDir + 'cosmo_sims/enzo/{0}_hydro/h5_files/'.format(nPoints)
 

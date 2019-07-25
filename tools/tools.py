@@ -17,7 +17,7 @@ def create_directory( dir ):
 
 def get_files_names( fileKey, inDir, type='cholla' ):
   if type=='nyx': dataFiles = [f for f in listdir(inDir) if (f.find(fileKey) >= 0 )  ]
-  if type == 'cholla': [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find(fileKey) > 0 ) ) ]
+  if type == 'cholla': dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find(fileKey) >= 0 ) ) ]
   dataFiles = np.sort( dataFiles )
   nFiles = len( dataFiles )
   # index_stride = int(dataFiles[1][len(fileKey):]) - int(dataFiles[0][len(fileKey):])

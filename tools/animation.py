@@ -8,26 +8,42 @@ from shutil import copyfile
 dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
 # inDir = cosmo_dir + 'figures/cosmo_256_cholla_highRes/'
 # inDir = cosmo_dir + 'figures/collapse/anim/'
-# inDir = dev_dir + 'figures/chemistry/chemistry_HI_eta0.005_beta0.250_0.000_PressureJump10.0/'
-inDir = dev_dir + 'figures/phase_diagram/uvb_eta0.001_beta0.000_0.000_noDE/'
-# inDir = cosmo_dir + 'figures/projections/de1_PPMC_HLLC/'
+# inDir = dev_dir + 'figures/chemistry/chemistry_HI_eta0.001_0.030/'
+# inDir = dev_dir + 'figures/phase_diagram/uvb_SIMPLE_several/'
+# inDir = dev_dir + 'figures/power_hydro/animation/'
+# inDir = dev_dir + 'figures/cell_difference/'
+# inDir = dev_dir + 'figures/zeldovich/'
+# inDir = dev_dir + 'figures/spectra/'
+inDir = dev_dir + 'figures/dm_projection_50Mpc/'
 
-# inDir = cosmo_dir + 'figures/zeldovich/enzo_simple_beta_convDE/'
+# inDir = '/home/bruno/Desktop/namrata/'
+
+
+
+
 outDir = '/home/bruno/Desktop/'
 
+# image_name = 'l1_cell_difference'
 # image_name = 'chemistry'
-image_name = 'phase_diagram'
-out_anim_name = 'phase_diagram_DE_beta_simple_beta0.00_noDE'
+# image_name = 'phase_diagram'
+# image_name = 'ps_128_cooling_uv_PPMC_HLLC_SIMPLE'
+# out_anim_name = 'l1_difference_eta2'
 # image_name = 'zeldovich'
-# out_anim_name = 'zeldovich_enzo_simple_beta_convDE'
+# image_name = 'spectra'
+image_name = 'projection'
 
-cmd = 'ffmpeg -framerate 1  '
+# out_anim_name = 'zeldovich_error_noGrav'
+out_anim_name = 'dm_projection_50Mpc'
+# out_anim_name = 'spec_animation'
+
+cmd = 'ffmpeg -framerate 10  '
 # cmd += ' -start_number 45'
 cmd += ' -i {0}{1}_%d.png '.format( inDir, image_name )
 cmd += '-pix_fmt yuv420p '
 # cmd += '-b 50000k '
 cmd += '{0}{1}.mp4'.format( outDir, out_anim_name )
 cmd += ' -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2"'
+cmd += ' -vf pad="width=ceil(iw/2)*2:height=ceil(ih/2)*2"'
 os.system( cmd )
 
 

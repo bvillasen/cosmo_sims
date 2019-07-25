@@ -10,36 +10,45 @@ import yt
 
 
 
-def load_snapshot_nyx( nSnap, inDir, hydro=True):
+def load_snapshot_nyx( nSnap, inDir, hydro=True, particles=True, cic=True):
   data_dic = {'dm':{}, 'gas':{}}
   inFileName = inDir + 'h5_files/snapshot_{0:03}.h5'.format(nSnap)
-  print "Loading: ", inFileName
-  inFile = h5.File(inFileName, 'r')
-  current_a = inFile.attrs['current_a']
-  current_z = inFile.attrs['current_z']
-  data_dic['current_a'] = current_a
-  data_dic['current_z'] = current_z
-
-  data_dm = inFile['dm']
-  mass = data_dm['mass']
-  pos_x = data_dm['pos_x']
-  pos_y = data_dm['pos_y']
-  pos_z = data_dm['pos_z']
-  vel_x = data_dm['vel_x']
-  vel_y = data_dm['vel_y']
-  vel_z = data_dm['vel_z']
-  data_dic['dm']['mass'] = mass
-  data_dic['dm']['pos_x'] = pos_x
-  data_dic['dm']['pos_y'] = pos_y
-  data_dic['dm']['pos_z'] = pos_z
-  data_dic['dm']['vel_x'] = vel_x
-  data_dic['dm']['vel_y'] = vel_y
-  data_dic['dm']['vel_z'] = vel_z
-
-  cic_file_name = inDir + 'h5_files/gridFields/grid_CIC_{0:03}.h5'.format(nSnap)
-  cic_file = h5.File( cic_file_name, 'r' )
-  dens_dm = cic_file['dm']['density']
-  data_dic['dm']['density'] = dens_dm
+  
+  if particles:
+    print "Loading: ", inFileName
+    inFile = h5.File(inFileName, 'r')
+    current_a = inFile.attrs['current_a']
+    current_z = inFile.attrs['current_z']
+    data_dic['current_a'] = current_a
+    data_dic['current_z'] = current_z
+    data_dm = inFile['dm']
+    mass = data_dm['mass']
+    pos_x = data_dm['pos_x']
+    pos_y = data_dm['pos_y']
+    pos_z = data_dm['pos_z']
+    vel_x = data_dm['vel_x']
+    vel_y = data_dm['vel_y']
+    vel_z = data_dm['vel_z']
+    data_dic['dm']['mass'] = mass
+    data_dic['dm']['pos_x'] = pos_x
+    data_dic['dm']['pos_y'] = pos_y
+    data_dic['dm']['pos_z'] = pos_z
+    data_dic['dm']['vel_x'] = vel_x
+    data_dic['dm']['vel_y'] = vel_y
+    data_dic['dm']['vel_z'] = vel_z
+  
+  if cic:
+    cic_file_name = inDir + 'h5_files/gridFields/grid_CIC_{0:03}.h5'.format(nSnap)
+    cic_file = h5.File( cic_file_name, 'r' )
+    # print cic_file.keys()
+    dens_dm = cic_file['dm']['density']
+    data_dic['dm']['density'] = dens_dm
+    current_a = cic_file.attrs['current_a']
+    current_z = cic_file.attrs['current_z']
+    data_dic['dm']['current_a'] = current_a
+    data_dic['dm']['current_z'] = current_z
+    
+  
 
   if hydro:
     data_gas = inFile['gas']

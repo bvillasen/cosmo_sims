@@ -23,9 +23,8 @@ nSnap = rank
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
 
-eta_0 = 0.005
-beta_0 = 0.00
-beta_1 = 0.00
+eta_1 = 0.001
+eta_2 = 0.020
 
 n_arg = len(sys.argv)
 if n_arg > 1:
@@ -33,27 +32,28 @@ if n_arg > 1:
   for i in range(1 , n_arg):
     arg = sys.argv[i]
     args.append( float( arg ))
-  eta_0, beta_0, beta_1 = args
+  eta_1, eta_2,  = args
   if rank == 0:
     print "Using command arguments"
     print args
 
 
-print 'eta: {0:.3f}   beta{1:.3f}  {2:.3f}/'.format( eta_0, beta_0, beta_1 )
+print 'eta: {0:.3f}   {1:.3f} '.format( eta_1, eta_2 )
 
 
-nPoints = 128
-Lbox = 50000.
+nPoints = 256
+Lbox = 100000.
 
-
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_hydro/'.format(nPoints)
-chollaDir_uv = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
+# 
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_hydro_100Mpc/'.format(nPoints)
+chollaDir_uv = chollaDir +  'data_PPMC_HLLC_SIMPLE_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
 
 enzoDir = dataDir + 'cosmo_sims/enzo/'
-enzoDir_uv = enzoDir + '{0}_hydro/h5_files/'.format(nPoints)
+enzoDir_uv = enzoDir + '{0}_hydro_100Mpc/h5_files/'.format(nPoints)
 
 
-outDir = dev_dir + 'figures/chemistry/chemistry_HI_eta{0:.3f}_beta{1:.3f}_{2:.3f}/'.format( eta_0, beta_0, beta_1 )
+outDir = dev_dir + 'figures/projection_hydro_100Mpc/PPMC_HLLC_SIMPLE_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
+
 if rank == 0:
   create_directory( outDir )
 
@@ -67,8 +67,7 @@ nz = nPoints
 
 dv = (Lbox/nPoints)**3
 
-slice_0 = 0
-n_slice = 64
+
 
 dens_weight = True
 
@@ -82,9 +81,9 @@ def get_projection( data, offset, depth, log=True ):
 
 
 proj_offset = 0
-proj_depth = 10
+proj_depth = 64
 
-fields = ['density', 'temperature' ]
+fields = ['density_dm', 'density', 'temperature' ]
 
 # nSnap = 0
 # n_snapshots = 10
@@ -95,8 +94,14 @@ data_ch = {}
 data_cholla = load_snapshot_data( nSnap, chollaDir_uv, cool=False )
 current_z_ch = data_cholla['current_z']
 current_a_ch = data_cholla['current_a']
-for field in fields:
-  if field == 'temperature':
+dens_ch = data_cholla['gas']['density'][...]
+U_ch = data_cholla['gas']['GasEnergy'][...] / data_cholla['gas']['density'][...]
+temp_ch = get_temp( U_ch*1e6, gamma, mu=1 ) 
+
+for i,field in enumerate(fields):
+  if i == 0:
+    data = data_cholla['dm']['density'][...]
+  elif field == 'temperature':
     ge = data_cholla['gas']['GasEnergy'][...] / data_cholla['gas']['density'][...]
     data = get_temp( ge*1e6, gamma, mu=1 )
   else:  
@@ -109,14 +114,20 @@ for field in fields:
 
 
 data_en = {}
-data_enzo = load_snapshot_enzo( nSnap, enzoDir_uv, cool=False, metals=False )
+data_enzo = load_snapshot_enzo( nSnap, enzoDir_uv, cool=False, metals=False, dm=True )
 current_a_enzo = data_enzo['current_a']
 current_z_enzo = data_enzo['current_z']
-for field in fields:
-  if field == 'temperature':
+dens_en = data_enzo['gas']['density'][...]
+U_en = data_enzo['gas']['GasEnergy'][...] / data_enzo['gas']['density'][...]
+temp_en = get_temp( U_en*1e6, gamma, mu=1 ) 
+for i, field in enumerate(fields):
+  if i == 0:
+    data = data_enzo['dm']['density'][...]
+  elif field == 'temperature':
+    # data = data_enzo['gas']['temperature'][...]
     ge = data_enzo['gas']['GasEnergy'][...] / data_enzo['gas']['density'][...]
     data = get_temp( ge*1e6, gamma, mu=1 )
-    data[data<1] = 1
+    data[data<1] = 1    
   else:
     data = data_enzo['gas'][field][...]
   data_en[field] = {}
@@ -126,18 +137,22 @@ for field in fields:
   data_en[field]['min'] = proj.min() 
 
 data_diff = {}
-for field in fields:
-  if field == 'temperature':
-    vals_en = get_temp( (data_enzo['gas']['GasEnergy'][...] / data_enzo['gas']['density'][...])*1e6, gamma, mu=1 )
+for i, field in enumerate(fields):
+  if i == 0:
+    vals_ch = data_cholla['dm']['density'][...]
+    vals_en = data_enzo['dm']['density'][...]
+    
+  elif field == 'temperature':
     vals_ch = get_temp( (data_cholla['gas']['GasEnergy'][...] / data_cholla['gas']['density'][...])*1e6, gamma, mu=1 )
+    # vals_en = data_enzo['gas']['temperature'][...]
+    vals_en = get_temp( (data_enzo['gas']['GasEnergy'][...] / data_enzo['gas']['density'][...])*1e6, gamma, mu=1 )
     vals_en[vals_en<1] = 1
-    # diff = (temp_ch - temp_en) / temp_en
   else:  
     vals_ch = data_cholla['gas'][field][...]  
     vals_en = data_enzo['gas'][field][...]
   data_diff[field] = {}
-  proj_en = get_projection( vals_en, proj_offset, proj_depth )
-  proj_ch = get_projection( vals_ch, proj_offset, proj_depth )
+  proj_en = get_projection( vals_en, proj_offset, proj_depth, log=False )
+  proj_ch = get_projection( vals_ch, proj_offset, proj_depth, log=False )
   proj = ( proj_ch - proj_en ) / proj_en 
   data_diff[field]['proj'] = proj
   data_diff[field]['max'] = proj.max()
@@ -150,7 +165,7 @@ data_all = [ data_en, data_ch, data_diff ]
 n_rows = 3
 n_cols = len(fields)
 fig, ax_list = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(10*n_cols,10*n_rows))
-titles = [ 'Z={0:.2f}   Gas'.format(current_z_ch),  'HI', 'HII', 'Temperature' ]
+titles = [ 'Z={0:.2f}   DM Density'.format(current_z_enzo), 'Gas Density', 'Temperature' ]
 y_labels = [' ENZO', 'CHOLLA', 'DIFFERENCE' ]
 
 for i in range( n_cols):
@@ -160,8 +175,8 @@ for i in range( n_cols):
 
 
   for n in range(n_rows):
-    data = data_all[n]
 
+    data = data_all[n]
 
     ax = ax_list[n][i]
     proj = data[field]['proj']
@@ -169,12 +184,13 @@ for i in range( n_cols):
     if n == n_rows-1:
       # min_val = max( -10, proj.min())
       # max_val = min( 10 , proj.max() )
-      min_val = -10
-      max_val = 10
+      min_val = -1
+      max_val = 1
       im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='jet' )
 
     else:
-      if field=='temperature': im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='jet' )
+      if field=='density_dm': im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='inferno' )
+      elif field=='temperature': im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='jet' )
       else : im = ax.imshow( proj, interpolation='bilinear', vmin=min_val, vmax=max_val )
 
     divider = make_axes_locatable(ax)
@@ -185,7 +201,7 @@ for i in range( n_cols):
     if n == 0: ax.set_title( titles[i], fontsize=35)
 
 #   
-fig.suptitle(r'$\eta_0={0:0.3f}$   $\beta_0={1:0.3f}$   $\beta_1={2:0.3f}$'.format( eta_0, beta_0, beta_1 ), fontsize=30, y=0.997)
+fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.3f}$  '.format( eta_1, eta_2, ), fontsize=30, y=0.997)
 fig.tight_layout()
 fileName = 'chemistry_{0}.png'.format(nSnap)
 fig.savefig( outDir + fileName )
