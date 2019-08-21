@@ -10,6 +10,7 @@ sys.path.append( toolsDirectory )
 from tools import *
 # from directories import cosmoDir, dataDir
 from load_data_nyx import load_data_nyx_yt
+import yt
 
 
 dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
@@ -34,10 +35,33 @@ dataFiles, nFiles = get_files_names( fileKey, inDir, type='nyx' )
 print ('Saving Files: ', nFiles)
 current_a_list = []
 
+
 for nSnap, inFileName in enumerate( dataFiles):
-  
+  # snapKey = '{0:05}'.format(nSnap*index_stride)
+  # inFileName = 'plt' + snapKey
+  ds = yt.load( inDir + inFileName )
+  data = ds.all_data()
+
+  h = ds.hubble_constant
+  current_z = ds.current_redshift
+  current_a = 1./(current_z + 1)
+  current_a_list.append(current_a)
+  # print current_z
+
+scale_file_name = outDir + 'outputs_{0}_nyx_256_50Mpc.txt'.format(type)
+print "Saving scale_output_files: ", scale_file_name
+np.savetxt( scale_file_name, current_a_list )
+
+
+# nyx_outputs = np.loadtxt( scale_file_name ) 
+# enzo_outputs = np.loadtxt( outDir + 'outputs_dm_enzo_256_50Mpc.txt')
+
+
+
+for nSnap, inFileName in enumerate( dataFiles):
+
   # if nSnap > 1: continue
-  
+
   # snapKey = '{0:05}'.format(nSnap*index_stride)
   # inFileName = 'plt' + snapKey
   print "\n Loading: ", inDir +inFileName
@@ -109,7 +133,4 @@ for nSnap, inFileName in enumerate( dataFiles):
   outFile.close()
   print 'Saved h5 file: ', outputFileName
 
-chollaDir = '/home/bruno/cholla/'
-scale_fle_name = outDir + 'outputs_{0}_nyx_100Mpc.txt'.format(type)
-print "Saving scale_output_files: ", scale_fle_name
-np.savetxt( scale_fle_name, current_a_list )
+

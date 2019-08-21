@@ -29,13 +29,13 @@ dataDir = '/raid/bruno/data/'
 data_set = 'enzo_simple_beta_convDE'
 
 
-n_cholla_files = 2
-chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMC_HLLC_VL_eta0.001_0.030_da0.001/'
-chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMC_HLLC_VL_eta0.001_0.030_da0.002'
+n_cholla_files = 1
+chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMP_HLLC_VL_eta0.001_0.010/'
+chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMC_HLL_VL_eta0.001_0.030/'
 chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMC_HLLC_VL_eta0.001_0.050/'
 
 chollaDir_all = [ chollaDir_0, chollaDir_1, chollaDir_2 ]
-cholla_label_all = [r'Cholla $\eta_2=0.030 \Delta a = 0.001$', r'Cholla $\eta_2=0.030 \Delta a = 0.002$',  r'Cholla $\eta_2=0.050$' ]
+cholla_label_all = [r'Cholla PPMP', r'Cholla HLL',  r'Cholla $\eta_2=0.050$' ]
 
 
 
@@ -43,7 +43,7 @@ enzoDir = dataDir + 'cosmo_sims/enzo/ZeldovichPancake_HLLC/'
 enzoDir_1 = dataDir + 'cosmo_sims/enzo/ZeldovichPancake_HLLC_noDE/'
 
 
-outDir = dev_dir + 'figures/zeldovich/'
+outDir = dev_dir + 'figures/zeldovich_PPMP_eta0.010/'
 if rank == 0:
   create_directory( outDir )
 
@@ -129,7 +129,7 @@ props = dict(boxstyle='round', facecolor='gray', alpha=0.3)
 
 
 ax = ax_list[0]
-ax.plot( x, data_en[0], linewidth=3, label='Enzo_HLLC'    )
+ax.plot( x, data_en[0], linewidth=3, label='Enzo'    )
 # ax.plot( x, data_en_1[0], linewidth=1, label='Enzo_HLLC noDE'    )
 
 
@@ -172,7 +172,7 @@ ax.set_xlabel(r'X [ $\mathrm{cMpc}/h$ ]')
 ax = ax_list[2]
 ax.set_yscale('log')
 ax.set_xlim(0,64)
-ax.set_ylabel(r'Temperature')
+ax.set_ylabel(r'Temperature  [K]')
 
 
 fig.tight_layout()

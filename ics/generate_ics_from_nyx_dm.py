@@ -19,7 +19,7 @@ import ast
 
 dataDir = '/raid/bruno/data/'
 nyxDir = dataDir + 'cosmo_sims/nyx/256_dm_50Mpc/'
-outDir = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/ics/'
+outDir = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/ics_nyx/'
 nSnap = 0
 
 

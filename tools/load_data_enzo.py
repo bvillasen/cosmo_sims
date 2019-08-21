@@ -10,30 +10,31 @@ import matplotlib.cm as cm
 
 
 
-def load_snapshot_enzo( nSnap, inDir, dm=False, cool=False, metals=False ):
+def load_snapshot_enzo( nSnap, inDir, dm=False, particles=False, cool=False, metals=False, hydro=True ):
   snapKey = '_{0:03}'.format( nSnap)
   base_name = 'snapshot'
   fileName = inDir + base_name + snapKey + '.h5'
 
-  print (' Loading enzo file: {0}'.format( fileName ))
-  h5_file = h5.File( fileName, 'r')
-  current_a = h5_file.attrs['current_a']
-  current_z = h5_file.attrs['current_z']
-  print( '  nSnap: {0}     current_z: {1}'.format(nSnap, current_z ))
-
   data = { 'dm':{}, 'gas':{} }
-  data['current_a'] = current_a
-  data['current_z'] = current_z
+  if particles or hydro:
+    h5_file = h5.File( fileName, 'r')
+    current_a = h5_file.attrs['current_a']
+    current_z = h5_file.attrs['current_z']
+    # print (' Loading enzo file: {0}'.format( fileName ))
+    # print( '  nSnap: {0}     current_z: {1}'.format(nSnap, current_z ))
 
+    data['current_a'] = current_a
+    data['current_z'] = current_z
 
-  data_gas = h5_file['gas']
-  data['gas']['density'] = data_gas['density']
-  data['gas']['momentum_x'] = data_gas['momentum_x']
-  data['gas']['momentum_y'] = data_gas['momentum_y']
-  data['gas']['momentum_z'] = data_gas['momentum_z']
-  data['gas']['Energy'] = data_gas['Energy']
-  data['gas']['GasEnergy'] = data_gas['GasEnergy']
-  data['gas']['temperature'] = data_gas['temperature']
+  if hydro:
+    data_gas = h5_file['gas']
+    data['gas']['density'] = data_gas['density']
+    data['gas']['momentum_x'] = data_gas['momentum_x']
+    data['gas']['momentum_y'] = data_gas['momentum_y']
+    data['gas']['momentum_z'] = data_gas['momentum_z']
+    data['gas']['Energy'] = data_gas['Energy']
+    data['gas']['GasEnergy'] = data_gas['GasEnergy']
+    data['gas']['temperature'] = data_gas['temperature']
 
   if cool:
     data['gas']['HI_density'] = data_gas['H_dens']
@@ -44,8 +45,8 @@ def load_snapshot_enzo( nSnap, inDir, dm=False, cool=False, metals=False ):
     data['gas']['e_density'] = data_gas['electron_dens']
   if metals:
     data['gas']['metal_density'] = data_gas['metal_dens']
-
-  if dm:
+  
+  if particles:
     data_dm = h5_file['dm']
     data['dm']['mass'] = data_dm['mass']
     data['dm']['pos_x'] = data_dm['pos_x']
@@ -55,16 +56,21 @@ def load_snapshot_enzo( nSnap, inDir, dm=False, cool=False, metals=False ):
     data['dm']['vel_y'] = data_dm['vel_y']
     data['dm']['vel_z'] = data_dm['vel_z']
 
+  if dm:
     density_file_name = 'grid_CIC_{0:03}.h5'.format(nSnap)
     density_file = h5.File( inDir + density_file_name, 'r')
+    current_a = density_file.attrs['current_a']
+    current_z = density_file.attrs['current_z']
     density_dm = density_file['dm']['density'][...]
     density_file.close()
     data['dm']['density'] = density_dm
+    if data.get('current_a') == None: data['current_a'] = current_a
+    if data.get('current_z') == None: data['current_z'] = current_z
 
   return data
 
 
-def load_snapshot_enzo_yt( nSnap, inDir, cooling=False, metals=False  ):
+def load_snapshot_enzo_yt( nSnap, inDir, cooling=False, metals=False, hydro=True  ):
   import yt
   snapKey = '{0:03}'.format(nSnap)
   inFileName = 'DD0{0}/data0{0}'.format( snapKey)
@@ -75,14 +81,18 @@ def load_snapshot_enzo_yt( nSnap, inDir, cooling=False, metals=False  ):
 
   h = ds.hubble_constant
   current_z = ds.current_redshift
-  current_a = 1/(current_z + 1)
+  current_a = 1./(current_z + 1)
+  print current_a
+  print current_z
+  print h
 
-  data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
-  gas_dens = data_grid[ ('gas', 'density')].in_units('msun/kpc**3')*current_a**3/h**2
-  gas_temp = data_grid[ ('gas', 'temperature')]
-  gas_vel_x = data_grid[('gas','velocity_x')].in_units('km/s')
-  gas_vel_y = data_grid[('gas','velocity_y')].in_units('km/s')
-  gas_vel_z = data_grid[('gas','velocity_z')].in_units('km/s')
+  if hydro:
+    data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
+    gas_dens = data_grid[ ('gas', 'density')].in_units('msun/kpc**3')*current_a**3/h**2
+    gas_temp = data_grid[ ('gas', 'temperature')]
+    gas_vel_x = data_grid[('gas','velocity_x')].in_units('km/s')
+    gas_vel_y = data_grid[('gas','velocity_y')].in_units('km/s')
+    gas_vel_z = data_grid[('gas','velocity_z')].in_units('km/s')
 
   if cooling :
     H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
@@ -118,11 +128,12 @@ def load_snapshot_enzo_yt( nSnap, inDir, cooling=False, metals=False  ):
   data_dic['dm']['vel_y'] = p_vel_y.v
   data_dic['dm']['vel_z'] = p_vel_z.v
 
-  data_dic['gas']['density'] = gas_dens.v
-  data_dic['gas']['temperature'] = gas_temp.v
-  data_dic['gas']['vel_x'] = gas_vel_x.v
-  data_dic['gas']['vel_y'] = gas_vel_y.v
-  data_dic['gas']['vel_z'] = gas_vel_z.v
+  if hydro:
+    data_dic['gas']['density'] = gas_dens.v
+    data_dic['gas']['temperature'] = gas_temp.v
+    data_dic['gas']['vel_x'] = gas_vel_x.v
+    data_dic['gas']['vel_y'] = gas_vel_y.v
+    data_dic['gas']['vel_z'] = gas_vel_z.v
   if cooling:
     data_dic['gas']['H_dens'] = H_0_dens
     data_dic['gas']['HI_dens'] = H_1_dens

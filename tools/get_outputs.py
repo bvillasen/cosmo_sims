@@ -4,18 +4,36 @@ import yt
 
 dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
 # dataDir = '/raid/bruno/data/'
-inDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_100Mpc/h5_files/'
+inDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_50Mpc/h5_files/'
 enzoDir = inDir
 outDir = inDir
 
 
-outFileName = 'outputs_enzo_cool_uv_256_100Mpc.txt'
-# a_list = [ 1./21 ]
+outFileName = 'outputs_cool_uv_enzo_256_50Mpc.txt'
 a_list = []
 
-nSnap = 0
+nSnapshots = 44
+for nSnap in range(nSnapshots):
+  fileName = 'snapshot_{0:03}.h5'.format( nSnap )
+  file = h5.File( inDir+fileName, 'r' )
+  current_a = file.attrs['current_a']
+  print( nSnap, current_a )
+  a_list.append( current_a )
 
-# for nSnap in range(180):
+n_vals = len( a_list )
+a_vals = np.array(a_list)
+
+np.savetxt( outDir + outFileName, a_vals )
+
+
+
+
+
+
+
+# nSnap = 0
+# 
+# for nSnap in range(158):
 #   # if nSnap == 0:
 #   #   file_name = enzoDir + 'ics/DD0{0:03}/data0{0:03}'.format(nSnap)
 #   # else:
@@ -34,29 +52,3 @@ nSnap = 0
 # a_vals = np.array( a_list )
 # np.savetxt(  outDir + outFileName, a_vals )
 
-
-for nSnap in range(32):
-  fileName = 'snapshot_{0:03}.h5'.format( nSnap )
-  file = h5.File( inDir+fileName, 'r' )
-  current_a = file.attrs['current_a']
-  print( nSnap, current_a )
-  a_list.append( current_a )
-
-n_vals = len( a_list )
-a_vals = np.array(a_list)
-
-
-np.savetxt( outDir + outFileName, a_vals )
-# 
-# 
-# outDir = '/home/bruno/Desktop/'
-# outFileName = 'scale_outputs_zeldovich_40.txt'
-# z_start = 20
-# z_end = 0
-# n_points = 41
-# z_vals =  np.linspace( z_start, z_end, n_points )
-# a_vals = 1 / ( z_vals + 1)
-# # a_start = 1./ ( z_start + 1)
-# # a_end = 1./ ( z_end + 1)
-# # a_vals = np.linspace( a_start, a_end, n_points )
-# np.savetxt(  outDir+outFileName, a_vals )

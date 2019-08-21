@@ -30,24 +30,23 @@ if outDir[-1] != "/": outDir += '/'
 for option in sys.argv:
   if option == 'no_cosmo': cosmo = False
   if option == 'particles': particles, hydro = True, False
-  
+
 
 if rank == 0:
   print 'Input Dir: ', inDir
   print 'Output Dir: ', outDir
   create_directory( outDir )
 
-# comm.Barrier()
 
 
 def split_name( file_name, part=False):
   nSnapshot, name, nBox = file_name.split('.')
-  if part: 
+  if part:
     indx = nSnapshot.find("_particles")
     nSnapshot = nSnapshot[:indx]
   return [int(nSnapshot), int(nBox)]
 
-  
+
 name_base = 'h5'
 
 if hydro:
@@ -68,14 +67,15 @@ nBoxes = len( boxes )
 if rank == 0:
   print "Number of boxes: {0}".format(nBoxes)
   print "Number of snapshots: {0}".format(nSnapshots)
-  
 
-if rank < nSnapshots:   
+comm.Barrier()
+
+if rank < nSnapshots:
   nSnap = rank
-for nSnap in range( nSnapshots):
+# for nSnap in range( nSnapshots):
   if hydro:
-    out_base_name = 'grid_' 
+    out_base_name = 'grid_'
     compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir )
   if cosmo or particles:
-    out_base_name = 'particles_' 
+    out_base_name = 'particles_'
     compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir , cosmology=cosmo )

@@ -20,22 +20,28 @@ sys.path.extend([toolsDirectory ] )
 # dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
 # dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
 dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
-inDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_100Mpc/'
+inDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_50Mpc/'
 # inDir = dataDir + 'cosmo_sims/enzo/512_hydro/'
-outDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_100Mpc/h5_files/'
+outDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_50Mpc/h5_files/'
 # 
 # dataFiles = [f for f in listdir(inDir) if  (f.find('DD') == 0 )   ]
 # dataFiles = np.sort( dataFiles )
 # nFiles = len( dataFiles )
 
+hydro = True
 cooling = True
 metals = True
 
 
-n_snaps = 120
-snapshots = list(range(0,n_snaps, 4))
+n_snaps = 84
+snapshots = list(range(0,n_snaps, 2))
 if n_snaps-1 not in snapshots: snapshots.append(n_snaps-1)
+# snapshots = range(158)
+
+
+
 # snapshots = [0]
+
 
 nSnap_out = 1
 for nSnap in snapshots:
@@ -51,15 +57,16 @@ for nSnap in snapshots:
   current_a = 1./(current_z + 1)
   gamma = 5./3
 
-  data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
-  gas_dens = data_grid[ ('gas', 'density')].in_units('msun/kpc**3').v*current_a**3/h**2
-  gas_vel_x = data_grid[('gas','velocity_x')].in_units('km/s').v
-  gas_vel_y = data_grid[('gas','velocity_y')].in_units('km/s').v
-  gas_vel_z = data_grid[('gas','velocity_z')].in_units('km/s').v
-  gas_u = data_grid[('gas', 'thermal_energy' )].v * 1e-10 * gas_dens #km^2/s^2
-  gas_E = data_grid[('gas', 'total_energy' )].v * 1e-10   *gas_dens  #km^2/s^2
-  # mu = data[('gas', 'mean_molecular_weight' )].v
-  gas_temp = data_grid[ ('gas', 'temperature')].v
+  if hydro:
+    data_grid = ds.covering_grid( level=0, left_edge=ds.domain_left_edge, dims=ds.domain_dimensions )
+    gas_dens = data_grid[ ('gas', 'density')].in_units('msun/kpc**3').v*current_a**3/h**2
+    gas_vel_x = data_grid[('gas','velocity_x')].in_units('km/s').v
+    gas_vel_y = data_grid[('gas','velocity_y')].in_units('km/s').v
+    gas_vel_z = data_grid[('gas','velocity_z')].in_units('km/s').v
+    gas_u = data_grid[('gas', 'thermal_energy' )].v * 1e-10 * gas_dens #km^2/s^2
+    gas_E = data_grid[('gas', 'total_energy' )].v * 1e-10   *gas_dens  #km^2/s^2
+    # mu = data[('gas', 'mean_molecular_weight' )].v
+    gas_temp = data_grid[ ('gas', 'temperature')].v
 
   if cooling :
     H_dens =  data_grid[ ('gas', 'H_density')].in_units('msun/kpc**3')*current_a**3/h**2
@@ -102,15 +109,16 @@ for nSnap in snapshots:
   dm.create_dataset( 'vel_y', data=p_vel_y)
   dm.create_dataset( 'vel_z', data=p_vel_z)
 
-  gas = h5_file.create_group( 'gas' )
-  gas.attrs['gamma'] = gamma
-  gas.create_dataset( 'density', data=gas_dens )
-  gas.create_dataset( 'momentum_x', data=gas_vel_x * gas_dens )
-  gas.create_dataset( 'momentum_y', data=gas_vel_y * gas_dens )
-  gas.create_dataset( 'momentum_z', data=gas_vel_z * gas_dens )
-  gas.create_dataset( 'Energy', data=gas_E )
-  gas.create_dataset( 'GasEnergy', data=gas_u  )
-  gas.create_dataset( 'temperature', data=gas_temp  )
+  if hydro:
+    gas = h5_file.create_group( 'gas' )
+    gas.attrs['gamma'] = gamma
+    gas.create_dataset( 'density', data=gas_dens )
+    gas.create_dataset( 'momentum_x', data=gas_vel_x * gas_dens )
+    gas.create_dataset( 'momentum_y', data=gas_vel_y * gas_dens )
+    gas.create_dataset( 'momentum_z', data=gas_vel_z * gas_dens )
+    gas.create_dataset( 'Energy', data=gas_E )
+    gas.create_dataset( 'GasEnergy', data=gas_u  )
+    gas.create_dataset( 'temperature', data=gas_temp  )
 
 
   if cooling:

@@ -10,14 +10,14 @@ using Statistics
 # dataDir = "/home/bruno/Desktop/data/"
 # dataDir = "/home/bruno/Desktop/data/"
 dataDir = "/home/bruno/Desktop/hard_drive_1/data/"
-inDir = dataDir * "cosmo_sims/enzo/256_cool_uv_100Mpc/h5_files/"
+inDir = dataDir * "cosmo_sims/enzo/256_cool_uv_50Mpc/h5_files/"
 # inDir = "/home/bruno/Desktop/data/cosmo_sims/ramses/128_hydro/h5_files/"
 # inDir = dataDir * "cosmo_sims/enzo/256_hydro_grackle_noUV/h5_files/"
 outDir = inDir
 in_base_name = "snapshot_"
 out_base_name = "grid_CIC_"
 
-Lbox = 100e3
+Lbox = 50e3
 const nPoints = 256
 
 #Domain Parameters
@@ -48,7 +48,7 @@ const dz = Lz / nz
 
 
 nSnap = 0
-for nSnap in 0:35
+for nSnap in 0:43
 
   println( "\nSnapshot: $(nSnap)")
   snapKey = lpad(nSnap,3,'0')
@@ -61,7 +61,7 @@ for nSnap in 0:35
 
   current_a = read( attrs(inFile), "current_a" )
   current_z = read( attrs(inFile), "current_z" )
-
+  print(" Current redshift: $(current_z)\n")
 
   print(" Writing File: $(outFileName)\n")
   outFile = h5open( outFileName, "w")

@@ -23,7 +23,7 @@ nSnap = rank
 dataDir = '/raid/bruno/data/'
 
 eta_1 = 0.001
-eta_2 = 0.030
+eta_2 = 0.036
 
 
 
@@ -43,8 +43,8 @@ print 'eta: {0:.3f}   {1:.3f}  /'.format( eta_1, eta_2 )
 integrator = 'SIMPLE'
 extra_name = ''
 
-# outDir = dev_dir + 'figures/phase_diagram/uvb_SIMPLE_eta{0:.3f}_{1:.3f}{3}/'.format( eta_1, eta_2, integrator, extra_name )
-outDir = dev_dir + 'figures/phase_diagram/cool_uv_100Mpc_{0}_eta2_{1:.3f}/'.format(  integrator, eta_2 )
+outDir = dev_dir + 'figures/phase_diagram/uvb_SIMPLE_PPMP/'
+# outDir = dev_dir + 'figures/phase_diagram/cool_uv_100Mpc_{0}_eta2_{1:.3f}/'.format(  integrator, eta_2 )
 
 
 if rank == 0: 
@@ -52,25 +52,30 @@ if rank == 0:
   print "Output: ", outDir
 
 
-Lbox = 100000.
-nPoints = 256
+Lbox = 50000.
+nPoints = 128
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_100Mpc/'.format(nPoints)
+enzoDir_uv = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool/'.format(nPoints)
 
-eta_2_LIST = [ 0.030, 0.030, 0.032, 0.038, 0.046,]
 
-nrows = 2
-chollaDir_0 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_{1:.3f}{3}_reconstDE/'.format( eta_1, eta_2, integrator, extra_name )
-chollaDir_1 = chollaDir +  'data_PPMC_HLLC_VL_eta0.001_0.030_nieghbourDE/'.format( eta_1, eta_2, integrator, extra_name )
-chollaDir_2 = chollaDir +  'data_PPMC_HLLC_VL_eta{0:.3f}_0.030_gravWork/'.format( eta_1, eta_2, integrator, extra_name )
-chollaDir_3 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_0.038{3}/'.format( eta_1, eta_2, integrator, extra_name )
-chollaDir_4 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_0.046{3}/'.format( eta_1, eta_2, integrator, extra_name )
+nrows = 3
+chollaDir_0 = chollaDir +  'data_PPMP_HLLC_SIMPLE_eta0.001_0.025/'
+chollaDir_1 = chollaDir +  'data_PPMP_HLLC_SIMPLE_eta0.001_0.030/'
+chollaDir_2 = chollaDir +  'data_PPMP_HLLC_SIMPLE_eta0.001_0.035/'
+chollaDir_3 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_0.038{3}/'
+chollaDir_4 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_0.046{3}/'
 
 chollaDir_all = [ chollaDir_0, chollaDir_1, chollaDir_2, chollaDir_3, chollaDir_4 ]
-
-
-enzoDir_uv = dataDir + 'cosmo_sims/enzo/{0}_cool_uv_100Mpc/h5_files/'.format(nPoints)
-
+# 
+eta_2_LIST = [ 0.025, 0.030, 0.035,  0.040, 0.045, 0.050  ]
+# nrows = len( eta_2_LIST )
+# chollaDir_all = []
+# for eta_2 in eta_2_LIST:
+#   chollaDir_0 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_{1:.4f}{3}/'.format( eta_1, eta_2, integrator, extra_name )
+#   chollaDir_all.append( chollaDir_0)
+# 
+# 
 
 
 gamma = 5./3
@@ -86,37 +91,22 @@ nbins = 1000
 # for nSnap in snapshots:
 fileName = 'phase_diagram_{0}.png'.format(nSnap)
 
-data_GK = []
-data_U  = []
-data_GE = []
-data_frac = []
+data_ch = []
 
 for n in range( nrows ):
   data_cholla = load_snapshot_data( str(nSnap), chollaDir_all[n], cool=True)
   current_z_ch = data_cholla['current_z']
   current_a_ch = data_cholla['current_a']
-  dens = data_cholla['gas']['density'][...]
-  dens_H = data_cholla['gas']['HI_density'][...]
-  dens_mean = dens.mean()
-  temp_GK, temp_DE, temp_U, temp_GE, dens_U, dens_GE, HI_dens_U, HI_dens_GE, temp_U_ALL, temp_GE_ALL =  get_Temperaure_From_Flags_DE( data_cholla, gamma=5./3, normalize_dens=True, )
-  # x_U_ALL_0, y_U_ALL_0, z_U_ALL_0 = get_phase_diagram( dens.flatten()/dens_mean, temp_U_ALL , nbins, ncells )
-  # x_GE_ALL_0, y_GE_ALL_0, z_GE_ALL_0 = get_phase_diagram( dens.flatten()/dens_mean, temp_GE_ALL , nbins, ncells )
-  x_GK, y_GK, z_GK = get_phase_diagram( dens.flatten()/dens_mean, temp_GK , nbins, ncells )
-  x_U, y_U, z_U = get_phase_diagram( dens_U, temp_U , nbins, ncells )
-  x_GE, y_GE, z_GE = get_phase_diagram( dens_GE, temp_GE , nbins, ncells )
-  cell_frac = float(z_GE.sum())
-  mass_frac = dens_GE.sum()*dens_mean/dens.sum()
-
-  data_GK.append( [ x_GK, y_GK, z_GK ])
-  data_U.append( [ x_U, y_U, z_U ])
-  data_GE.append( [ x_GE, y_GE, z_GE ])
-  data_frac.append( [cell_frac, mass_frac ])
-
-
-  dens_1D = np.linspace( 0.001, 1e5, 1000  )
-  alpha = 500
-  p_jeans = alpha * dens_1D**2
-  t_jeans = p_jeans / dens_1D 
+  dens_ch = data_cholla['gas']['density'][...]
+  dens_H_ch = data_cholla['gas']['HI_density'][...]
+  temp_ch =  data_cholla['gas']['temperature'][...]
+  dens_mean = dens_ch.mean()
+  rho_ch = dens_ch.reshape( nx*ny*nz) / dens_mean
+  temp_ch = temp_ch.reshape(nx*ny*nz)
+  x_ch_uv, y_ch_uv, z_ch_uv = get_phase_diagram( rho_ch, temp_ch , nbins, ncells )
+  data_ch.append( [ x_ch_uv, y_ch_uv, z_ch_uv ])
+  
+  
 
 
 
@@ -137,7 +127,7 @@ temp_avrg_en_uv = temp_avrg_en
 x_en_uv, y_en_uv, z_en_uv = get_phase_diagram( rho_en_uv, temp_en_uv , nbins, ncells )
 # x_H_en_uv, y_H_en_uv, z_H_en_uv = get_phase_diagram( rho_H_en_uv, temp_en_uv , nbins, ncells )
 
-ncols = 4
+ncols = 2
 fig, ax_l = plt.subplots(nrows=nrows, ncols=ncols, figsize=(10*ncols,8*nrows))
 x_min = -2
 x_max = 5
@@ -150,7 +140,7 @@ y_max = 8
 
 for n in range(nrows):
 
-  data = data_GK[n]
+  data = data_ch[n]
   min_val = min( np.min(np.log10(z_en_uv)), np.min(np.log10(data[2])) )
   max_val = min( np.max(np.log10(z_en_uv)), np.max(np.log10(data[2])) )
 
@@ -174,30 +164,6 @@ for n in range(nrows):
   ax.set_ylabel(r'Log Temperature $[K]$', fontsize=15 )
   ax.set_xlabel(r'Log Gas Overdensity', fontsize=15 )
   ax.set_title( r" CHOLLA Gas   $\eta_2={0:.3f}$".format(eta_2_LIST[n]),fontsize=17 )
-  ax.set_xlim(x_min, x_max)
-  ax.set_ylim(-1, y_max)
-
-  data = data_U[n]
-  plt.subplot(nrows, ncols, n*ncols+3)
-  ax = plt.gca()
-  ax.clear()
-  c = ax.scatter( data[1], data[0], c = np.log10(data[2]), s=1, vmin=min_val, vmax=max_val )
-  plt.colorbar(c)
-  ax.set_ylabel(r'Log Temperature $[K]$', fontsize=15 )
-  ax.set_xlabel(r'Log Gas Overdensity', fontsize=15 )
-  ax.set_title( " CHOLLA Gas GE_TOTAL   ", fontsize=17 )
-  ax.set_xlim(x_min, x_max)
-  ax.set_ylim(-1, y_max)
-
-  data = data_GE[n]
-  plt.subplot(nrows, ncols, n*ncols+4)
-  ax = plt.gca()
-  ax.clear()
-  c = ax.scatter( data[1], data[0], c = np.log10(data[2]), s=1, vmin=min_val, vmax=max_val )
-  plt.colorbar(c)
-  ax.set_ylabel(r'Log Temperature $[K]$', fontsize=15 )
-  ax.set_xlabel(r'Log Gas Overdensity', fontsize=15 )
-  ax.set_title( " CHOLLA Gas GE_ADVECTED   cell_frac: {0:.3}  mass_frac: {1:.3}".format( data_frac[n][0], data_frac[n][1]), fontsize=17 )
   ax.set_xlim(x_min, x_max)
   ax.set_ylim(-1, y_max)
 

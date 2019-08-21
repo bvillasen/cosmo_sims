@@ -1,6 +1,5 @@
 import numpy as np
 import h5py as h5
-import yt
 from tools import *
 from load_data_cholla import load_snapshot_data_particles
 

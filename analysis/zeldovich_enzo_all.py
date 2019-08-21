@@ -33,7 +33,7 @@ RIEMANN = "HLLC"
 INTEGRATOR = "VL"
 extra_name = ''
 
-eta_2 = 0.040
+eta_2 = 0.030
 
 n_cholla_files = 1
 chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_{0}_{1}_{2}_eta0.001_{4:.3f}{3}/'.format( RECONSTRUCTION, RIEMANN, INTEGRATOR, extra_name, eta_2)
@@ -197,6 +197,10 @@ ax.set_ylabel(r' Vel Y')
 ax = ax_list[4]
 ax.set_xlim(0,64)
 ax.set_ylabel(r' Vel Z')
+
+ax = ax_list[5]
+ax.set_xlim(0,64)
+ax.set_ylabel(r' Potential')
 
 
 

@@ -22,7 +22,7 @@ nSnap = rank
 dataDir = '/raid/bruno/data/'
 
 eta_1 = 0.001
-eta_2 = 0.030
+eta_2 = 0.0500
 # beta_0 = 0.25
 # beta_1 = 0.00
 
@@ -41,19 +41,19 @@ if n_arg > 1:
 print 'eta: {0:.3f}  {1:.3f} /'.format( eta_1, eta_2 )
 
 
-nPoints = 256
-Lbox = 100000.
+nPoints = 128
+Lbox = 50000.
 
 integrator = 'SIMPLE'
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_100Mpc/'.format(nPoints)
-chollaDir_uv = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2, integrator )
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool/'.format(nPoints)
+chollaDir_uv = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_{1:.4f}/'.format( eta_1, eta_2, integrator )
 
 enzoDir = dataDir + 'cosmo_sims/enzo/'
-enzoDir_uv = enzoDir + '{0}_cool_uv_100Mpc/h5_files/'.format(nPoints)
+enzoDir_uv = enzoDir + '{0}_cool_uv/h5_files/'.format(nPoints)
 
 
-outDir = dev_dir + 'figures/chemistry_100Mpc/chemistry_HI_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
+outDir = dev_dir + 'figures/chemistry/chemistry_HI_eta{0:.3f}_{1:.4f}/'.format( eta_1, eta_2 )
 if rank == 0:
   create_directory( outDir )
 
@@ -130,7 +130,7 @@ for i,field in enumerate(fields):
   else: 
     vals_ch = data_cholla['gas'][field][...] 
     vals_en = data_enzo['gas'][field][...]
-  if i == 0: print vals_ch.mean()
+  # if i == 0: print vals_ch.mean()
   proj_ch = get_projection( vals_ch, proj_offset, proj_depth, log=False )
   proj_en = get_projection( vals_en, proj_offset, proj_depth, log=False )
   proj = ( proj_ch - proj_en )/ proj_en
@@ -149,7 +149,7 @@ fig, ax_list = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=(10*n_cols,10*n_
 titles = [ 'Z={0:.2f}   DM Density'.format(current_z_ch), 'Gas Density',  'HI', 'HII', 'Temperature' ]
 y_labels = [' ENZO', 'CHOLLA', 'DIFFERENCE' ]
 
-fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.3f}$   '.format( eta_1, eta_2 ), fontsize=30, y=0.997)
+fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.4}$   '.format( eta_1, eta_2 ), fontsize=30, y=0.997)
 
 for i in range( n_cols):
   field = fields[i]
@@ -168,7 +168,7 @@ for i in range( n_cols):
       # min_val = max( -10, proj.min())
       # max_val = min( 10 , proj.max() )
       min_val = -1
-      max_val = 1
+      max_val = 3
       im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='jet' )
 
     else:

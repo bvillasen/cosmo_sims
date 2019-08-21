@@ -4,39 +4,43 @@ import matplotlib.pyplot as plt
 from subprocess import call
 from shutil import copyfile
 
-
 dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
+
+eta_2  = .050
+
 # inDir = cosmo_dir + 'figures/cosmo_256_cholla_highRes/'
 # inDir = cosmo_dir + 'figures/collapse/anim/'
-# inDir = dev_dir + 'figures/chemistry/chemistry_HI_eta0.001_0.030/'
-# inDir = dev_dir + 'figures/phase_diagram/uvb_SIMPLE_several/'
-# inDir = dev_dir + 'figures/power_hydro/animation/'
+# inDir = dev_dir + 'figures/chemistry/chemistry_difference/'.format(eta_2)
+# inDir = dev_dir + 'figures/phase_diagram/uvb_several/'
+# inDir = dev_dir + 'figures/power_hydro/anim/'
 # inDir = dev_dir + 'figures/cell_difference/'
-# inDir = dev_dir + 'figures/zeldovich/'
+inDir = dev_dir + 'figures/zeldovich_PPMP_eta0.010/'
 # inDir = dev_dir + 'figures/spectra/'
-inDir = dev_dir + 'figures/dm_projection_50Mpc/'
+# inDir = dev_dir + 'figures/dm_projection_50Mpc/'
 
 # inDir = '/home/bruno/Desktop/namrata/'
 
 
-
-
 outDir = '/home/bruno/Desktop/'
 
+
+# image_name = ''
 # image_name = 'l1_cell_difference'
 # image_name = 'chemistry'
 # image_name = 'phase_diagram'
 # image_name = 'ps_128_cooling_uv_PPMC_HLLC_SIMPLE'
 # out_anim_name = 'l1_difference_eta2'
-# image_name = 'zeldovich'
+image_name = 'zeldovich'
 # image_name = 'spectra'
-image_name = 'projection'
+# image_name = 'projection'
 
-# out_anim_name = 'zeldovich_error_noGrav'
-out_anim_name = 'dm_projection_50Mpc'
+# out_anim_name = 'chemistry_128_difference'.format(eta_2)
+# out_anim_name = 'ps_128_eta2'
+out_anim_name = 'zeldovich_PPMP_fixed'
+# out_anim_name = 'dm_projection_50Mpc'
 # out_anim_name = 'spec_animation'
 
-cmd = 'ffmpeg -framerate 10  '
+cmd = 'ffmpeg -framerate 1  '
 # cmd += ' -start_number 45'
 cmd += ' -i {0}{1}_%d.png '.format( inDir, image_name )
 cmd += '-pix_fmt yuv420p '

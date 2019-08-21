@@ -2,8 +2,8 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import h5py as h5
-
-cosmo_dir = '/home/bruno/Desktop/Dropbox/Developer/cosmo_sims/'
+dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
+cosmo_dir = dev_dir + 'cosmo_sims/'
 toolsDirectory = cosmo_dir + "tools/"
 analysisDirectory = cosmo_dir + "analysis/"
 sys.path.extend([toolsDirectory, analysisDirectory ] )
@@ -13,13 +13,13 @@ from internal_energy import  get_temp, get_mu
 from cosmo_constants import *
 
 dataDir = '/raid/bruno/data/'
-outDir = cosmo_dir + 'figures/spectra/'
+outDir = dev_dir + 'figures/spectra/'
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data_de02_limitEkin/'
-enzoDir_uv = dataDir + 'cosmo_sims/enzo/256_cool_uv/h5_files/'
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool_uv_100Mpc/data_PPMC_HLLC_SIMPLE_eta0.001_0.034_reconstDE/'
+enzoDir_uv = dataDir + 'cosmo_sims/enzo/256_cool_uv_100Mpc/h5_files/'
 
 
-fileName = 'spectra_0.png'
+fileName = 'spectra_256.png'
 
 
 f_12 = 1
@@ -74,7 +74,7 @@ current_a = 1. / ( current_z + 1 )
 a_dot = np.sqrt( Omega_M/current_a + Omega_L*current_a**2  ) * H0 
 H = a_dot / current_a
 
-L = 115. #Mpc
+L = 100. #Mpc
 n_points = 256
 dz = L / n_points
 R = current_a * L / cosmo_h
@@ -130,7 +130,7 @@ ax.clear()
 ax.plot( x_comov, dens / dens.mean() , label='Gas' )
 ax.plot( x_comov, dens_H / dens_H.mean()   , label='HI' )
 ax.set_yscale('log')
-ax.set_xlim(0, 115 )
+ax.set_xlim(0, L )
 ax.set_ylabel( r"$\rho / \bar{\rho} $", fontsize=16)
 ax.legend( fontsize=16)
 
@@ -139,7 +139,7 @@ ax = plt.gca()
 ax.clear()
 ax.plot( x_comov, temp  )
 ax.set_yscale('log')
-ax.set_xlim(0, 115 )
+ax.set_xlim(0, L )
 ax.set_ylim(3e3, 1e5 )
 ax.set_ylabel( "Temperature [K]", fontsize=16)
 ax.legend()
@@ -149,7 +149,7 @@ ax = plt.gca()
 ax.clear()
 ax.plot( x_comov, vz  )
 # ax.set_yscale('log')
-ax.set_xlim(0, 115 )
+ax.set_xlim(0, L )
 ax.set_ylabel( r"LOS Velocity  [$km/s$] ", fontsize=16)
 ax.legend()
 
@@ -159,7 +159,7 @@ ax = plt.gca()
 ax.clear()
 ax.plot( x_comov, optical_depth )
 ax.set_yscale('log')
-ax.set_xlim(0, 115 )
+ax.set_xlim(0, L )
 ax.set_ylabel( r"$\tau$", fontsize=16)
 ax.legend()
 

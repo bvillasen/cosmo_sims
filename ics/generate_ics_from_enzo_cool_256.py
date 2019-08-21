@@ -22,9 +22,9 @@ from tools import create_directory
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
 # enzoDir = dataDir + 'cosmo_sims/enzo/256_hydro_grackle_0/'
-enzoDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_100Mpc/ics/'
+enzoDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_50Mpc/ics/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/256_cool_uv_100Mpc/ics/'
+outputDir = dataDir + 'cosmo_sims/cholla_pm/256_cool_uv_50Mpc/ics/'
 create_directory( outputDir )
 nSnap_enzo = 0
 
@@ -114,7 +114,7 @@ data_enzo['gas']['e_density'] = electron_dens
 if metals:
   data_enzo['gas']['metal_density'] = metal_dens
 
-Lbox = 100000
+Lbox = 50000
 
 proc_grid = [ 2, 2, 2]
 box_size = [ Lbox, Lbox, Lbox ]

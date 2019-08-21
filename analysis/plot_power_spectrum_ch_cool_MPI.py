@@ -20,7 +20,7 @@ dataDir = '/raid/bruno/data/'
 
 
 eta_1 = 0.001
-eta_2 = 0.030
+eta_2 = 0.036
 
 
 n_arg = len(sys.argv)
@@ -41,14 +41,14 @@ nPoints = 128
 Lbox = 50.0   #Mpc/h
 
 integrator = 'SIMPLE'
-extra_name = '_gravWork'
+extra_name = ''
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool/data_PPMC_HLLC_{4}_eta{0:.3f}_{1:.3f}{2}/'.format( eta_1, eta_2,  extra_name, nPoints, integrator )
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool/data_PPMP_HLLC_{4}_eta{0:.3f}_{1:.3f}{2}/'.format( eta_1, eta_2,  extra_name, nPoints, integrator )
 
 enzoDir = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
 outDir = dev_dir + 'figures/power_hydro/'
 
-fileName = outDir + 'ps_{2}_cooling_uv_PPMC_HLLC_{4}_eta{0:.3f}_{1:.3f}{3}.png'.format( eta_1, eta_2, nPoints, extra_name, integrator  )
+fileName = outDir + 'ps_{2}_cooling_uv_PPMP_HLLC_{4}_eta{0:.3f}_{1:.4f}{3}.png'.format( eta_1, eta_2, nPoints, extra_name, integrator  )
 # fileName = outDir + 'ps_{2}_cooling_uv_PPMC_HLLC_{4}_{5}.png'.format( eta_1, eta_2, nPoints, extra_name, integrator, n_out  )
 
 
@@ -68,7 +68,7 @@ n_kSamples = 20
 
 # snapshots = [ 0, 2, 4, 7, 10, 13, 16, 20, 25, 30]
 
-snapshots = [ 0, 2, 4, 7, 10, 13, 16, 20, 24, 27]
+snapshots = [ 0, 2, 4, 7, 10, 13, 16, 22, 24, 27]
 # snapshots = [ 0, 2, 4]
 n_snapshots = len( snapshots  )
 
@@ -211,14 +211,17 @@ for i in range(n_snapshots):
   ax6.plot( k_vals, error_gas_H , c=c, alpha=0.9)
   ax8.plot( k_vals, error_gas_HII , c=c, alpha=0.9)
 
+ymin = -1
+ymax = 1
+
 ax2.axhline( y=0., color='r', linestyle='--',  )
-ax2.set_ylim( -0.4, 0.4)
+ax2.set_ylim( ymin, ymax)
 ax4.axhline( y=0., color='r', linestyle='--',  )
-ax4.set_ylim( -0.4, 0.4)
+ax4.set_ylim( ymin, ymax)
 ax6.axhline( y=0., color='r', linestyle='--',  )
-ax6.set_ylim( -0.4, 0.4)
+ax6.set_ylim( ymin, ymax)
 ax8.axhline( y=0., color='r', linestyle='--',  )
-ax8.set_ylim( -0.4, 0.4)
+ax8.set_ylim( ymin, ymax)
 
 ax1.set_ylabel( r'$P(k) $', fontsize=17)
 ax2.set_ylabel( 'Difference', fontsize=15)
