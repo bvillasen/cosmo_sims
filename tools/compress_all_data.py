@@ -49,6 +49,11 @@ def split_name( file_name, part=False):
 
 name_base = 'h5'
 
+fields_hydro = ['density', 'temperature', 'HI_density', 'HII_density']
+
+
+
+
 if hydro:
   dataFiles = [f for f in listdir(inDir) if (isfile(join(inDir, f)) and (f.find('.h5.') > 0 ) and ( f.find('_particles') < 0) ) ]
 else:
@@ -75,7 +80,7 @@ if rank < nSnapshots:
 # for nSnap in range( nSnapshots):
   if hydro:
     out_base_name = 'grid_'
-    compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir )
+    compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, fields=fields_hydro )
   if cosmo or particles:
     out_base_name = 'particles_'
     compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir , cosmology=cosmo )

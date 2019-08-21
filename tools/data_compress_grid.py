@@ -5,7 +5,7 @@ import h5py
 import numpy as np
 
 
-def compress_grid( nSnap, nBoxes, name_base, out_base_name,inDir, outDir, float_precision=False ):
+def compress_grid( nSnap, nBoxes, name_base, out_base_name,inDir, outDir, float_precision=False, fields='all' ):
   inFileName = '{0}.{1}.{2}'.format(nSnap, name_base, 0)
   inFile = h5py.File( inDir + inFileName, 'r')
   head = inFile.attrs
@@ -23,8 +23,8 @@ def compress_grid( nSnap, nBoxes, name_base, out_base_name,inDir, outDir, float_
   else: print ' snap: {0}  '.format( nSnap )
   
   for key in keys:
-    # if key in [ 'momentum_x', 'momentum_y', 'momentum_z', 'Energy', 'grav_potential', 'e_density', 'metal_density', 'HeI_density', 'HeII_density', 'HeIII_density']: continue
-    if key in [  'grav_potential', ]: continue
+    if fields != 'all':
+      if key not in fields: continue
     if float_precision: data_all = np.zeros( dims_all, dtype=np.float32 )
     else: data_all = np.zeros( dims_all, dtype=np.float64 )
     for nBox in range(nBoxes):
