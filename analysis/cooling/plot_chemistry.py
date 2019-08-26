@@ -22,9 +22,9 @@ nSnap = rank
 dataDir = '/raid/bruno/data/'
 
 eta_1 = 0.001
-eta_2 = 0.0500
-# beta_0 = 0.25
-# beta_1 = 0.00
+eta_2 = 0.030
+
+
 
 n_arg = len(sys.argv)
 if n_arg > 1:
@@ -41,19 +41,19 @@ if n_arg > 1:
 print 'eta: {0:.3f}  {1:.3f} /'.format( eta_1, eta_2 )
 
 
-nPoints = 128
+nPoints = 256
 Lbox = 50000.
 
 integrator = 'SIMPLE'
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool/'.format(nPoints)
-chollaDir_uv = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_{1:.4f}/'.format( eta_1, eta_2, integrator )
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_50Mpc/'.format(nPoints)
+chollaDir_uv = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2, integrator )
 
 enzoDir = dataDir + 'cosmo_sims/enzo/'
-enzoDir_uv = enzoDir + '{0}_cool_uv/h5_files/'.format(nPoints)
+enzoDir_uv = enzoDir + '{0}_cool_uv_50Mpc/h5_files/'.format(nPoints)
 
 
-outDir = dev_dir + 'figures/chemistry/chemistry_HI_eta{0:.3f}_{1:.4f}/'.format( eta_1, eta_2 )
+outDir = dev_dir + 'figures/chemistry/chemistry_HI_256_PPMC_eta{0:.3f}_{1:.3f}/'.format( eta_1, eta_2 )
 if rank == 0:
   create_directory( outDir )
 
@@ -168,7 +168,7 @@ for i in range( n_cols):
       # min_val = max( -10, proj.min())
       # max_val = min( 10 , proj.max() )
       min_val = -1
-      max_val = 3
+      max_val = 1
       im = ax.imshow( proj, interpolation='bilinear',  vmin=min_val, vmax=max_val, cmap='jet' )
 
     else:

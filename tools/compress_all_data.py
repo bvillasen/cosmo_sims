@@ -50,6 +50,7 @@ def split_name( file_name, part=False):
 name_base = 'h5'
 
 fields_hydro = ['density', 'temperature', 'HI_density', 'HII_density']
+fields_hydro = 'all'
 
 
 

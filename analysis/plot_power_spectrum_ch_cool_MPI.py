@@ -20,7 +20,7 @@ dataDir = '/raid/bruno/data/'
 
 
 eta_1 = 0.001
-eta_2 = 0.036
+eta_2 = 0.035
 
 
 n_arg = len(sys.argv)
@@ -37,18 +37,20 @@ if n_arg > 1:
 
 if rank == 0: print 'eta: {0:.3f}  {1:.3f}  '.format( eta_1, eta_2, )
 
+# nPoints = 256
 nPoints = 128
 Lbox = 50.0   #Mpc/h
 
 integrator = 'SIMPLE'
-extra_name = ''
+extra_name = '_kdk'
+reconstuction = 'PPMP'
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool/data_PPMP_HLLC_{4}_eta{0:.3f}_{1:.3f}{2}/'.format( eta_1, eta_2,  extra_name, nPoints, integrator )
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool_uv_50Mpc/data_{5}_HLLC_{4}_eta{0:.3f}_{1:.3f}{2}/'.format( eta_1, eta_2,  extra_name, nPoints, integrator, reconstuction )
 
-enzoDir = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
+enzoDir = dataDir + 'cosmo_sims/enzo/{0}_cool_uv_50Mpc/h5_files/'.format(nPoints)
 outDir = dev_dir + 'figures/power_hydro/'
 
-fileName = outDir + 'ps_{2}_cooling_uv_PPMP_HLLC_{4}_eta{0:.3f}_{1:.4f}{3}.png'.format( eta_1, eta_2, nPoints, extra_name, integrator  )
+fileName = outDir + 'ps_{2}_cooling_uv_{5}_HLLC_{4}_eta{0:.3f}_{1:.3f}{3}.png'.format( eta_1, eta_2, nPoints, extra_name, integrator, reconstuction  )
 # fileName = outDir + 'ps_{2}_cooling_uv_PPMC_HLLC_{4}_{5}.png'.format( eta_1, eta_2, nPoints, extra_name, integrator, n_out  )
 
 
@@ -66,9 +68,14 @@ n_kSamples = 20
 
 
 
-# snapshots = [ 0, 2, 4, 7, 10, 13, 16, 20, 25, 30]
 
+#For 128  50Mpc
 snapshots = [ 0, 2, 4, 7, 10, 13, 16, 22, 24, 27]
+
+#For 56 %0Mpc
+# snapshots = [ 0, 2, 5, 10, 15, 20, 25, 30, 38, 43]
+
+
 # snapshots = [ 0, 2, 4]
 n_snapshots = len( snapshots  )
 

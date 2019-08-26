@@ -4,15 +4,15 @@ import yt
 
 dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
 # dataDir = '/raid/bruno/data/'
-inDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_50Mpc/h5_files/'
+inDir = dataDir + 'cosmo_sims/enzo/128_dm_50Mpc/h5_files/'
 enzoDir = inDir
 outDir = inDir
 
 
-outFileName = 'outputs_cool_uv_enzo_256_50Mpc.txt'
+outFileName = 'outputs_dm_enzo_128_50Mpc.txt'
 a_list = []
 
-nSnapshots = 44
+nSnapshots = 39
 for nSnap in range(nSnapshots):
   fileName = 'snapshot_{0:03}.h5'.format( nSnap )
   file = h5.File( inDir+fileName, 'r' )

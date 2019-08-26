@@ -43,7 +43,7 @@ print 'eta: {0:.3f}   {1:.3f}  /'.format( eta_1, eta_2 )
 integrator = 'SIMPLE'
 extra_name = ''
 
-outDir = dev_dir + 'figures/phase_diagram/uvb_SIMPLE_PPMP/'
+outDir = dev_dir + 'figures/phase_diagram/uvb_SIMPLE_PPMP_256/'
 # outDir = dev_dir + 'figures/phase_diagram/cool_uv_100Mpc_{0}_eta2_{1:.3f}/'.format(  integrator, eta_2 )
 
 
@@ -53,22 +53,22 @@ if rank == 0:
 
 
 Lbox = 50000.
-nPoints = 128
+nPoints = 256
 
-enzoDir_uv = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool/'.format(nPoints)
+enzoDir_uv = dataDir + 'cosmo_sims/enzo/{0}_cool_uv_50Mpc/h5_files/'.format(nPoints)
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_50Mpc/'.format(nPoints)
 
 
-nrows = 3
-chollaDir_0 = chollaDir +  'data_PPMP_HLLC_SIMPLE_eta0.001_0.025/'
-chollaDir_1 = chollaDir +  'data_PPMP_HLLC_SIMPLE_eta0.001_0.030/'
+nrows = 2
+chollaDir_0 = chollaDir +  'data_PPMP_HLLC_SIMPLE_eta0.001_0.030/'
+chollaDir_1 = chollaDir +  'data_PPMP_HLLC_SIMPLE_eta0.001_0.035/'
 chollaDir_2 = chollaDir +  'data_PPMP_HLLC_SIMPLE_eta0.001_0.035/'
 chollaDir_3 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_0.038{3}/'
 chollaDir_4 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_0.046{3}/'
 
 chollaDir_all = [ chollaDir_0, chollaDir_1, chollaDir_2, chollaDir_3, chollaDir_4 ]
 # 
-eta_2_LIST = [ 0.025, 0.030, 0.035,  0.040, 0.045, 0.050  ]
+eta_2_LIST = [  0.030, 0.035,  0.040, 0.045, 0.050  ]
 # nrows = len( eta_2_LIST )
 # chollaDir_all = []
 # for eta_2 in eta_2_LIST:

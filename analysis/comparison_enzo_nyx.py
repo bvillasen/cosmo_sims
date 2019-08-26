@@ -21,7 +21,7 @@ outputsDir = '/home/bruno/cholla/scale_output_files/'
 nyxDir = dataDir + 'cosmo_sims/nyx/256_dm_50Mpc/'
 enzoDir = dataDir + 'cosmo_sims/enzo/256_dm_50Mpc/h5_files/'
 chollaDir_enzo = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_enzo/'
-chollaDir_nyx = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_nyx/'
+chollaDir_nyx = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_nyx_peculiar/'
 outDir = dev_dir + 'figures/comparison_enzo_nyx/'
 
 create_directory( outDir )
@@ -41,8 +41,9 @@ n_kSamples = 12
 
 
 
-fileName = 'power_dm_enzo.png'
+fileName = 'power_dm_nyx_peculiar.png'
 redshift_list = [ 100, 70, 40, 10, 7, 4, 1, 0.6, 0.3, 0 ]
+# redshift_list = [ 100, 70, 40, 10, 7, 4, 1, 0.6  ]
 redshift_list.reverse()
 
 outputs_enzo = np.loadtxt( outputsDir + 'outputs_dm_enzo_256_50Mpc.txt')
@@ -87,25 +88,25 @@ ax4.axhline( y=0., color='r', linestyle='--',  )
 
 
 for i in range(len(redshift_list)):
-  # if i>0: continue
-  nSnap_enzo = snapshots_enzo[i]
-
-  data_cholla = load_snapshot_data_particles( nSnap_enzo, chollaDir_enzo )
-  current_z_ch_enzo = data_cholla['current_z']
-  dens_dm_cholla_enzo = data_cholla['density'][...]
-  print " Cholla: ", current_z_ch_enzo, dens_dm_cholla_enzo.mean()
-  ps_dm_cholla_enzo, k_vals, error_cholla = get_power_spectrum( dens_dm_cholla_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
-
-  #Load Enzo data
-  data_enzo = load_snapshot_enzo( nSnap_enzo, enzoDir, dm=True, particles=False, cool=False, metals=False, hydro=False)
-  current_a_enzo = data_enzo['current_a']
-  current_z_enzo = data_enzo['current_z']
-  dens_dm_enzo = data_enzo['dm']['density'][...]
-  print ' Enzo: ', current_z_enzo, dens_dm_enzo.mean()
-  ps_dm_enzo, k_vals, count_dm_enzo = get_power_spectrum( dens_dm_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
-
-  error_enzo = ( ps_dm_cholla_enzo - ps_dm_enzo ) /ps_dm_enzo
-  # print "Error: {0}\n".format(error.max())
+  
+  # nSnap_enzo = snapshots_enzo[i]
+  # 
+  # data_cholla = load_snapshot_data_particles( nSnap_enzo, chollaDir_enzo )
+  # current_z_ch_enzo = data_cholla['current_z']
+  # dens_dm_cholla_enzo = data_cholla['density'][...]
+  # print " Cholla: ", current_z_ch_enzo, dens_dm_cholla_enzo.mean()
+  # ps_dm_cholla_enzo, k_vals, error_cholla = get_power_spectrum( dens_dm_cholla_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
+  # 
+  # #Load Enzo data
+  # data_enzo = load_snapshot_enzo( nSnap_enzo, enzoDir, dm=True, particles=False, cool=False, metals=False, hydro=False)
+  # current_a_enzo = data_enzo['current_a']
+  # current_z_enzo = data_enzo['current_z']
+  # dens_dm_enzo = data_enzo['dm']['density'][...]
+  # print ' Enzo: ', current_z_enzo, dens_dm_enzo.mean()
+  # ps_dm_enzo, k_vals, count_dm_enzo = get_power_spectrum( dens_dm_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
+  # 
+  # error_enzo = ( ps_dm_cholla_enzo - ps_dm_enzo ) /ps_dm_enzo
+  # # print "Error: {0}\n".format(error.max())
 
   nSnap_nyx = snapshots_nyx[i]
   
@@ -131,11 +132,11 @@ for i in range(len(redshift_list)):
   print "Plotting..."
   c = colors[i]
 
-  label = 'z = {0:.1f}'.format(np.abs(current_z_ch_enzo))
-  if i==0: ax1.plot( k_vals, ps_dm_enzo, '--', c='k', label='Enzo' )
-  ax1.plot( k_vals, ps_dm_cholla_enzo, label=label, c=c, linewidth=4 )
-  ax1.plot( k_vals, ps_dm_enzo, '--', c='k' )
-  ax2.plot( k_vals, error_enzo, c=c, alpha=0.9, linewidth=2 )
+  # label = 'z = {0:.1f}'.format(np.abs(current_z_ch_enzo))
+  # if i==0: ax1.plot( k_vals, ps_dm_enzo, '--', c='k', label='Enzo' )
+  # ax1.plot( k_vals, ps_dm_cholla_enzo, label=label, c=c, linewidth=4 )
+  # ax1.plot( k_vals, ps_dm_enzo, '--', c='k' )
+  # ax2.plot( k_vals, error_enzo, c=c, alpha=0.9, linewidth=2 )
 
   label = 'z = {0:.1f}'.format(np.abs(current_z_ch_nyx))
   if i==0: ax3.plot( k_vals, ps_dm_nyx, '--', c='k', label='Nyx' )

@@ -19,14 +19,14 @@ import yt
 
 
 dataDir = '/raid/bruno/data/'
-inDir = dataDir + 'cosmo_sims/enzo/256_dm_50Mpc/h5_files/'
-outDir = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/ics_enzo/'
+inDir = dataDir + 'cosmo_sims/enzo/128_dm_50Mpc/h5_files/'
+outDir = dataDir + 'cosmo_sims/cholla_pm/128_dm_50Mpc/ics/'
 
 
 
 nSnap = 0
 
-data_enzo = load_snapshot_enzo( nSnap, inDir, dm=True, cool=False, metals=False, hydro=False  )
+data_enzo = load_snapshot_enzo( nSnap, inDir, dm=True, cool=False, metals=False, hydro=False, particles=True  )
 # 
 # snapKey = '{0:03}'.format(nSnap)
 # inFileName = 'DD0{0}/data0{0}'.format( snapKey)
@@ -62,10 +62,11 @@ data_enzo = load_snapshot_enzo( nSnap, inDir, dm=True, cool=False, metals=False,
 
 
 Lbox = 50000
+nPoints = 128
 
 proc_grid = [ 2, 2, 2]
 box_size = [ Lbox, Lbox, Lbox ]
-grid_size = [ 256, 256, 256 ]
+grid_size = [ nPoints, nPoints, nPoints ]
 domain_parent = get_domain_block( proc_grid, box_size, grid_size )
 outputBaseName = '{0}_particles.h5'.format(nSnap)
 generate_ics_particles(data_enzo, outDir, outputBaseName, proc_grid, box_size, grid_size)

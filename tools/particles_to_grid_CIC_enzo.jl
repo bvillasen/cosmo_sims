@@ -10,7 +10,7 @@ using Statistics
 # dataDir = "/home/bruno/Desktop/data/"
 # dataDir = "/home/bruno/Desktop/data/"
 dataDir = "/home/bruno/Desktop/hard_drive_1/data/"
-inDir = dataDir * "cosmo_sims/enzo/256_cool_uv_50Mpc/h5_files/"
+inDir = dataDir * "cosmo_sims/enzo/128_dm_50Mpc/h5_files/"
 # inDir = "/home/bruno/Desktop/data/cosmo_sims/ramses/128_hydro/h5_files/"
 # inDir = dataDir * "cosmo_sims/enzo/256_hydro_grackle_noUV/h5_files/"
 outDir = inDir
@@ -18,7 +18,7 @@ in_base_name = "snapshot_"
 out_base_name = "grid_CIC_"
 
 Lbox = 50e3
-const nPoints = 256
+const nPoints = 128
 
 #Domain Parameters
 const x_min = 0.0

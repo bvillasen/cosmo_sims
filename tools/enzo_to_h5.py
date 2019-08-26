@@ -20,30 +20,34 @@ sys.path.extend([toolsDirectory ] )
 # dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
 # dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
 dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
-inDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_50Mpc/'
+inDir = dataDir + 'cosmo_sims/enzo/128_dm_50Mpc/'
 # inDir = dataDir + 'cosmo_sims/enzo/512_hydro/'
-outDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_50Mpc/h5_files/'
+outDir = dataDir + 'cosmo_sims/enzo/128_dm_50Mpc/h5_files/'
 # 
 # dataFiles = [f for f in listdir(inDir) if  (f.find('DD') == 0 )   ]
 # dataFiles = np.sort( dataFiles )
 # nFiles = len( dataFiles )
 
-hydro = True
-cooling = True
-metals = True
+# hydro = True
+# cooling = True
+# metals = True
+
+hydro = False
+cooling = False
+metals = False
 
 
-n_snaps = 84
-snapshots = list(range(0,n_snaps, 2))
+n_snaps = 149
+snapshots = list(range(0,n_snaps, 4))
 if n_snaps-1 not in snapshots: snapshots.append(n_snaps-1)
-# snapshots = range(158)
+
 
 
 
 # snapshots = [0]
 
-
 nSnap_out = 1
+
 for nSnap in snapshots:
 
   snapKey = '{0:03}'.format(nSnap)
