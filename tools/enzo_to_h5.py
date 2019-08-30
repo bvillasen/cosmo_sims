@@ -20,9 +20,9 @@ sys.path.extend([toolsDirectory ] )
 # dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
 # dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
 dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
-inDir = dataDir + 'cosmo_sims/enzo/128_dm_50Mpc/'
+inDir = dataDir + 'cosmo_sims/enzo/256_dm_50Mpc_expansion0.01/'
 # inDir = dataDir + 'cosmo_sims/enzo/512_hydro/'
-outDir = dataDir + 'cosmo_sims/enzo/128_dm_50Mpc/h5_files/'
+outDir = dataDir + 'cosmo_sims/enzo/256_dm_50Mpc_expansion0.01/h5_files/'
 # 
 # dataFiles = [f for f in listdir(inDir) if  (f.find('DD') == 0 )   ]
 # dataFiles = np.sort( dataFiles )

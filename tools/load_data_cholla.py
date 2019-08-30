@@ -69,21 +69,22 @@ def load_snapshot_data( nSnap, inDir, cool=False, dm=True, cosmo=True ):
     if field not in fields_data: continue
     outDir['gas'][field] = data_grid[field]
 
-  data_part = h5.File( partFileName, 'r' )
-  fields_data = data_part.keys()
-  fields_part = [ 'density',  'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z' ]
-  # current_z = data_part.attrs['current_z']
-  # current_a = data_part.attrs['current_a']
-  # outDir['current_a'] = current_a
-  # outDir['current_z'] = current_z
-  for key in data_part.attrs.keys(): outDir[key] = data_part.attrs[key]
-  if cosmo:
-    current_z = data_part.attrs['current_z']
-    print ("Loading Cholla Snapshot: {0}       current_z: {1}".format( nSnap, current_z) )
-  for field in fields_part:
-    if field not in fields_data: continue
-    # print field
-    outDir['dm'][field] = data_part[field]
+  if dm:
+    data_part = h5.File( partFileName, 'r' )
+    fields_data = data_part.keys()
+    fields_part = [ 'density',  'pos_x', 'pos_y', 'pos_z', 'vel_x', 'vel_y', 'vel_z' ]
+    # current_z = data_part.attrs['current_z']
+    # current_a = data_part.attrs['current_a']
+    # outDir['current_a'] = current_a
+    # outDir['current_z'] = current_z
+    for key in data_part.attrs.keys(): outDir[key] = data_part.attrs[key]
+    if cosmo:
+      current_z = data_part.attrs['current_z']
+      print ("Loading Cholla Snapshot: {0}       current_z: {1}".format( nSnap, current_z) )
+    for field in fields_part:
+      if field not in fields_data: continue
+      # print field
+      outDir['dm'][field] = data_part[field]
 
   return outDir
 

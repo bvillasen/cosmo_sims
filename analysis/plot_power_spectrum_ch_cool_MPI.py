@@ -42,7 +42,7 @@ nPoints = 128
 Lbox = 50.0   #Mpc/h
 
 integrator = 'SIMPLE'
-extra_name = '_kdk'
+extra_name = '_gravCPU_new'
 reconstuction = 'PPMP'
 
 chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool_uv_50Mpc/data_{5}_HLLC_{4}_eta{0:.3f}_{1:.3f}{2}/'.format( eta_1, eta_2,  extra_name, nPoints, integrator, reconstuction )
