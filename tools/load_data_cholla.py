@@ -25,12 +25,16 @@ def load_snapshot_data_grid( nSnap, inFileName ):
 # dataDir = '/home/bruno/Desktop/data/'
 # inputDir = dataDir + 'cholla_hydro/collapse_3D/'
 # nSnap = 0
-def load_snapshot_data_particles( nSnap, inputDir ):
+def load_snapshot_data_particles( nSnap, inputDir, single_file=False ):
   inFileName = 'particles_{0}.h5'.format(nSnap)
+  
+  if single_file:
+    inFileName = '{0}_particles.h5'.format(nSnap)
+  
   partsFile = h5.File( inputDir + inFileName, 'r')
   fields_data = partsFile.keys()
-  current_a = partsFile.attrs['current_a']
-  current_z = partsFile.attrs['current_z']
+  current_a = partsFile.attrs['current_a'][0]
+  current_z = partsFile.attrs['current_z'][0]
   # particle_mass = partsFile.attrs['particle_mass']
 
   data_part = {}
@@ -50,9 +54,14 @@ def load_snapshot_data_particles( nSnap, inputDir ):
 
 
 
-def load_snapshot_data( nSnap, inDir, cool=False, dm=True, cosmo=True ):
+def load_snapshot_data( nSnap, inDir, cool=False, dm=True, cosmo=True, single_file=False ):
   gridFileName = inDir + 'grid_{0}.h5'.format(nSnap)
   partFileName = inDir + 'particles_{0}.h5'.format(nSnap)
+  
+  if single_file:
+    partFileName = inDir + '{0}_particles.h5'.format(nSnap)
+    gridFileName = inDir + '{0}.h5'.format(nSnap)
+    
   outDir = {'dm':{}, 'gas':{} }
   data_grid = h5.File( gridFileName, 'r' )
   fields_data = data_grid.keys()

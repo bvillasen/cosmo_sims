@@ -19,9 +19,9 @@ from load_data_enzo import load_snapshot_enzo
 
 outputsDir = '/home/bruno/cholla/scale_output_files/'
 nyxDir = dataDir + 'cosmo_sims/nyx/256_dm_50Mpc/'
-enzoDir = dataDir + 'cosmo_sims/enzo/256_dm_50Mpc/h5_files/'
-chollaDir_enzo = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_enzo/'
-chollaDir_nyx = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_nyx_peculiar/'
+enzoDir = dataDir + 'cosmo_sims/enzo/256_dm_50Mpc_expansion0.01/h5_files/'
+chollaDir_enzo = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_enzo_expansion0.01/'
+chollaDir_nyx = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_nyx_expansion0.01_dkd/'
 outDir = dev_dir + 'figures/comparison_enzo_nyx/'
 
 create_directory( outDir )
@@ -41,12 +41,11 @@ n_kSamples = 12
 
 
 
-fileName = 'power_dm_nyx_peculiar.png'
+fileName = 'power_dm_comparison_expansion0.01_dkd.png'
 redshift_list = [ 100, 70, 40, 10, 7, 4, 1, 0.6, 0.3, 0 ]
-# redshift_list = [ 100, 70, 40, 10, 7, 4, 1, 0.6  ]
 redshift_list.reverse()
 
-outputs_enzo = np.loadtxt( outputsDir + 'outputs_dm_enzo_256_50Mpc.txt')
+outputs_enzo = np.loadtxt( outputsDir + 'outputs_dm_enzo_256_50Mpc_expansion0.01.txt')
 outputs_nyx = np.loadtxt( outputsDir + 'outputs_dm_nyx_256_50Mpc.txt')
 z_enzo = 1./(outputs_enzo) - 1
 z_nyx = 1./(outputs_nyx) - 1
@@ -89,24 +88,24 @@ ax4.axhline( y=0., color='r', linestyle='--',  )
 
 for i in range(len(redshift_list)):
   
-  # nSnap_enzo = snapshots_enzo[i]
-  # 
-  # data_cholla = load_snapshot_data_particles( nSnap_enzo, chollaDir_enzo )
-  # current_z_ch_enzo = data_cholla['current_z']
-  # dens_dm_cholla_enzo = data_cholla['density'][...]
-  # print " Cholla: ", current_z_ch_enzo, dens_dm_cholla_enzo.mean()
-  # ps_dm_cholla_enzo, k_vals, error_cholla = get_power_spectrum( dens_dm_cholla_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
-  # 
-  # #Load Enzo data
-  # data_enzo = load_snapshot_enzo( nSnap_enzo, enzoDir, dm=True, particles=False, cool=False, metals=False, hydro=False)
-  # current_a_enzo = data_enzo['current_a']
-  # current_z_enzo = data_enzo['current_z']
-  # dens_dm_enzo = data_enzo['dm']['density'][...]
-  # print ' Enzo: ', current_z_enzo, dens_dm_enzo.mean()
-  # ps_dm_enzo, k_vals, count_dm_enzo = get_power_spectrum( dens_dm_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
-  # 
-  # error_enzo = ( ps_dm_cholla_enzo - ps_dm_enzo ) /ps_dm_enzo
-  # # print "Error: {0}\n".format(error.max())
+  nSnap_enzo = snapshots_enzo[i]
+  
+  data_cholla = load_snapshot_data_particles( nSnap_enzo, chollaDir_enzo )
+  current_z_ch_enzo = data_cholla['current_z']
+  dens_dm_cholla_enzo = data_cholla['density'][...]
+  print " Cholla: ", current_z_ch_enzo, dens_dm_cholla_enzo.mean()
+  ps_dm_cholla_enzo, k_vals, error_cholla = get_power_spectrum( dens_dm_cholla_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
+  
+  #Load Enzo data
+  data_enzo = load_snapshot_enzo( nSnap_enzo, enzoDir, dm=True, particles=False, cool=False, metals=False, hydro=False)
+  current_a_enzo = data_enzo['current_a']
+  current_z_enzo = data_enzo['current_z']
+  dens_dm_enzo = data_enzo['dm']['density'][...]
+  print ' Enzo: ', current_z_enzo, dens_dm_enzo.mean()
+  ps_dm_enzo, k_vals, count_dm_enzo = get_power_spectrum( dens_dm_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
+  
+  error_enzo = ( ps_dm_cholla_enzo - ps_dm_enzo ) /ps_dm_enzo
+  # print "Error: {0}\n".format(error.max())
 
   nSnap_nyx = snapshots_nyx[i]
   
@@ -132,11 +131,11 @@ for i in range(len(redshift_list)):
   print "Plotting..."
   c = colors[i]
 
-  # label = 'z = {0:.1f}'.format(np.abs(current_z_ch_enzo))
-  # if i==0: ax1.plot( k_vals, ps_dm_enzo, '--', c='k', label='Enzo' )
-  # ax1.plot( k_vals, ps_dm_cholla_enzo, label=label, c=c, linewidth=4 )
-  # ax1.plot( k_vals, ps_dm_enzo, '--', c='k' )
-  # ax2.plot( k_vals, error_enzo, c=c, alpha=0.9, linewidth=2 )
+  label = 'z = {0:.1f}'.format(np.abs(current_z_ch_enzo))
+  if i==0: ax1.plot( k_vals, ps_dm_enzo, '--', c='k', label='Enzo' )
+  ax1.plot( k_vals, ps_dm_cholla_enzo, label=label, c=c, linewidth=4 )
+  ax1.plot( k_vals, ps_dm_enzo, '--', c='k' )
+  ax2.plot( k_vals, error_enzo, c=c, alpha=0.9, linewidth=2 )
 
   label = 'z = {0:.1f}'.format(np.abs(current_z_ch_nyx))
   if i==0: ax3.plot( k_vals, ps_dm_nyx, '--', c='k', label='Nyx' )
@@ -148,7 +147,7 @@ for i in range(len(redshift_list)):
 
 
 max_diff_enzo = 0.5
-max_diff_nyx = 0.005
+max_diff_nyx = 0.05
 ax2.set_ylim( -1*max_diff_enzo, 1*max_diff_enzo )
 ax4.set_ylim( -1*max_diff_nyx, 1*max_diff_nyx )
 
@@ -169,8 +168,8 @@ ax4.set_xscale('log')
 
 
 # plt.xlim()
-ax1.set_title( r'DM Power Spectrum   ENZO - CHOLLA', fontsize=20 )
-ax3.set_title( r'DM Power Spectrum   NYX - CHOLLA', fontsize=20 )
+ax1.set_title( r'DM Power Spectrum  ENZO - CHOLLA DKD', fontsize=18 )
+ax3.set_title( r'DM Power Spectrum  NYX - CHOLLA  DKD', fontsize=18 )
 
 print "Saved File: ", fileName
 fig.savefig( outDir + fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)

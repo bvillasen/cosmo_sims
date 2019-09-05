@@ -2,17 +2,21 @@ import numpy as np
 import h5py as h5
 import yt
 
-dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
 # dataDir = '/raid/bruno/data/'
-inDir = dataDir + 'cosmo_sims/enzo/128_dm_50Mpc/h5_files/'
+# dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
+dataDir = '/home/bruno/Desktop/data/'
+inDir = dataDir + 'cosmo_sims/ramses/256_dm_50Mpc/h5_files/'
 enzoDir = inDir
 outDir = inDir
 
 
-outFileName = 'outputs_dm_enzo_128_50Mpc.txt'
+outFileName = 'outputs_dm_ramses_256_50Mpc.txt'
 a_list = []
 
-nSnapshots = 39
+# nSnapshots = 84
+
+nSnapshots = 15
+
 for nSnap in range(nSnapshots):
   fileName = 'snapshot_{0:03}.h5'.format( nSnap )
   file = h5.File( inDir+fileName, 'r' )

@@ -24,13 +24,13 @@ for nSnap in range(11):
   file_name = '{0}.h5'.format(nSnap)
   file = h5.File( inputDir_sor + file_name, 'r' )
   dens_sor = file['density'][...] 
-  pot_sor = file['potential'][...]
+  # pot_sor = file['potential'][...]
   file.close()
 
   file_name = '{0}.h5'.format(nSnap)
   file = h5.File( inputDir_cufft + file_name, 'r' )
   dens_cufft = file['density'][...] 
-  pot_cufft = file['potential'][...]
+  # pot_cufft = file['potential'][...]
   file.close()
   # 
   diff = (dens_sor - dens_cufft ) / dens_cufft

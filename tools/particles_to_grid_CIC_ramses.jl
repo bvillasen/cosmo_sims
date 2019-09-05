@@ -6,19 +6,15 @@ using CIC_functions
 using Statistics
 
 # Input File
-# dataDir = "/raid/bruno/data/"
-# dataDir = "/home/bruno/Desktop/data/"
-# dataDir = "/home/bruno/Desktop/data/"
-dataDir = "/home/bruno/Desktop/hard_drive_1/data/"
-inDir = dataDir * "cosmo_sims/enzo/256_dm_50Mpc_expansion0.01/h5_files/"
-# inDir = "/home/bruno/Desktop/data/cosmo_sims/ramses/128_hydro/h5_files/"
-# inDir = dataDir * "cosmo_sims/enzo/256_hydro_grackle_noUV/h5_files/"
+# dataDir = "/raid/bruno/data/"/"
+dataDir = "/home/bruno/Desktop/data/"
+inDir = dataDir * "cosmo_sims/ramses/128_hydro_50Mpc/h5_files/"
 outDir = inDir
 in_base_name = "snapshot_"
 out_base_name = "grid_CIC_"
 
 Lbox = 50e3
-const nPoints = 256
+const nPoints = 128
 
 #Domain Parameters
 const x_min = 0.0
