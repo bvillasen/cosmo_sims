@@ -7,8 +7,8 @@ from scipy.interpolate import RegularGridInterpolator
 import h5py as h5
 from power_spectrum import get_power_spectrum
 
-dataDir = '/raid/bruno/data/'
-# dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
+# dataDir = '/raid/bruno/data/'
+dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
 dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
 cosmo_dir = dev_dir + 'cosmo_sims/'
 toolsDirectory = cosmo_dir + "tools/"
@@ -18,19 +18,17 @@ from load_data_nyx import load_snapshot_nyx
 from load_data_enzo import load_snapshot_enzo
 
 
-outputsDir = '/home/bruno/cholla/scale_output_files/'
-nyxDir = dataDir + 'cosmo_sims/nyx/256_dm_50Mpc/'
-enzoDir = dataDir + 'cosmo_sims/enzo/256_dm_50Mpc/h5_files/'
-chollaDir_enzo = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_enzo/'
-chollaDir_nyx = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_nyx_peculiar/'
-outDir = dev_dir + 'figures/comparison_enzo_nyx/'
+outputsDir = '/home/bruno/Desktop/Dropbox/Developer/cholla/scale_output_files/'
+enzoDir = dataDir + 'cosmo_sims/enzo/256_dm_50Mpc_grav4/h5_files/'
+chollaDir_enzo = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_enzo_grav4/'
+outDir = dev_dir + 'figures/power_dm/'
 
-fileName = 'power_dm_enzo_expansion0.015.png'
+fileName = 'power_dm_enzo_grav4_new.png'
 redshift_list = [ 100, 70, 40, 10, 7, 4, 1, 0.6, 0.3, 0 ]
 # redshift_list = [ 100, 70, 40, 10, 7, 4, 1, 0.6  ]
 redshift_list.reverse()
 
-outputs_enzo = np.loadtxt( outputsDir + 'outputs_dm_enzo_256_50Mpc.txt')
+outputs_enzo = np.loadtxt( outputsDir + 'outputs_dm_enzo_256_50Mpc_grav4.txt')
 # outputs_nyx = np.loadtxt( outputsDir + 'outputs_dm_nyx_256_50Mpc.txt')
 z_enzo = 1./(outputs_enzo) - 1
 # z_nyx = 1./(outputs_nyx) - 1
@@ -65,7 +63,7 @@ Lx = Lbox
 Ly = Lbox
 Lz = Lbox
 dx, dy, dz = Lx/(nx), Ly/(ny), Lz/(nz )
-n_kSamples = 12
+n_kSamples = 20
 
 
 fig = plt.figure(0)
@@ -83,6 +81,9 @@ ax2 = plt.subplot(gs[4:5, 0])
 ax2.axhline( y=0., color='r', linestyle='--',  )
 
 
+z_list = []
+ps_ch_list = []
+ps_en_list = []
 
 
 for i in range(len(redshift_list)):
@@ -95,6 +96,8 @@ for i in range(len(redshift_list)):
   print " Cholla: ", current_z_ch_enzo, dens_dm_cholla_enzo.mean()
   ps_dm_cholla_enzo, k_vals, error_cholla = get_power_spectrum( dens_dm_cholla_enzo, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
   
+  
+  
   #Load Enzo data
   data_enzo = load_snapshot_enzo( nSnap_enzo, enzoDir, dm=True, particles=False, cool=False, metals=False, hydro=False)
   current_a_enzo = data_enzo['current_a']
@@ -106,6 +109,9 @@ for i in range(len(redshift_list)):
   error_enzo = ( ps_dm_cholla_enzo - ps_dm_enzo ) /ps_dm_enzo
   # print "Error: {0}\n".format(error.max())
 
+  z_list.append( current_z_enzo )
+  ps_ch_list.append( ps_dm_cholla_enzo )
+  ps_en_list.append( ps_dm_enzo )
 
   print "Plotting..."
   c = colors[i]
@@ -134,7 +140,32 @@ ax2.set_xscale('log')
 
 
 # plt.xlim()
-ax1.set_title( r'DM Power Spectrum ENZO - CHOLLA ExpansionLimit = 0.01', fontsize=20 )
+ax1.set_title( r'DM Power Spectrum ENZO - CHOLLA', fontsize=20 )
 
 print "Saved File: ", fileName
 fig.savefig( outDir + fileName,  pad_inches=0.1,  bbox_inches='tight', dpi=300)
+
+
+dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
+cosmo_tools = dev_dir + 'cosmo_tools/'
+outDir = cosmo_tools + 'data/power_spectrum/dm_only/'
+ 
+z_array = np.array( z_list)
+z_array[z_array<0] = 0
+n_snapshots = len( z_array)
+
+ps_dm_cholla = np.array(ps_ch_list)
+ps_dm_enzo = np.array(ps_en_list)
+ 
+data = np.zeros( [n_snapshots, n_kSamples+1])
+data[:,0] = z_array
+data[:,1:] = ps_dm_cholla
+
+out_file_name = 'ps_{0}_dmOnly_cholla_enzo.dat'.format( nPoints )
+np.savetxt( outDir + out_file_name, data )
+print( "Saved file: {0}".format( outDir + out_file_name ))
+
+data[:,1:] = ps_dm_enzo
+out_file_name = 'ps_{0}_dmOnly_enzo.dat'.format( nPoints )
+np.savetxt( outDir + out_file_name, data )
+print( "Saved file: {0}".format( outDir + out_file_name ))

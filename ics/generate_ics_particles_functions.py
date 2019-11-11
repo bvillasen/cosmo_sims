@@ -39,6 +39,8 @@ def generate_ics_particles_single_domain( pId, data_in, outDir, outputBaseName, 
   xMin, xMax = domain[pId]['box']['x']
   yMin, yMax = domain[pId]['box']['y']
   zMin, zMax = domain[pId]['box']['z']
+  
+  print( '{0} x[{1} , {2}] y[{3} , {4}] z[{5}, {6}]'.format( pId, xMin, xMax, yMin, yMax, zMin, aMax))
 
   # indx_x = np.where( ( (pos_x >= xMin) & (pos_x < xMax ) ) )
   # indx_y = np.where( ( (pos_y >= yMin) & (pos_y < yMax ) ) )
@@ -101,6 +103,8 @@ def generate_ics_particles( data_in, outDir, outputBaseName, proc_grid, box_size
   dx = domain[0]['box']['dx']
   dy = domain[0]['box']['dy']
   dz = domain[0]['box']['dz']
+  
+  print( dx, dy, dz)
 
   index_x = ( pos_x / dx ).astype(np.int)
   index_y = ( pos_y / dy ).astype(np.int)

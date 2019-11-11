@@ -40,10 +40,10 @@ if n_arg > 1:
 
 print 'eta: {0:.3f}   {1:.3f}  /'.format( eta_1, eta_2 )
 
-integrator = 'SIMPLE'
-extra_name = ''
 
-outDir = dev_dir + 'figures/phase_diagram_hydro/uvb_SIMPLE_eta{0:.3f}_all/'.format( eta_1, eta_2, integrator, extra_name )
+data_name = 'SIMPLE_PPMP_eta0.030_beta0.00_grav4'
+
+outDir = dev_dir + 'figures/phase_diagram/enzo_{0}/'.format( data_name )
 # outDir = dev_dir + 'figures/phase_diagram/cool_uv_100Mpc_{0}_eta2_{1:.3f}/'.format(  integrator, eta_2 )
 
 
@@ -53,14 +53,14 @@ if rank == 0:
 
 
 Lbox = 50000.
-nPoints = 128
+nPoints = 256
 
-enzoDir_uv = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool/'.format(nPoints)
+enzoDir_uv = dataDir + 'cosmo_sims/enzo/{0}_cool_uv_50Mpc_HLLC_grav4/h5_files/'.format(nPoints)
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_50Mpc/'.format(nPoints)
 
 nrows = 1
 # 
-chollaDir_0 = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_{1:.4f}{3}/'.format( eta_1, eta_2, integrator, extra_name )
+chollaDir_0 = chollaDir +  'data_{0}/'.format( data_name )
  
 
 
@@ -74,7 +74,7 @@ ncells = nx * ny * nz
 dv = (Lbox/nPoints)**3
 nbins = 1000
 
-nSnap = 27
+nSnap = rank
 
 # snapshots = range(0,31)
 # for nSnap in snapshots:
@@ -92,7 +92,8 @@ current_a_ch = data_cholla['current_a']
 dens = data_cholla['gas']['density'][...]
 dens_H = data_cholla['gas']['HI_density'][...]
 dens_mean = dens.mean()
-temp_GK, temp_DE, temp_U, temp_GE, dens_U, dens_GE, HI_dens_U, HI_dens_GE, temp_U_ALL, temp_GE_ALL =  get_Temperaure_From_Flags_DE( data_cholla, gamma=5./3, normalize_dens=True, )
+temp_GK = data_cholla['gas']['temperature'][...].flatten()
+# temp_GK, temp_DE, temp_U, temp_GE, dens_U, dens_GE, HI_dens_U, HI_dens_GE, temp_U_ALL, temp_GE_ALL =  get_Temperaure_From_Flags_DE( data_cholla, gamma=5./3, normalize_dens=True, )
 # x_U_ALL_0, y_U_ALL_0, z_U_ALL_0 = get_phase_diagram( dens.flatten()/dens_mean, temp_U_ALL , nbins, ncells )
 # x_GE_ALL_0, y_GE_ALL_0, z_GE_ALL_0 = get_phase_diagram( dens.flatten()/dens_mean, temp_GE_ALL , nbins, ncells )
 x_GK, y_GK, z_GK = get_phase_diagram( dens.flatten()/dens_mean, temp_GK , nbins, ncells )
@@ -142,7 +143,7 @@ x_min_h = -11
 x_max_h = 3
 
 y_max = 8
-y_min = 2
+y_min = 0
 
 
 fs = 17
@@ -190,7 +191,7 @@ plt.colorbar(c)
 ax.set_ylabel(r'Log Temperature $[K]$', fontsize=fs )
 ax.set_xlabel(r'Log HI Overdensity', fontsize=fs )
 ax.set_title( "ENZO Neutral Hydrogen ".format( current_z_ch),fontsize=fs_1)
-# ax.set_xlim(x_min, x_max)
+ax.set_xlim(-12, 2)
 ax.set_ylim(y_min, y_max)
 
 
@@ -204,14 +205,14 @@ plt.colorbar(c)
 ax.set_ylabel(r'Log Temperature $[K]$', fontsize=fs )
 ax.set_xlabel(r'Log HI Overdensity', fontsize=fs )
 ax.set_title( r" CHOLLA Neutral Hydrogen   ",fontsize=fs_1 )
-# ax.set_xlim(x_min, x_max)
+ax.set_xlim(-12, 2)
 ax.set_ylim(y_min, y_max)
 
 ##################
 
 # # #
 # 
-# fig.suptitle(r'$\eta_1={0:0.3f}$   $\eta_2={1:0.3f}$  {2}  {3} '.format( eta_1, eta_2, integrator, extra_name ), fontsize=20, y=0.999)
+fig.suptitle('{0}'.format( data_name ), fontsize=20, y=0.999)
 
 # fig.text( 0.44, 0.99, r'$\eta_0={0:0.3f}$   $\beta_0={1:0.3f}$   $\beta_1={2:0.3f}$'.format( eta_0, beta_0, beta_1 ), fontsize=20, )
 # fig.text( 0.44, 0.49, r'$\eta_0={0:0.3f}$   $\beta_0={1:0.3f}$   $\beta_1={2:0.3f}$'.format( eta_0_1, beta_0_1, beta_1_1 ), fontsize=20, )

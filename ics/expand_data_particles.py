@@ -48,6 +48,8 @@ def expand_data_particles_to_cholla( proc_grid, box_size, grid_size, inFileName,
     xMin, xMax = domain[pId]['box']['x']
     yMin, yMax = domain[pId]['box']['y']
     zMin, zMax = domain[pId]['box']['z']
+    
+    print( '{0} x[{1} , {2}] y[{3} , {4}] z[{5}, {6}]'.format( pId, xMin, xMax, yMin, yMax, zMin, aMax))
 
     indx_x = np.where( ( (pos_x >= xMin) & (pos_x < xMax ) ) )
     indx_y = np.where( ( (pos_y >= yMin) & (pos_y < yMax ) ) )

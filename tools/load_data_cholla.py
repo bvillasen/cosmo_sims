@@ -33,8 +33,8 @@ def load_snapshot_data_particles( nSnap, inputDir, single_file=False ):
   
   partsFile = h5.File( inputDir + inFileName, 'r')
   fields_data = partsFile.keys()
-  current_a = partsFile.attrs['current_a'][0]
-  current_z = partsFile.attrs['current_z'][0]
+  current_a = partsFile.attrs['current_a']
+  current_z = partsFile.attrs['current_z']
   # particle_mass = partsFile.attrs['particle_mass']
 
   data_part = {}
@@ -54,29 +54,23 @@ def load_snapshot_data_particles( nSnap, inputDir, single_file=False ):
 
 
 
-def load_snapshot_data( nSnap, inDir, cool=False, dm=True, cosmo=True, single_file=False ):
+def load_snapshot_data( nSnap, inDir, cool=False, dm=True, cosmo=True, hydro=True, single_file=False ):
   gridFileName = inDir + 'grid_{0}.h5'.format(nSnap)
   partFileName = inDir + 'particles_{0}.h5'.format(nSnap)
   
   if single_file:
     partFileName = inDir + '{0}_particles.h5'.format(nSnap)
     gridFileName = inDir + '{0}.h5'.format(nSnap)
-    
+  
   outDir = {'dm':{}, 'gas':{} }
-  data_grid = h5.File( gridFileName, 'r' )
-  fields_data = data_grid.keys()
-  # print fields_data
-  # t = data_grid.attrs['t']
-  # dt = data_grid.attrs['dt']
-  # outDir['t'] = t
-  # outDir['dt'] = dt
-  for key in data_grid.attrs.keys(): outDir[key] = data_grid.attrs[key]
-  # fields_grid = [ 'density',  'momentum_x', 'momentum_y', 'momentum_z', 'Energy', 'GasEnergy', 'potential', 'extra_scalar', 'extra_scalar_1', 'cooling_rate']
-  # if cool: fields_grid.extend(['HI_density', 'HII_density', 'HeI_density', 'HeII_density', 'HeIII_density', 'e_density', 'metal_density', 'temperature', 'flags_DE'])
-  fields_grid = fields_data
-  for field in fields_grid:
-    if field not in fields_data: continue
-    outDir['gas'][field] = data_grid[field]
+  if hydro:  
+    data_grid = h5.File( gridFileName, 'r' )
+    fields_data = data_grid.keys()
+    for key in data_grid.attrs.keys(): outDir[key] = data_grid.attrs[key]
+    fields_grid = fields_data
+    for field in fields_grid:
+      if field not in fields_data: continue
+      outDir['gas'][field] = data_grid[field]
 
   if dm:
     data_part = h5.File( partFileName, 'r' )

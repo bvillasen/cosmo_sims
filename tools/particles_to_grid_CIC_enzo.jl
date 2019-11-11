@@ -9,8 +9,8 @@ using Statistics
 # dataDir = "/raid/bruno/data/"
 # dataDir = "/home/bruno/Desktop/data/"
 # dataDir = "/home/bruno/Desktop/data/"
-dataDir = "/home/bruno/Desktop/hard_drive_1/data/"
-inDir = dataDir * "cosmo_sims/enzo/256_dm_50Mpc_expansion0.01/h5_files/"
+dataDir = "/home/bruno/Desktop/hdd_extrn_1/data/"
+inDir = dataDir * "cosmo_sims/enzo/256_cool_uv_50Mpc_HLLC_grav4/h5_files/"
 # inDir = "/home/bruno/Desktop/data/cosmo_sims/ramses/128_hydro/h5_files/"
 # inDir = dataDir * "cosmo_sims/enzo/256_hydro_grackle_noUV/h5_files/"
 outDir = inDir

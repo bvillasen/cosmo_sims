@@ -8,13 +8,13 @@ using Statistics
 # Input File
 # dataDir = "/raid/bruno/data/"/"
 dataDir = "/home/bruno/Desktop/data/"
-inDir = dataDir * "cosmo_sims/ramses/128_hydro_50Mpc/h5_files/"
+inDir = dataDir * "cosmo_sims/ramses/256_hydro_50Mpc/h5_files/"
 outDir = inDir
 in_base_name = "snapshot_"
 out_base_name = "grid_CIC_"
 
 Lbox = 50e3
-const nPoints = 128
+const nPoints = 256
 
 #Domain Parameters
 const x_min = 0.0

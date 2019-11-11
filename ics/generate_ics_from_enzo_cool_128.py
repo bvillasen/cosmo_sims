@@ -21,9 +21,9 @@ from tools import create_directory
 
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
-enzoDir = dataDir + 'cosmo_sims/enzo/128_hydro/ics/'
+enzoDir = dataDir + 'cosmo_sims/enzo/128_cool_uv_50Mpc/ics/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/128_hydro/ics/'
+outputDir = dataDir + 'cosmo_sims/cholla_pm/128_cool_uv_50Mpc/ics_enzo/'
 create_directory( outputDir )
 nSnap_enzo = 0
 

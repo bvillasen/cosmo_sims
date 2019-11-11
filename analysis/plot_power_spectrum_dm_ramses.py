@@ -21,7 +21,7 @@ from load_data_ramses import load_snapshot_ramses
 
 nPoints = 256
 
-extra_name = '_0'
+extra_name = '_2'
 
 outputsDir = '/home/bruno/cholla/scale_output_files/'
 chollaDir_ramses = dataDir + 'cosmo_sims/cholla_pm/{0}_dm_50Mpc/data_ramses{1}/'.format( nPoints, extra_name )
@@ -53,7 +53,7 @@ fileName = 'power_dm_{0}_ramses{1}.png'.format( nPoints, extra_name )
 # #   snapshots_nyx.append( index_nyx )
 # 
 
-snapshots = [0, 2, 3, 5, 6, 8, 9,  10, 12, 14]
+snapshots = [0, 2, 3, 5, 6, 8, 9,  10, 11, 14]
 
 # 
 # Lbox = 115.0   #Mpc/h
@@ -86,7 +86,7 @@ ax2 = plt.subplot(gs[4:5, 0])
 ax2.axhline( y=0., color='r', linestyle='--',  )
 
 
-
+snapshots.reverse()
 for i,nSnap in enumerate(snapshots):
 
   data_cholla = load_snapshot_data_particles( nSnap, chollaDir_ramses, single_file=True )
@@ -104,7 +104,7 @@ for i,nSnap in enumerate(snapshots):
   ps_dm_ramses, k_vals, count_dm_ramses = get_power_spectrum( dens_dm_ramses, Lbox, nx, ny, nz, dx, dy, dz,  n_kSamples=n_kSamples)
   
   error_ramses = ( ps_dm_cholla_ramses - ps_dm_ramses ) /ps_dm_ramses
-  # print "Error: {0}\n".format(error.max())
+  print "Error: ", error_ramses.min(), error_ramses.max()
 
 
   print "Plotting..."

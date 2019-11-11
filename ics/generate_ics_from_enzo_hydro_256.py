@@ -21,9 +21,9 @@ from tools import create_directory
 
 # dataDir = '/home/bruno/Desktop/data/'
 dataDir = '/raid/bruno/data/'
-enzoDir = dataDir + 'cosmo_sims/enzo/256_hydro_100Mpc/ics/'
+enzoDir = dataDir + 'cosmo_sims/enzo/256_hydro_50Mpc_HLLC_grav4/ics/'
 inDir = enzoDir
-outputDir = dataDir + 'cosmo_sims/cholla_pm/256_hydro_100Mpc/ics/'
+outputDir = dataDir + 'cosmo_sims/cholla_pm/256_hydro_50Mpc/ics_enzo_4/'
 create_directory( outputDir )
 nSnap_enzo = 0
 
@@ -80,13 +80,13 @@ data_enzo['gas']['GasEnergy'] = gas_u
 data_enzo['gas']['Energy'] = gas_E
 
 
-Lbox = 100000
+Lbox = 50000
 
-proc_grid = [ 2, 2, 2]
+proc_grid = [ 2, 2, 1 ]
 box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 256, 256, 256 ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)
 generate_ics_particles(data_enzo, outputDir, outputBaseName, proc_grid, box_size, grid_size)
-
-outputBaseName = '{0}.h5'.format(nSnap)
-expand_data_grid_to_cholla( proc_grid, data_enzo['gas'], outputDir, outputBaseName )
+# 
+# outputBaseName = '{0}.h5'.format(nSnap)
+# expand_data_grid_to_cholla( proc_grid, data_enzo['gas'], outputDir, outputBaseName )

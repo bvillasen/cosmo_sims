@@ -26,11 +26,11 @@ nSnap = rank
 dataDir = '/raid/bruno/data/'
 # dataDir = '/home/bruno/Desktop/data/'
 
-data_set = 'enzo_simple_beta_convDE'
+data_name = 'SIMPLE_PPMP_eta0.010_beta0.00'
 
 
 n_cholla_files = 1
-chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMP_HLLC_VL_eta0.001_0.010_halfDE/'
+chollaDir_0 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_{0}/'.format( data_name )
 chollaDir_1 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMC_HLL_VL_eta0.001_0.030/'
 chollaDir_2 = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_PPMC_HLLC_VL_eta0.001_0.050/'
 
@@ -43,7 +43,7 @@ enzoDir = dataDir + 'cosmo_sims/enzo/ZeldovichPancake_HLLC/'
 enzoDir_1 = dataDir + 'cosmo_sims/enzo/ZeldovichPancake_HLLC_noDE/'
 
 
-outDir = dev_dir + 'figures/zeldovich_PPMP_eta0.010_halfDE/'
+outDir = dev_dir + 'figures/zeldovich/{0}/'.format( data_name )
 if rank == 0:
   create_directory( outDir )
 

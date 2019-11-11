@@ -29,32 +29,32 @@ def load_snapshot_enzo( nSnap, inDir, dm=False, particles=False, cool=False, met
   if hydro:
     data_gas = h5_file['gas']
     data['gas']['density'] = data_gas['density']
-    data['gas']['momentum_x'] = data_gas['momentum_x']
-    data['gas']['momentum_y'] = data_gas['momentum_y']
-    data['gas']['momentum_z'] = data_gas['momentum_z']
-    data['gas']['Energy'] = data_gas['Energy']
+    # data['gas']['momentum_x'] = data_gas['momentum_x']
+    # data['gas']['momentum_y'] = data_gas['momentum_y']
+    # data['gas']['momentum_z'] = data_gas['momentum_z']
+    # data['gas']['Energy'] = data_gas['Energy']
     data['gas']['GasEnergy'] = data_gas['GasEnergy']
     data['gas']['temperature'] = data_gas['temperature']
 
   if cool:
     data['gas']['HI_density'] = data_gas['H_dens']
-    data['gas']['HII_density'] = data_gas['HI_dens']
-    data['gas']['HeI_density'] = data_gas['He_dens']
-    data['gas']['HeII_density'] = data_gas['HeI_dens']
-    data['gas']['HeIII_density'] = data_gas['HeII_dens']
-    data['gas']['e_density'] = data_gas['electron_dens']
-  if metals:
-    data['gas']['metal_density'] = data_gas['metal_dens']
+  #   data['gas']['HII_density'] = data_gas['HI_dens']
+  #   data['gas']['HeI_density'] = data_gas['He_dens']
+  #   data['gas']['HeII_density'] = data_gas['HeI_dens']
+  #   data['gas']['HeIII_density'] = data_gas['HeII_dens']
+  #   data['gas']['e_density'] = data_gas['electron_dens']
+  # if metals:
+  #   data['gas']['metal_density'] = data_gas['metal_dens']
   
   if particles:
     data_dm = h5_file['dm']
-    data['dm']['mass'] = data_dm['mass']
+    # data['dm']['mass'] = data_dm['mass']
     data['dm']['pos_x'] = data_dm['pos_x']
     data['dm']['pos_y'] = data_dm['pos_y']
     data['dm']['pos_z'] = data_dm['pos_z']
-    data['dm']['vel_x'] = data_dm['vel_x']
-    data['dm']['vel_y'] = data_dm['vel_y']
-    data['dm']['vel_z'] = data_dm['vel_z']
+    # data['dm']['vel_x'] = data_dm['vel_x']
+    # data['dm']['vel_y'] = data_dm['vel_y']
+    # data['dm']['vel_z'] = data_dm['vel_z']
 
   if dm:
     density_file_name = 'grid_CIC_{0:03}.h5'.format(nSnap)

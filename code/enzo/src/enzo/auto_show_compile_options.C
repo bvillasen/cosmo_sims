@@ -3,7 +3,7 @@ void auto_show_compile_options(void) {
    FILE *opf;
    opf = fopen("Enzo_Build", "w");
    fprintf(opf, "### Enzo build information:\n");
-   fprintf(opf, "### Compiled: Wed May  8 18:03:54 2019\n");
+   fprintf(opf, "### Compiled: Tue Sep 10 16:10:13 2019\n");
    fprintf(opf, "### Machine name: tornado\n");
    fprintf(opf, "### Branch: unknown\n");
    fprintf(opf, "### Changeset: unknown\n");
@@ -50,7 +50,7 @@ void auto_show_compile_options(void) {
    fprintf(opf, "CONFIG_USE_HDF4 = no\n");
    fprintf(opf, "CONFIG_BITWISE_IDENTICALITY = no\n");
    fprintf(opf, "CONFIG_ECUDA = no\n");
-   fprintf(opf, "CONFIG_GRAVITY_4S = no\n");
+   fprintf(opf, "CONFIG_GRAVITY_4S = yes\n");
    fprintf(opf, "CONFIG_GRACKLE = yes\n");
    fprintf(opf, "CONFIG_LOG2ALLOC = no\n");
    fclose(opf);

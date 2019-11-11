@@ -43,12 +43,12 @@ Lbox = 50.0   #Mpc/h
 integrator = 'SIMPLE'
 extra_name = ''
 
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool/data_PPMC_HLLC_{4}_eta{0:.3f}_{1:.4f}{2}/'.format( eta_1, eta_2,  extra_name, nPoints, integrator )
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/{3}_cool/data_SIMPLE_PPMP_eta0.035_0.00_grav4_clean/'.format( eta_1, eta_2,  extra_name, nPoints, integrator )
 
-enzoDir = dataDir + 'cosmo_sims/enzo/{0}_cool_uv/h5_files/'.format(nPoints)
+enzoDir = dataDir + 'cosmo_sims/enzo/{0}_cool_uv_50Mpc_HLLC_grav4/h5_files/'.format(nPoints)
 outDir = dev_dir + 'figures/power_hydro/'
 
-fileName = outDir + 'ps_{2}_cooling_uv_PPMC_HLLC_{4}_eta{0:.3f}_{1:.4f}{3}_new.png'.format( eta_1, eta_2, nPoints, extra_name, integrator  )
+fileName = outDir + 'ps_{2}_cooling_uv_PPMC_HLLC_new.png'.format( eta_1, eta_2, nPoints, extra_name, integrator  )
 # fileName = outDir + 'ps_{2}_cooling_uv_PPMC_HLLC_{4}_{5}.png'.format( eta_1, eta_2, nPoints, extra_name, integrator, n_out  )
 
 

@@ -17,8 +17,8 @@ from cosmo_constants import *
 
 # dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
 dataDir = '/raid/bruno/data/'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool/data/'
-nSnap = 0
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_cool_uv_50Mpc/data_SIMPLE_PPMP_eta0.035_beta0.00_grav4/'
+nSnap = 33
 
 gamma = 5./3
 
@@ -52,7 +52,6 @@ px = data_cholla['gas']['momentum_x'][...]
 py = data_cholla['gas']['momentum_y'][...]
 pz = data_cholla['gas']['momentum_z'][...]
 temp = data_cholla['gas']['temperature'][...]
-flags_DE = data_cholla['gas']['flags_DE'][...]
 HI_dens = data_cholla['gas']['HI_density'][...]
 HII_dens = data_cholla['gas']['HII_density'][...]
 HeI_dens = data_cholla['gas']['HeI_density'][...]

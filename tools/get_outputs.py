@@ -4,18 +4,18 @@ import yt
 
 # dataDir = '/raid/bruno/data/'
 # dataDir = '/home/bruno/Desktop/hard_drive_1/data/'
-dataDir = '/home/bruno/Desktop/data/'
-inDir = dataDir + 'cosmo_sims/ramses/256_dm_50Mpc/h5_files/'
+dataDir = '/home/bruno/Desktop/hdd_extrn_1/data/'
+inDir = dataDir + 'cosmo_sims/enzo/256_cool_uv_50Mpc_HLLC_grav4/h5_files/'
 enzoDir = inDir
 outDir = inDir
 
 
-outFileName = 'outputs_dm_ramses_256_50Mpc.txt'
+outFileName = 'outputs_cool_uv_enzo_256_50Mpc_HLLC_grav4.txt'
 a_list = []
 
 # nSnapshots = 84
 
-nSnapshots = 15
+nSnapshots = 34
 
 for nSnap in range(nSnapshots):
   fileName = 'snapshot_{0:03}.h5'.format( nSnap )
@@ -36,8 +36,8 @@ np.savetxt( outDir + outFileName, a_vals )
 
 
 # nSnap = 0
-# 
-# for nSnap in range(158):
+
+# for nSnap in range(79):
 #   # if nSnap == 0:
 #   #   file_name = enzoDir + 'ics/DD0{0:03}/data0{0:03}'.format(nSnap)
 #   # else:
@@ -54,5 +54,6 @@ np.savetxt( outDir + outFileName, a_vals )
 #   a_list.append( current_a)
 # 
 # a_vals = np.array( a_list )
+# print( a_vals )
 # np.savetxt(  outDir + outFileName, a_vals )
-
+# 

@@ -36,7 +36,7 @@ void auto_show_config(FILE *fp) {
    fprintf (fp,"   CONFIG_NEW_GRID_IO  [newgridio-{yes,no}]                  : yes\n");
    fprintf (fp,"   CONFIG_BITWISE_IDENTICALITY  [bitwise-{yes,no}]           : no\n");
    fprintf (fp,"   CONFIG_FAST_SIB  [fastsib-{yes,no}]                       : yes\n");
-   fprintf (fp,"   CONFIG_GRAVITY_4S  [gravity-4s-{yes,no}]                  : no\n");
+   fprintf (fp,"   CONFIG_GRAVITY_4S  [gravity-4s-{yes,no}]                  : yes\n");
    fprintf (fp,"   CONFIG_ENZO_PERFORMANCE  [enzo-performance-{yes,no}]      : yes\n");
    fprintf (fp,"   CONFIG_GRACKLE  [grackle-{yes,no}]                        : yes\n");
    fprintf (fp,"   CONFIG_LOG2ALLOC  [log2alloc-{yes,no}]                    : no\n");

@@ -3,6 +3,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 import h5py as h5
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+import matplotlib
+# set some global options
+matplotlib.font_manager.findSystemFonts(fontpaths=['/home/bruno/Downloads'], fontext='ttf')
+# plt.rcParams['figure.figsize'] = (6,5)
+# plt.rcParams['legend.frameon'] = False
+# plt.rcParams['legend.fontsize'] = 14
+# plt.rcParams['legend.borderpad'] = 0.1
+# plt.rcParams['legend.labelspacing'] = 0.1
+# plt.rcParams['legend.handletextpad'] = 0.1
+plt.rcParams['font.family'] = 'Helvetica'
+hfont = {'fontname':'Helvetica'}
+
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+# rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+rc('text', usetex=True)
+
 
 dev_dir = '/home/bruno/Desktop/Dropbox/Developer/'
 cosmo_dir = dev_dir + 'cosmo_sims/'
@@ -44,16 +61,15 @@ print 'eta: {0:.3f}  {1:.3f} /'.format( eta_1, eta_2 )
 nPoints = 256
 Lbox = 50000.
 
-integrator = 'SIMPLE'
-
+data_name = 'SIMPLE_PPMP_eta0.035_beta0.00_grav4'
 chollaDir = dataDir + 'cosmo_sims/cholla_pm/{0}_cool_uv_50Mpc/'.format(nPoints)
-chollaDir_uv = chollaDir +  'data_PPMC_HLLC_{2}_eta{0:.3f}_{1:.4f}/'.format( eta_1, eta_2, integrator )
+chollaDir_uv = chollaDir +  'data_{0}/'.format( data_name )
 
 enzoDir = dataDir + 'cosmo_sims/enzo/'
-enzoDir_uv = enzoDir + '{0}_cool_uv_50Mpc/h5_files/'.format(nPoints)
+enzoDir_uv = enzoDir + '{0}_cool_uv_50Mpc_HLLC_grav4/h5_files/'.format(nPoints)
 
 
-outDir = dev_dir + 'figures/projection_hydro_50Mpc/chemistry_HI_eta{0:.3f}_{1:.4f}/'.format( eta_1, eta_2 )
+outDir = dev_dir + 'figures/projection_hydro_50Mpc/256_hydro_{0}/'.format( data_name )
 if rank == 0:
   create_directory( outDir )
 
@@ -79,16 +95,16 @@ def get_projection( data, offset, depth, log=True ):
 
 
 proj_offset = 0
-proj_depth = 128
+proj_depth = 256
 
-# fields = ['density_dm', 'density', 'HI_density', 'HII_density', 'temperature' ]
-fields = [ 'density', 'HI_density', 'temperature' ]
+fields = ['density_dm', 'density', 'HI_density',  'temperature' ]
+# fields = [ 'density', 'HI_density', 'temperature' ]
 
-ticks_list = [ [1, 4], [-5, -1],  [3.5, 7 ]]
+ticks_list = [ [1, 4], [-5, -1.5],  [3.5, 7 ]]
 
 cbar_labels = [ r'log Density  [$ h^2 \mathrm{M_{sun} } \mathrm{kpc}^{-3}  $]',  r'log Density  [$ h^2 \mathrm{M_{sun} } \mathrm{kpc}^{-3}  $]',  r'log Temperature [$K $]']
 
-nSnap = 31
+nSnap = rank
 # n_snapshots = 10
 # snapshots = range(0, n_snapshots)
 # for nSnap in snapshots:
@@ -101,7 +117,7 @@ for i,field in enumerate(fields):
   # weight = data_cholla['gas'][field]
   # if field == 'temperature': weight = data_cholla['gas']['density']
   data = data_cholla['gas'][field][...]
-  if field == 'HI_density': data[data>data.mean()*5000] = data.mean()*5000
+  if field == 'HI_density': data[data>data.mean()*2000] = data.mean()*2000
   print ( field, data[proj_offset:proj_offset+proj_depth, :, :].min(),  data[proj_offset:proj_offset+proj_depth, :, :].max())
   weight = data
   weight = data_cholla['gas']['density']
@@ -125,7 +141,7 @@ for i,field in enumerate(fields):
   weight = data_enzo['gas'][field]
   if field == 'temperature': weight = data_enzo['gas']['density']
   data = data_enzo['gas'][field][...]
-  if field == 'HI_density': data[data>data.mean()*5000] = data.mean()*5000
+  if field == 'HI_density': data[data>data.mean()*2000] = data.mean()*2000
   weight = data
   weight = data_enzo['gas']['density']
   data_weight = data * weight

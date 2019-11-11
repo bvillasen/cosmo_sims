@@ -1,2 +1,3 @@
 CONFIG_GRACKLE = yes
 CONFIG_OPT = high
+CONFIG_GRAVITY_4S = yes

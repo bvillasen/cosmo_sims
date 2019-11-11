@@ -19,12 +19,13 @@ from load_data_ramses import load_snapshot_ramses
 
 
 outputsDir = '/home/bruno/cholla/scale_output_files/'
-ramsesDir = dataDir + 'cosmo_sims/ramses/128_hydro_50Mpc/h5_files/'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/128_hydro_50Mpc/data_ramses/'
+ramsesDir = dataDir + 'cosmo_sims/ramses/128_hydro_50Mpc_slope1/h5_files/'
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/128_hydro_50Mpc/data_ramses_PLMC_beta0.25_slope1/'
 outDir = dev_dir + 'figures/comparison_ramses/'
 
 create_directory( outDir )
 
+fileName = 'temperature_comparison_beta0.25_slope1.png'
 
 Lbox = 50.
 h = 0.6766
@@ -40,7 +41,6 @@ n_kSamples = 12
 
 
 
-fileName = 'temperature_comparison.png'
 
 
 fig = plt.figure(0)
@@ -73,6 +73,9 @@ for nSnap in range(29):
   t_ch = temp_ch.mean()
   t_rm = temp_ramses.mean()
   
+  diff = ( t_ch - t_rm )/t_rm
+  print diff
+  
   if nSnap == 0:
     t0 = t_ch
     a_0 = current_a_ramses
@@ -89,7 +92,7 @@ for nSnap in range(29):
 
 
 fs = 15
-ax.plot( z_list, t_ch_list, linewidth=3, label='Cholla')
+ax.plot( z_list, t_ch_list, linewidth=5, label='Cholla')
 ax.plot( z_list, t_rm_list, linewidth=3, label='Ramses')
 ax.plot( z_list, t_cosmo_list, '--', label='Cosmo')
 ax.legend(fontsize=fs)

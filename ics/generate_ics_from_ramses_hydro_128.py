@@ -20,9 +20,9 @@ from domain_decomposition import get_domain_block, get_domain_parent
 from tools import create_directory
 from load_data_ramses import load_snapshot_ramses
 
-dataDir = '/home/bruno/Desktop/data/'
-# dataDir = '/raid/bruno/data/'
-ramsesDir = dataDir + 'cosmo_sims/ramses/128_hydro_50Mpc/h5_files/'
+# dataDir = '/home/bruno/Desktop/data/'
+dataDir = '/raid/bruno/data/'
+ramsesDir = dataDir + 'cosmo_sims/ramses/128_hydro_50Mpc_slope1/h5_files/'
 inDir = ramsesDir
 outputDir = dataDir + 'cosmo_sims/cholla_pm/128_hydro_50Mpc/ics_ramses/'
 create_directory( outputDir )
@@ -35,7 +35,7 @@ nSnap = nSnap_ramses
 
 data_ramses = load_snapshot_ramses( nSnap, inDir, dm=False, particles=True, cool=False, metals=False, hydro=True )
 
-proc_grid = [ 1, 1, 1]
+proc_grid = [ 2, 2, 2]
 box_size = [ 50000, 50000, 50000 ]
 grid_size = [ 128, 128, 128 ]
 outputBaseName = '{0}_particles.h5'.format(nSnap)

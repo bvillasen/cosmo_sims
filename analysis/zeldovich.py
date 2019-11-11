@@ -28,7 +28,7 @@ dataDir = '/raid/bruno/data/'
 # enzoDir = dataDir + 'cosmo_sims/enzo/ZeldovichPancake/'
 
 
-data_set = 'test'
+data_set = 'SIMPLE_PPMP_eta0.030_beta0.00_grav2'
 inputDir = dataDir + 'cosmo_sims/cholla_pm/zeldovich/data_{0}/'.format(data_set)
 
 outputDir = cosmo_dir + 'figures/zeldovich/{0}/'.format( data_set )

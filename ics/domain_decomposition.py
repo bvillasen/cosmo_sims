@@ -4,7 +4,7 @@ def get_domain_block( proc_grid, box_size, grid_size ):
   np_x, np_y, np_z = proc_grid
   Lx, Ly, Lz = box_size
   nx_g, ny_g, nz_g = grid_size
-  dx, dy, dz = Lx/np_x, Ly/np_y, Lz/np_y
+  dx, dy, dz = Lx/np_x, Ly/np_y, Lz/np_z
   nx_l, ny_l, nz_l = nx_g/np_x, ny_g/np_z, nz_g/np_z,
 
   nprocs = np_x * np_y * np_z
