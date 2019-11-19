@@ -1,6 +1,6 @@
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import h5py as h5
 from load_uv_file import load_uv_file, load_cooling_rates
 
