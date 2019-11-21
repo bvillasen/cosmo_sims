@@ -4,7 +4,7 @@ from os.path import isfile, join
 import h5py
 import numpy as np
 
-def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, cosmology=True, float_precision=False):
+def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, cosmology=True, float_precision=False, fields='all'):
 
 
   inFileName = '{0}_particles.{1}.{2}'.format(nSnap, name_base, 0)
@@ -21,8 +21,8 @@ def compress_particles(  nSnap, nBoxes, name_base, out_base_name,inDir, outDir, 
   keys = [  'density' ]
   # keys_parts = [ 'pos_x', 'pos_y', 'pos_z',  'vel_x', 'vel_y', 'vel_z' ]
   keys_parts = [  ]
-  keys_all = keys + keys_parts
-  
+  if fields == 'all': keys_all = keys + keys_parts
+  else: keys_all = fields
   if inFile.attrs.get('current_z'): print ' snap: {0}   {1}   current_z: {2}'.format( nSnap, keys_all, inFile.attrs['current_z'][0] )  
   else: print ' snap: {0}  {1}'.format( nSnap, keys_all )
   inFile.close()

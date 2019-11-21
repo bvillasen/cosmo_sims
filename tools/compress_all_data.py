@@ -52,6 +52,7 @@ name_base = 'h5'
 fields_hydro = ['density', 'temperature', 'HI_density', 'HII_density']
 fields_hydro = 'all'
 
+fields_particles = ['density', 'grav_potential']
 
 
 
@@ -84,4 +85,4 @@ if rank < nSnapshots:
     compress_grid( nSnap, nBoxes, name_base, out_base_name, inDir, outDir, fields=fields_hydro )
   if cosmo or particles:
     out_base_name = 'particles_'
-    compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir , cosmology=cosmo )
+    compress_particles( nSnap, nBoxes, name_base, out_base_name, inDir, outDir , cosmology=cosmo, fields=fields_particles )
