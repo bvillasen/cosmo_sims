@@ -19,7 +19,7 @@ import ast
 
 dataDir = '/raid/bruno/data/'
 nyxDir = dataDir + 'cosmo_sims/nyx/256_dm_50Mpc/'
-outDir = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/ics_nyx/ics_single/'
+outDir = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/ics_nyx/ics_4/'
 nSnap = 0
 
 
@@ -29,7 +29,7 @@ data_nyx = load_snapshot_nyx( nSnap, nyxDir, hydro=False )
 
 Lbox = 50000
 
-proc_grid = [ 1, 1, 1]
+proc_grid = [ 2, 2, 1]
 box_size = [ Lbox, Lbox, Lbox ]
 grid_size = [ 256, 256, 256 ]
 domain_parent = get_domain_block( proc_grid, box_size, grid_size )

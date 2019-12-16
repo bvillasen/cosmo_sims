@@ -29,7 +29,7 @@ from load_data_cholla import load_snapshot_data_particles
 from load_data_nyx import load_snapshot_nyx
 
 nyxDir = dataDir + 'cosmo_sims/nyx/256_dm_50Mpc/'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_sor/'
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_pfft_4/'
 outDir = dev_dir + 'figures/power_dm/'
 # outputsDir = '/home/bruno/Desktop/Dropbox/Developer/cholla/scale_output_files/'
 outputsDir = '/home/bruno/cholla/scale_output_files/'
@@ -65,7 +65,7 @@ print snapshots
 
 # snapshots = [0, 94]
 
-fileName = 'power_dm_nyx_50Mpc_new_sor.png'
+fileName = 'power_dm_nyx_50Mpc_new_pfft_4.png'
 
 # 
 # Lbox = 115.0   #Mpc/h
@@ -111,8 +111,8 @@ for i,nSnap in enumerate(snapshots):
   # c = colors[i]
   c = "C{0}".format(i)
   # Load cholla densities
-  data_cholla = load_snapshot_data_particles( nSnap, chollaDir, single_file=True )
-  current_z_ch_1 = data_cholla['current_z'][0]
+  data_cholla = load_snapshot_data_particles( nSnap, chollaDir, single_file=False)
+  current_z_ch_1 = data_cholla['current_z']
   dens_dm_cholla_1 = data_cholla['density'][...]
   print " Cholla: ", current_z_ch_1, dens_dm_cholla_1.mean()
 
