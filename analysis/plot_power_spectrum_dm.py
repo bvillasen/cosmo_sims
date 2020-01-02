@@ -29,7 +29,7 @@ from load_data_cholla import load_snapshot_data_particles
 from load_data_nyx import load_snapshot_nyx
 
 nyxDir = dataDir + 'cosmo_sims/nyx/256_dm_50Mpc/'
-chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_pfft_4/'
+chollaDir = dataDir + 'cosmo_sims/cholla_pm/256_dm_50Mpc/data_pfft_8/'
 outDir = dev_dir + 'figures/power_dm/'
 # outputsDir = '/home/bruno/Desktop/Dropbox/Developer/cholla/scale_output_files/'
 outputsDir = '/home/bruno/cholla/scale_output_files/'
@@ -65,7 +65,7 @@ print snapshots
 
 # snapshots = [0, 94]
 
-fileName = 'power_dm_nyx_50Mpc_new_pfft_4.png'
+fileName = 'power_dm_nyx_50Mpc_new_pfft_8.png'
 
 # 
 # Lbox = 115.0   #Mpc/h
